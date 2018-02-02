@@ -1,0 +1,27 @@
+#s-d78e22f0-5070-449d-bafe-5d851ab6d1e5 #s-Label_55 {
+  border-top-width: 2px;
+  border-top-style: solid;
+  border-top-color: #5BB85C;
+  border-right-width: 2px;
+  border-right-style: solid;
+  border-right-color: #5BB85C;
+  border-bottom-width: 2px;
+  border-bottom-style: solid;
+  border-bottom-color: #5BB85C;
+  border-left-width: 2px;
+  border-left-style: solid;
+  border-left-color: #5BB85C;
+  border-radius: 13px 13px 13px 13px;
+  padding-top: 7px;
+  padding-right: 7px;
+  padding-bottom: 7px;
+  padding-left: 7px;
+  width: 168px;
+  height: 65px;
+  -ms-transform: rotate(0.0deg);
+}
+#s-d78e22f0-5070-449d-bafe-5d851ab6d1e5 > #loadMark {
+  width: 1px;
+  visibility: hidden;
+  display: none;
+}
