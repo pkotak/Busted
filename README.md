@@ -1,5 +1,5 @@
 # Plagiarism Detection : Team-212
-Team members: **Paarth Kotak**,**Abhiruchi Karwa**,**Ke 'Conan' Xuan** and **Sirusthi Murugesan**
+Team members: **Paarth Kotak**,**Abhiruchi Karwa**,**Ke 'Conan' Xuan** and **Sirushti Murugesan**
 
 * Phase A:
   * Project Plan
