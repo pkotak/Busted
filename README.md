@@ -6,6 +6,10 @@ Team members: **Paarth Kotak**,**Abhiruchi Karwa**,**Ke 'Conan' Xuan** and **Sir
   * User Interface Mock-ups
   * Use Cases
 
+* Phase B:
+  * UML Class Diagrams
+  * Java interfaces
+
 The course page can be found by clicking
 [here](https://course.ccs.neu.edu/cs5500)
 
