@@ -8,5 +8,5 @@ public interface Assignment {
 	/**
 	 * @return an Assignment.
 	 */
-	public Assignment getAssignment(int submissionID);
+	public Assignment fetchAssignment(int submissionID);
 }
