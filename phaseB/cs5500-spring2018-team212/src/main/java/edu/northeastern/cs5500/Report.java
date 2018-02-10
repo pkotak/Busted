@@ -30,11 +30,11 @@ public interface Report {
 	/**
 	 * @return
 	 */
-	public List<String> getSevereFiles();
+	public List<Integer> getSevereFiles();
 	
 	/**
 	 * @return
 	 */
-	public List<String> getWarningFiles();
+	public List<Integer> getWarningFiles();
 
 }

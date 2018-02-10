@@ -8,8 +8,8 @@ public interface Comparator {
 	/**
 	 * @param a1
 	 * @param a2
-	 * @return the similarity score between the two Assignments.
+	 * @return the similarity score between the two ASTs.
 	 */
-	public int compareAssignments(Assignment a1, Assignment a2);
+	public int compare(AST a1, AST a2);
 
 }

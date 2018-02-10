@@ -6,6 +6,7 @@ package edu.northeastern.cs5500;
 public interface User {
 	
 	/**
+	 * logs in the User.
 	 * @param username
 	 * @param password
 	 * @return User object
@@ -13,17 +14,16 @@ public interface User {
 	public User login(String username, String password);
 	
 	/**
-	 * @param user
-	 * @return true iff the user is successfully created in
-	 * the system
+	 * resisters a new User.
+	 * @param username
+	 * @param password
+	 * @return User Object
 	 */
-	public boolean register(User user);
+	public User register(String username, String password);
 	
 	/**
-	 * @param user
-	 * @return true iff the user is successfully removed from
-	 * the system
+	 * logs out the User. 
 	 */
-	public boolean deleteUser(User user);
+	public void logout();
 
 }
