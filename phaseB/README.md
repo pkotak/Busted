@@ -28,3 +28,9 @@ Currently there are three kinds of users: Admin, TA and Professor.
 * We assume student will follow instructions when submitting the homework so they are in same format and naming standard.
 * File will also have other information about the course and the students’ submission, such as whether a file is late submission or has already been checked
 
+###### Report
+* A report will be generated using the AST.
+* The AST Node visitor will enable calculations like, similarity score, flagging files based on scores etc.
+* Coloring patterns like Red for severe, Yellow for suspicious and green for safe will be used.
+* Report will have an option to be exported as a document file and additionally allows to pass inform 
+  a senior authority about file that require attention.
