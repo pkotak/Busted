@@ -11,3 +11,20 @@
 * This Assignment is parsed by a Parser to be converted in to an Abstract Syntax Tree.
 * The Comparator takes these Abstract Syntax Trees of the Assignments that need to be checked for plagiarism and generates a Report
 
+
+######User
+Currently there are three kinds of users: Admin, TA and Professor.
+* We assume users have collected all students’ homework, either as url or real files. So students wouldn't have access to the system and try to cheat against the system.
+* Admin has authorization to manage other users
+* TA can only send report to professor
+* Professor can send report to OSCCR
+* Users have common methods such as register, login, logout
+* Users upload assignments for further analysis
+* Users can get reports after analysis
+ 
+######Assignment
+* Assignment will be checked by the program to detect plagiarism
+* Assignment can be either files or directory
+* We assume student will follow instructions when submitting the homework so they are in same format and naming standard.
+* File will also have other information about the course and the students’ submission, such as whether a file is late submission or has already been checked
+
