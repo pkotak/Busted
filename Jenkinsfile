@@ -43,5 +43,16 @@ pipeline {
           }
          }
         }
-       }
+       
+       stage('Deploy') {
+            when { branch 'master' }
+            steps {
+                checkout scm
+                echo 'Deploying...'
+                withCredentials([file(credentialsId: 'PEM_FILE_ID', variable: 'PEM_PATH')]) {
+                    sh 'chmod +x deploy.sh; bash deploy.sh'
+                }
+               }
+              }
+             }
 }
