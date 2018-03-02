@@ -11,7 +11,7 @@ pipeline {
            steps {
                echo "Building"
                sh 'mvn -f phaseC/cs5500-spring2018-team212 compile'
-               sh 'mvn -f phaseC/cs5500-spring2018-team212 package’
+               sh 'mvn -f phaseC/cs5500-spring2018-team212 package'
            }
        }
        stage('Test'){
