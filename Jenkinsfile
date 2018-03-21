@@ -35,7 +35,7 @@ pipeline {
                retry(5) {
                script {
 				  def qg = waitForQualityGate()
-                  if (qg.status != 'WARN') {
+                  if (qg.status != 'OK') {
                 error "Pipeline aborted due to quality gate failure: ${qg.status}"
              }
             }
@@ -43,16 +43,5 @@ pipeline {
           }
          }
         }
-       
-       stage('Deploy') {
-            when { branch 'master' }
-            steps {
-                checkout scm
-                echo 'Deploying...'
-                withCredentials([file(credentialsId: 'PEM_FILE_ID', variable: 'PEM_PATH')]) {
-                    sh 'chmod +x deploy.sh; bash deploy.sh'
-                }
-               }
-              }
-             }
+}
 }
