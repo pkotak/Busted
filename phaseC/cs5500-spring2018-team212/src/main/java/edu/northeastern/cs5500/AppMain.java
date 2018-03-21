@@ -12,26 +12,19 @@ import java.util.logging.Logger;
 public class AppMain {
 
 	private static final Logger LOGGER = Logger.getLogger(AppMain.class.getName());
-	/**
-	 * Default Constructor
-	 */
-	public AppMain() {
-		//Empty Constructor
-	}
 
+	/**
 	public static void main(String[] args) {
 		AppMain app = new AppMain();
 		app.runLibrary();
 	}
+	*/
 
 	/**
 	 * Runs the comparison in 3 modes: 
 	 * Extreme strict, Moderate Strictness, Easy
 	 */
-	public void runLibrary() {
-		Scanner sc = new Scanner(System.in);
-		int strictness = sc.nextInt();
-		sc.close();
+	public void runLibrary(int strictness) {
 		String jarCommand = "java -jar ";
 		String directorycommand = " -s \"";
 		String cmd = "";
