@@ -13,3 +13,8 @@ Team members: **Paarth Kotak**,**Abhiruchi Karwa**,**Ke 'Conan' Xuan** and **Sir
 The course page can be found by clicking
 [here](https://course.ccs.neu.edu/cs5500)
 
+The UI is deployed on Heroku: 
+[link to Busted Plagiarism Checker](https://bustedplagiarismchecker.herokuapp.com/login)
+It'll be later moved to AWS.
+
+
