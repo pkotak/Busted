@@ -10,17 +10,106 @@
 	<name>cs5500-spring2018-team212</name>
 	<url>http://maven.apache.org</url>
 
+	<parent>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-parent</artifactId>
+		<version>1.5.10.RELEASE</version>
+		<relativePath /> <!-- lookup parent from repository -->
+	</parent>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
 
+	<!-- jgit -->
+	<repositories>
+		<repository>
+			<id>jgit-repository</id>
+			<url>https://repo.eclipse.org/content/groups/releases/</url>
+		</repository>
+	</repositories>
+
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>com.amazonaws</groupId>
+				<artifactId>aws-java-sdk-bom</artifactId>
+				<version>1.11.106</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+
+
+
 	<dependencies>
+		<dependency>
+			<groupId>com.amazonaws</groupId>
+			<artifactId>aws-java-sdk-s3</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.amazonaws</groupId>
+			<artifactId>aws-java-sdk-dynamodb</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.zeroturnaround</groupId>
+			<artifactId>zt-zip</artifactId>
+			<version>1.12</version>
+			<type>jar</type>
+		</dependency>
+		<!-- jgit -->
+		<dependency>
+			<groupId>org.eclipse.jgit</groupId>
+			<artifactId>org.eclipse.jgit</artifactId>
+			<version>4.11.0.201803080745-r</version>
+		</dependency>
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
-			<version>3.8.1</version>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+			<!-- jsoup HTML parser library @ https://jsoup.org/ -->
+			<groupId>org.jsoup</groupId>
+			<artifactId>jsoup</artifactId>
+			<version>1.11.2</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-jpa</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.derby</groupId>
+			<artifactId>derby</artifactId>
+			<scope>runtime</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-tomcat</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+			<version>5.1.39</version>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/org.json/json -->
+		<dependency>
+			<groupId>org.json</groupId>
+			<artifactId>json</artifactId>
+			<version>20160810</version>
+		</dependency>
+
 	</dependencies>
 
 	<build>
@@ -34,8 +123,8 @@
 				</configuration>
 			</plugin>
 			<plugin>
-        		<groupId>org.springframework.boot</groupId>
-        		<artifactId>spring-boot-maven-plugin</artifactId>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
 			<plugin>
 				<groupId>org.jacoco</groupId>
