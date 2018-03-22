@@ -18,6 +18,8 @@
 	</parent>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<sonar.coverage.exclusions>src/main/java/edu/northeastern/springbootjdbc/daos/*.java</sonar.coverage.exclusions>
+		<sonar.cpd.exclusions>src/main/java/edu/northeastern/springbootjdbc/daos/*.java</sonar.cpd.exclusions>
 	</properties>
 
 	<!-- jgit -->
@@ -127,6 +129,11 @@
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
 			<plugin>
+				<configuration>
+				<excludes>
+					<exclude>edu/northeastern/springbootjdbc/daos/**/*</exclude>
+				</excludes>
+				</configuration>
 				<groupId>org.jacoco</groupId>
 				<artifactId>jacoco-maven-plugin</artifactId>
 				<version>0.8.0</version>
