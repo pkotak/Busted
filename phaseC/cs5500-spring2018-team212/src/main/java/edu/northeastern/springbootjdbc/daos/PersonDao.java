@@ -145,6 +145,50 @@ public class PersonDao {
 	 *            the unique identifier of the person
 	 * @return Number of rows affected in the database
 	 */
+	public int deletePerson(String username) {
+		int rowsAffected = 0;
+		Connection conn = null;
+		PreparedStatement personStatement = null;
+		try {
+			Class.forName(Constants.JDBC_DRIVER);
+			conn = DriverManager.getConnection(Constants.CONNECTION_STRING, Constants.AWS_USERNAME,
+					Constants.AWS_P);
+			Person p = findPersonByUsername(username);
+			int personId = p.getId();
+			String personDelete = "DELETE FROM Person where id = ?";
+			try {
+				personStatement = conn.prepareStatement(personDelete);
+				personStatement.setInt(1, personId);
+				rowsAffected += personStatement.executeUpdate();
+			} finally {
+				if (personStatement != null)
+					personStatement.close();
+			}
+
+		} catch (ClassNotFoundException e) {
+			LOGGER.info(e.toString());
+		} catch (SQLException e) {
+			LOGGER.info(e.toString());
+		} finally {
+			try {
+				if (conn != null) {
+					conn.close();
+				}
+			} catch (SQLException e) {
+				LOGGER.info(e.toString());
+			}
+		}
+		return rowsAffected;
+	}
+
+	
+	/**
+	 * Delete a person from the database
+	 * 
+	 * @param personId
+	 *            the unique identifier of the person
+	 * @return Number of rows affected in the database
+	 */
 	public int deletePerson(int personId) {
 		int rowsAffected = 0;
 		Connection conn = null;
@@ -179,7 +223,8 @@ public class PersonDao {
 		}
 		return rowsAffected;
 	}
-
+	
+	
 	/**
 	 * Find all the people
 	 * 

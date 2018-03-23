@@ -1,7 +1,5 @@
 package edu.northeastern.cs5500;
 
-import java.util.Random;
-
 import org.junit.Test;
 
 import edu.northeastern.springbootjdbc.controllers.PersonService;
@@ -22,23 +20,18 @@ public class PersonTests {
 	@Test
 	public void testFindPeople() {
 		PersonService ps = new PersonService();
-		Random r = new Random();
-		Integer random = r.nextInt(50)+1;
-		String email = "rree@gmail.com";
-		ps.insertPerson(random.toString(), random.toString(), email, random.toString(), "123", "student");
-		//		Person p = ps.selectPersonByUsername(email);
-		//		ps.updatePerson(12, p);
-		//		ps.deletePersonByUsername(p.getEmail());
-		ps.selectAllPeople();
-
-
+		PersonDao dao = PersonDao.getInstance();
+		ps.insertPerson("{'firstname':'hello','lastname':'ak','email':'aisj@gma.com','password':'hi','role':'student'}");
+		ps.login("{'username':'ak@gmail.com','password':'hi'}");
+		ps.updatePerson("216", "{'firstName':'gg','lastName':'', 'password':'', 'username': ''}");
+		dao.deletePerson("aisj@gma.com");
 	}
 
 	/////for coverage
 	@Test
 	public void test2() {
 		PersonService ps = new PersonService();
-		ps.updatePerson(0 , "");
+//		ps.updatePerson(0 , "");
 		ps.selectPersonByUsername("");
 	}
 

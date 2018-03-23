@@ -1,11 +1,10 @@
 package edu.northeastern.springbootjdbc.controllers;
 
-import java.util.List;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import edu.northeastern.springbootjdbc.daos.CourseRoleDao;
+import edu.northeastern.cs5500.Constants;
 import edu.northeastern.springbootjdbc.daos.PersonDao;
 import edu.northeastern.springbootjdbc.models.Person;
 import edu.northeastern.springbootjdbc.models.RoleType;
@@ -26,35 +25,57 @@ import edu.northeastern.springbootjdbc.models.RoleType;
  */
 @RestController
 public class PersonService {
-
-	private static final Logger LOGGER = Logger.getLogger(CourseRoleDao.class.getName());
-	
+	private static final Logger LOGGER = Logger.getLogger(PersonService.class.getName());
 	/**
 	 * Creates a person in the database
 	 * @return 
 	 * @return the number of rows affected
 	 */
+	@CrossOrigin(origins = "http://localhost:4200")
 	@RequestMapping("/api/register")
-	public @ResponseBody List<Person> insertPerson(@RequestParam("firstname") String firstname,
-			@RequestParam("lastname") String lastname,
-			@RequestParam("email") String email,
-			@RequestParam("password") String password,
-			@RequestParam("phone") String phone,
-			@RequestParam("type") String type) {
+	public @ResponseBody Person insertPerson(@RequestBody String json) {
 		PersonDao dao = PersonDao.getInstance();
-		Person p = new Person(firstname, lastname, email, password, phone, type);
-		dao.createPerson(p);
-		return dao.findAllPeople();
+		JSONObject obj;
+		String email = "";
+		try {
+			obj = new JSONObject(json);
+			String firstname = obj.getString("firstname");
+			String lastname = obj.getString("lastname");
+			email = obj.getString("email");
+			String password = obj.getString(Constants.AWS_P);
+			String type = obj.getString("role");
+			Person p = new Person(firstname, lastname, email, password, null, type);
+			dao.createPerson(p);
+		} catch (JSONException e) {
+			LOGGER.info(e.toString());
+		}
+		return dao.findPersonByUsername(email);
 	}
 
 	/**
-	 * Find all people
-	 * @return List of people in the database
+	 * Creates a person in the database
+	 * @return 
+	 * @return the number of rows affected
 	 */
-	@RequestMapping("/api/find/people")
-	public List<Person> selectAllPeople() {
+	@CrossOrigin(origins = "http://localhost:4200")
+	@RequestMapping("/api/login")
+	public @ResponseBody Person login(@RequestBody String json) {
 		PersonDao dao = PersonDao.getInstance();
-		return dao.findAllPeople();
+		JSONObject obj;
+		String email = "";
+		String pass = "";
+		try {
+			obj = new JSONObject(json);
+			email = obj.getString("username");
+			pass = obj.getString(Constants.AWS_P);
+		} catch (JSONException e) {
+			LOGGER.info(e.toString());
+		}
+		Person p = dao.findPersonByUsername(email);
+		if(email.equals(p.getEmail()) && pass.equals(p.getPassword()))
+			return p;
+		else
+			return null;
 	}
 	
 	/**
@@ -62,6 +83,7 @@ public class PersonService {
 	 * @param username unique string based on which the search is conducted
 	 * @return Person details
 	 */
+	@CrossOrigin(origins = "http://localhost:4200")
 	@RequestMapping("/api/find/person")
 	public @ResponseBody Person selectPersonByUsername(@RequestParam("username") String username) {
 		PersonDao dao = PersonDao.getInstance();
@@ -73,8 +95,9 @@ public class PersonService {
 	 * @param username unique string based on which the search is conducted
 	 * @return Person details
 	 */
-	@RequestMapping(value = "/api/person/{userid}", method=RequestMethod.PUT)
-	public @ResponseBody Person updatePerson(@PathVariable("id") int id,
+	@CrossOrigin(origins = "http://localhost:4200")
+	@RequestMapping(value = "/api/person/{userid}", method=RequestMethod.POST)
+	public @ResponseBody Person updatePerson(@PathVariable("userid") String id,
 			@RequestBody String json) {
 		PersonDao dao = PersonDao.getInstance();
 		JSONObject obj;
@@ -82,14 +105,14 @@ public class PersonService {
 			obj = new JSONObject(json);
 			String firstname = obj.getString("firstName");
 			String lastname = obj.getString("lastName");
-			String password = obj.getString("password");
-			String email = obj.getString("email");
+			String password = obj.getString(Constants.AWS_P);
+			String email = obj.getString("username");
 			Person p = new Person(firstname, lastname, email, password, "123", RoleType.STUDENT.name());
-			dao.updatePerson(id,p);
+			dao.updatePerson(Integer.parseInt(id),p);
 		} catch (JSONException e) {
-			LOGGER.log(Level.INFO, e.toString());
+			LOGGER.info(e.toString());
 		}
-		return dao.findPersonById(id);
+		return dao.findPersonById(Integer.parseInt(id));
 	}
 
 }
