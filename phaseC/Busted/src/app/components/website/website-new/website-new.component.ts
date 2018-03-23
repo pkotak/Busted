@@ -67,7 +67,7 @@ export class WebsiteNewComponent implements OnInit {
       this.websiteService.createWebsite(this.userId, this.newWebsite)
         .subscribe((websites) => {
           // this.websites = websites;
-          this.router.navigate(['user', 'website']);
+          this.router.navigate(['user', 'profile']);
         });
       console.log(this.newWebsite);
     }
@@ -86,7 +86,7 @@ export class WebsiteNewComponent implements OnInit {
 
     this.userId = this.user['_id'];
 
-    this.websiteService.findAllClasses()
+    this.websiteService.findWebsitesByUser(this.userId)
       .subscribe((classes) => {
         this.websites = classes;
         console.log(classes);

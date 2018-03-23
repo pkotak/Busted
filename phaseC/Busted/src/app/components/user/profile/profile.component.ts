@@ -9,6 +9,7 @@ import {environment} from '../../../../environments/environment';
 import { SharedService } from '../../../services/shared.service.client';
 import {CanActivate} from '@angular/router';
 import {DomSanitizer, SafeResourceUrl} from '@angular/platform-browser';
+import {Website} from '../../../models/website.model.client';
 
 @Component({
   selector: 'app-profile',
@@ -28,11 +29,13 @@ export class ProfileComponent implements OnInit {
   class: String;
   youtubeUrl: SafeResourceUrl;
   url: String;
+  websites: Website[];
   // inject route info in constructor
   constructor(
           private userService: UserService,
           private activatedRoute: ActivatedRoute,
           private sharedService: SharedService,
+          private websiteService: WebsiteService,
           private router: Router,
           public sanitizer: DomSanitizer) { }
 
@@ -113,14 +116,44 @@ export class ProfileComponent implements OnInit {
     }
   }
 
+  addclass() {
+    if (this.user.role === 'STUDENT') {
+      alert('Student cannot create classes');
+    } else if (this.user.role === 'TA') {
+      alert('TA cannot create classes');
+    } else {
+      this.router.navigate(['user', 'website', 'new']);
+    }
+  }
+
+  // gotoAllclass() {
+  //   if (this.user.role !== 'ADMIN') {
+  //     alert('Access forbidden');
+  //   } else {
+  //     this.router.navigate(['user', 'website']);
+  //   }
+  // }
+
   // notify the changes of the route
   ngOnInit() {
 
     console.log(this.sharedService.user);
-    this.user = this.sharedService.user;
 
     this.getUser();
 
+    this.user = this.sharedService.user;
+
+    // this.websiteService.findWebsitesByUserAndRole(this.userId, this.user.role)
+    //   .subscribe((classes) => {
+    //     this.websites = classes;
+    //     console.log(classes);
+    //   });
+
+    this.websiteService.findWebsitesByUser(this.userId)
+      .subscribe((classes) => {
+        this.websites = classes;
+        console.log(classes);
+      });
     // invoke a function that can pass the value of the parameters
     // this.activatedRoute.params.subscribe((params) => {
     //   this.userId = params['userId'];

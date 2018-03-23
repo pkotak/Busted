@@ -75,7 +75,7 @@ export class WebsiteEditComponent implements OnInit {
           this.websiteService.updateWebsite(this.wid, newWebsite)
             .subscribe((status) => {
               console.log(status);
-              this.router.navigate(['user', 'website']);
+              this.router.navigate(['profile']);
             });
         }
       }
@@ -129,7 +129,7 @@ export class WebsiteEditComponent implements OnInit {
 
     dropClass() {
       if ((this.user.class === '') || ((this.user.class !== this.wid) && (this.user.competition !== this.wid))) {
-        alert ('You are currently not enrolled in this class or competition.');
+        alert ('You are currently not enrolled in this class.');
       } else {
         if (this.website.competition === 0) {
           this.updatedUser = {
@@ -164,7 +164,7 @@ export class WebsiteEditComponent implements OnInit {
           // console.log(status);
           this.user = newuser;
           console.log(this.user);
-          alert('You have dropped class/competition "' + this.website.name + '"');
+          alert('You have dropped course "' + this.website.name + '"');
           this.router.navigate(['user', 'website']);
         });
       }
@@ -172,11 +172,9 @@ export class WebsiteEditComponent implements OnInit {
 
 
     goToMyPortfolio() {
-      if ( (this.user.role === 'ORGANIZER') && (this.website.competition === 0) ) {
-        alert ('Competition organizers cannot check portfolios in normal classes.');
-      } else if ((this.user.role === 'STUDENT') && ((this.user.class !== this.website._id) &&
+    if ((this.user.role === 'STUDENT') && ((this.user.class !== this.website._id) &&
           (this.user.competition !== this.website._id))) {
-        alert ('Student may only check portfolios of its own class or competition.');
+        alert ('You are currently not enrolled in this course.');
       } else  {
         this.router.navigate(['user', 'website', this.wid, 'page']);
       }
@@ -184,11 +182,11 @@ export class WebsiteEditComponent implements OnInit {
 
     deleteWebsite() {
       if (this.user.role === 'STUDENT') {
-        alert ('Student cannot delete classes!');
+        alert ('Student cannot delete courses!');
       } else if (this.user.role === 'TA') {
-        alert ('TA cannot delete classes!');
+        alert ('TA cannot delete courses!');
       } else if ((this.user.role === 'PROFESSOR') && (this.user._id !== this.website._user)) {
-        alert ('Professors can only delete own class.');
+        alert ('Professors can only delete own courses.');
       } else if ((this.user.role === 'ORGANIZER') && (this.user._id !== this.website._user)) {
         alert('Competition organizer can only delete own competitions.');
       } else {
@@ -217,7 +215,7 @@ export class WebsiteEditComponent implements OnInit {
     //     this.websites = websites;
     //   });
 
-    this.websiteService.findAllClasses()
+    this.websiteService.findWebsitesByUser(this.userId)
       .subscribe((classes) => {
         this.websites = classes;
         console.log(classes);

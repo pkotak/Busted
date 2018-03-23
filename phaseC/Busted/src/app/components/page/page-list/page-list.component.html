@@ -4,21 +4,21 @@
 
     <!--heading on the nav bar-->
     <div class="navbar-text pull-left">
-      <a routerLink="/user/website" class="black">
+      <a routerLink="/profile" class="black">
         <span class="white glyphicon glyphicon-chevron-left"></span>
       </a>
     </div>
 
     <div class="navbar-brand pull-left">
 
-        <b class = white>Class {{this.website.name}} portfolio dashboard</b>
+        <b class = white>Assignments Dashboard:&nbsp;&nbsp;    Course {{this.website.name}}  </b>
 
     </div>
 
     <!--tick mark-->
     <div class="navbar-brand pull-right ">
       <a (click)= createPortfolio() class="white " >
-        <b>Create</b>
+        <b>New</b>
         <!--<span class="glyphicon glyphicon-plus "></span>-->
         <!--<button class="btn btn-primary">Create a portfolio</button>-->
       </a>
@@ -28,21 +28,30 @@
 </nav>
 
 <div class="container-fluid padding"></div>
-<label class ='letter-tiffany paddingleft'>Welcome to StockSim, &nbsp;{{user.firstName}}!&nbsp; Role: {{user.role}}</label>
+<label class ='letter-tiffany paddingleft'> Hi, &nbsp;{{user.firstName}}!&nbsp; &nbsp; Role: {{user.role}}</label>
 
 <div *ngFor = "let page of pages" class="container-fluid ">
   <ul  class="list-group">
     <li class="list-group-item blue ">
 
-      <a routerLink="/user/website/{{ wid }}/page/{{page._id}}/widget/google/list" class="thick">
-       <b> {{ page.name }} &nbsp;&nbsp;（ Portfolio manager: {{page.ownername}} ）</b>
+      <a routerLink="/user/website/{{ wid }}/page/{{page._id}}/widget/" class="thick">
+       <b> {{ page.name }}: &nbsp;&nbsp; {{page.description}} </b>
       </a>
 
       <!--<a class="pull-right" routerLink="/user/website/{{ wid }}/page/{{page._id}}">-->
         <!--<span class="glyphicon glyphicon-cog"></span>-->
       <!--</a>-->
+      <button class="pull-right btn-success "
+              (click)= "gotoReport()" >
+
+              <!--routerLink="/user/website/{{ wid }}/page/{{page._id}}/widget/new">-->
+        Check Report
+      </button>
+
+      &nbsp;
+
       <button class="pull-right btn-primary " routerLink="/user/website/{{ wid }}/page/{{page._id}}">
-        Edit portfolio
+        Edit assignment
       </button>
 
     </li>
@@ -53,7 +62,7 @@
 <nav class="navbar navbar-tiffany navbar-fixed-bottom">
   <div class="container-fluid">
     <b class="navbar-text pull-left white">
-      StockSim
+      Busted
     </b>
 
     <p class="navbar-text pull-right">

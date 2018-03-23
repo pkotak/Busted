@@ -1,5 +1,6 @@
 package edu.northeastern.springbootjdbc.controllers;
 
+import java.util.List;
 import java.util.logging.Logger;
 
 import org.json.JSONException;
@@ -42,7 +43,7 @@ public class PersonService {
 			String firstname = obj.getString("firstname");
 			String lastname = obj.getString("lastname");
 			email = obj.getString("email");
-			String password = obj.getString(Constants.AWS_P);
+			String password = obj.getString("password");
 			String type = obj.getString("role");
 			Person p = new Person(firstname, lastname, email, password, null, type);
 			dao.createPerson(p);
@@ -51,7 +52,6 @@ public class PersonService {
 		}
 		return dao.findPersonByUsername(email);
 	}
-
 	/**
 	 * Creates a person in the database
 	 * @return 
@@ -67,7 +67,7 @@ public class PersonService {
 		try {
 			obj = new JSONObject(json);
 			email = obj.getString("username");
-			pass = obj.getString(Constants.AWS_P);
+			pass = obj.getString("password");
 		} catch (JSONException e) {
 			LOGGER.info(e.toString());
 		}

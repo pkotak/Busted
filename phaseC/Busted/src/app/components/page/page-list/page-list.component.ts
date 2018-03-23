@@ -39,9 +39,26 @@ export class PageListComponent implements OnInit {
     private sharedService: SharedService,
     private router: Router) { }
 
+
+  // goEditAss() {
+  //   if (this.user.role === 'STUDENT') {
+  //     alert('Student cannot create classes');
+  //   } else if (this.user.role === 'TA') {
+  //     alert('TA cannot create classes');
+  //   } else {
+  //     this.router.navigate(['user', 'website', this.wid, 'page', page._id ]);
+  //   }
+  // }
+
+  gotoReport() {
+    window.open("http://localhost:63342/Busted/Results/index.html");
+  }
+
   createPortfolio() {
-    if (this.user.role === 'TA') {
-      alert('TA cannot create portfolios.');
+    if (this.user.role === 'STUDENT') {
+      alert('Student cannot create assignments.');
+    } else if (this.user.role === 'TA') {
+      alert('TA cannot create assignments.');
     } else {
       this.router.navigate(['user', 'website', this.wid, 'page', 'new' ]);
     }
@@ -66,22 +83,22 @@ export class PageListComponent implements OnInit {
 
     this.userId = this.user['_id'];
 
-      this.websiteService.findWebsitesByUser(this.userId)
-        .subscribe((websites) => {
-          this.websites = websites;
-          console.log(websites);
-        });
+    this.websiteService.findWebsitesByUser(this.userId)
+      .subscribe((websites) => {
+        this.websites = websites;
+        console.log(websites);
+      });
 
     this.websiteService.findWebsiteById(this.userId, this.wid)
       .subscribe((website) => {
         this.website = website;
       });
 
-      this.pageService.findPagesByWebsiteId(this.wid)
-        .subscribe((data: any) => {
-          this.pages = data;
-          console.log(data);
-        });
+    this.pageService.findPagesByWebsiteId(this.wid)
+      .subscribe((data: any) => {
+        this.pages = data;
+        console.log(data);
+      });
 
     this.userService.findUserById(this.userId).subscribe((user: User) => {
       this.user = user;

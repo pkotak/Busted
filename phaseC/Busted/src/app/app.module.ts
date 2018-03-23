@@ -6,6 +6,7 @@ import { LoginComponent } from './components/user/login/login.component';
 import { RegisterComponent } from './components/user/register/register.component';
 import { FormsModule } from '@angular/forms';
 
+
 // import routing in appmodule.
 import {routing} from './app.routing';
 import { ProfileComponent } from './components/user/profile/profile.component';

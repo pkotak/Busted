@@ -6,7 +6,7 @@
     <div class="row">
       <div class="col-sm-1">
         <div class="navbar-text pull-left">
-          <a routerLink="/user/website" class="white">
+          <a routerLink="/profile" class="white">
             <span class="glyphicon glyphicon-chevron-left"></span>
           </a>
         </div>
@@ -15,12 +15,12 @@
       <div class="col-sm-3 hidden-xs">
         <div class="navbar-brand pull-left">
           <!--<a href="../page/page-list.html" class="white">-->
-          <b class="white">Class list</b>
+          <b class="white">My Course List</b>
           <!--</a>-->
         </div>
-        <div  class="navbar-text pull-right white">
-          <span class="glyphicon glyphicon-plus"></span>
-        </div>
+        <!--<div  class="navbar-text pull-right white">-->
+          <!--<span class="glyphicon glyphicon-plus"></span>-->
+        <!--</div>-->
         <!--</p>-->
       </div>
 
@@ -28,7 +28,7 @@
         <!--heading on the nav bar-->
         <div class="navbar-brand pull-left">
           <div class="thick white">
-            <b>New Class</b>
+            <b>New Course</b>
           </div>
         </div>
         <!--tick mark-->
@@ -54,7 +54,7 @@
         <li class="list-group-item blue borderless">
 
           <!--<a routerLink="/profile/{{ userId }}/website/{{ wid }}/page">-->
-          {{ website.name }}   (Professor: {{ website._user.username}} )
+          {{ website.name }}
           <!--</a>-->
 
           <!--<a class="pull-right" >-->
@@ -73,7 +73,7 @@
             <b class="blue">Name</b>
 
           <input ngModel
-                 placeholder="Class name"
+                 placeholder="Course name"
                  name="websitename"
                  class="form-control"
                  type="text"

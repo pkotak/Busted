@@ -50,6 +50,16 @@ export class WebsiteService {
     });
   }
 
+  //
+  findWebsitesByUserAndRole(userId: String, role: String) {
+    // initiate the array
+    // const webs: Website[] = [];
+    const url = this.baseUrl + '/api/user/' + userId + role + '/website';
+    return this.http.get(url).map((response: Response) => {
+      return response.json();
+    });
+  }
+
   // retrieves the website in local websites array whose _id matches the websiteId parameter
 
   findWebsiteById(userId, websiteId) {
