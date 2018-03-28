@@ -1,9 +1,6 @@
 package edu.northeastern.cs5500;
 
 public class Constants {
-	private Constants() {
-		//Private constructor
-	}
 	
 	public static final String LIBRARY_PATH = "jplag-2.11.9-SNAPSHOT-jar-with-dependencies.jar";
 	public static final String LANGUAGE = "python3";
@@ -19,4 +16,6 @@ public class Constants {
 	public static final String FIRSTNAME = "firstname";
 	public static final String LASTNAME = "lastname";
 	public static final String PHONE = "phone";
+	public static final String EMAIL = "email";
+	public static final String APPROVED = "isApproved";
 }

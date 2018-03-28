@@ -17,9 +17,7 @@ public class CourseRoleTest {
 	
 	@Test
 	public void testfindProfessor1() {
-		Person p = new Person("Jose", "Annunziato", "jga@ccs.neu.edu", "password", "8734653652", RoleType.PROFESSOR.name());
-		p.setId(3);		
-		assertEquals(p.toString(), crs.getPersonsforCourse("CS5500", "Spring2018", RoleType.PROFESSOR.name()).get(0).toString());		
+		assertEquals(1, crs.getPersonsforCourse("CS5500", "Spring2018", RoleType.PROFESSOR.name()).size());		
 	}
 	
 	@Test
