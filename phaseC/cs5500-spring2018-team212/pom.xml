@@ -118,6 +118,29 @@
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-resources-plugin</artifactId>
+				<version>2.4.2</version>
+				<executions>
+					<execution>
+						<id>default-copy-resources</id>
+						<phase>process-resources</phase>
+						<goals>
+							<goal>copy-resources</goal>
+						</goals>
+						<configuration>
+							<overwrite>true</overwrite>
+							<outputDirectory>${project.build.directory}/${project.artifactId}-${project.version}/Busted/</outputDirectory>
+							<resources>
+								<resource>
+									<directory>${project.basedir}/Busted</directory>
+								</resource>
+							</resources>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-war-plugin</artifactId>
 				<version>2.6</version>
 				<configuration>
@@ -130,9 +153,9 @@
 			</plugin>
 			<plugin>
 				<configuration>
-				<excludes>
-					<exclude>edu/northeastern/springbootjdbc/daos/**/*</exclude>
-				</excludes>
+					<excludes>
+						<exclude>edu/northeastern/springbootjdbc/daos/**/*</exclude>
+					</excludes>
 				</configuration>
 				<groupId>org.jacoco</groupId>
 				<artifactId>jacoco-maven-plugin</artifactId>
@@ -144,7 +167,7 @@
 							<goal>prepare-agent</goal>
 						</goals>
 					</execution>
-					<execution>
+					<execution>	
 						<id>default-report</id>
 						<phase>prepare-package</phase>
 						<goals>
