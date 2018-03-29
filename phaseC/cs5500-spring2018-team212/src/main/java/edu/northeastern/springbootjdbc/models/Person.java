@@ -6,13 +6,14 @@ package edu.northeastern.springbootjdbc.models;
  *
  */
 public class Person {
-	int id;
-	String firstName;
-	String lastName;
-	String email;
-	String password;
-	String phone;
-	String type;
+	private int id;
+	private String firstName;
+	private String lastName;
+	private String email;
+	private String password;
+	private String phone;
+	private String type;
+	private Boolean isApproved = false;
 
 	public Person() {
 		super();
@@ -87,7 +88,17 @@ public class Person {
 	@Override
 	public String toString() {
 		return "Person [id=" + id + ", firstName=" + firstName + ", lastName=" + lastName + ", email=" + email
-				+ ", password=" + password + ", phone=" + phone + ", type=" + type + "]";
+				+ ", password=" + password + ", phone=" + phone + ", type=" + type + ", isApproved=" + isApproved + "]";
 	}
 
+	public Boolean getIsApproved() {
+		return isApproved;
+	}
+
+	public void setIsApproved(int isApproved) {
+		if (isApproved == 1)
+			this.isApproved = true;
+		else
+			this.isApproved = false;
+	}
 }

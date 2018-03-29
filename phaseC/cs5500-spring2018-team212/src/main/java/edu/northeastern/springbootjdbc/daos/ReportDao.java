@@ -10,7 +10,6 @@ import java.util.List;
 import java.util.logging.Logger;
 
 import edu.northeastern.cs5500.Constants;
-import edu.northeastern.springbootjdbc.models.Person;
 import edu.northeastern.springbootjdbc.models.Report;
 
 /**

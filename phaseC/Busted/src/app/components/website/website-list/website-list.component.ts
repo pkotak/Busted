@@ -37,9 +37,9 @@ export class WebsiteListComponent implements OnInit {
 
   addclass() {
     if (this.user.role === 'STUDENT') {
-      alert('Student cannot create classes');
+      alert('Student cannot create courses');
     } else if (this.user.role === 'TA') {
-      alert('TA cannot create classes');
+      alert('TA cannot create courses');
     } else {
       this.router.navigate(['user', 'website', 'new']);
     }

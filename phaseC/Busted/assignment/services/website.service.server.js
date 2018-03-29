@@ -5,6 +5,8 @@ module.exports = function (app) {
   app.delete("/api/user/:userId/website/:websiteId", deleteWebsite);
   app.put("/api/user/:userId/website/:websiteId", updateWebsite);
   app.get("/api/allClasses", getAllClasses);
+  app.get("/api/user/:userId/:role/website", findWebsitesByUserAndRole);
+
 
 
   var websiteModel = require('../models/website/website.model.server');
@@ -35,6 +37,14 @@ module.exports = function (app) {
 
   function findWebsitesByUser(req, res) {
     var userId = req.params['userId'];
+    return websiteModel.findAllWebsitesForUser(userId).then(function (websites){
+      res.json(websites);
+    });
+  }
+
+  function findWebsitesByUserAndRole(req, res) {
+    var userId = req.params['userId'];
+    var role = req.params['role'];
     return websiteModel.findAllWebsitesForUser(userId).then(function (websites){
       res.json(websites);
     });

@@ -11,17 +11,17 @@
 
     <div class="navbar-brand pull-left">
       <div class="thick">
-        <b>Portfolio {{this.page.name}}</b>
+        <b>Assignment: {{this.page.name}}</b>
       </div>
     </div>
 
     <!--tick mark-->
-    <div class="navbar-text pull-right">
-      <a routerLink="/user/website/{{wid}}/page/{{pid}}/widget/new"
-         class="black">
-        <span class="glyphicon glyphicon-plus"></span>
-      </a>
-    </div>
+    <!--<div class="navbar-text pull-right">-->
+      <!--<a routerLink="/user/website/{{wid}}/page/{{pid}}/widget/new"-->
+         <!--class="black">-->
+        <!--<span class="glyphicon glyphicon-plus"></span>-->
+      <!--</a>-->
+    <!--</div>-->
 
   </div>
 </nav>
@@ -29,10 +29,29 @@
 
 
 <div class="container-fluid padding padding-b " >
-  <label class ='letter-tiffany paddingleft'>"The stock market is filled with individuals who know the price of everything,
-    but the value of nothing." - Phillip Fisher</label>
+  <label class ='letter-tiffany paddingleft'>Please make sure submit your assignments before due day. Any late
+  submission will be subjected to 50% grade deduction!</label>
 
-  <div class="widget-list" appSortable (newIndexes)="reorderWidgets($event)">
+  <div class="widget-list paddingleft" appSortable (newIndexes)="reorderWidgets($event)">
+
+
+        <input type="file" nv-file-select uploader="uploader"/>
+
+        <br/>
+
+
+            <!--Name: <span ng-bind="item.file.name"></span><br/>-->
+        <button ng-click="item.upload()">upload</button>
+
+        <br/>
+        <br/>
+        <label>GitHub Link: </label>
+        <input type = "text" #gitUrl>
+
+        <br/>
+        <br/>
+        <button class = 'btn-primary' (click)= submit()>Submit</button>
+
 
     <div *ngFor = "let widget of widgets | orderBy" >
 
@@ -44,6 +63,7 @@
             <div>
               <span class="glyphicon glyphicon-menu-hamburger black pull-right"></span>
               <a class="blue" routerLink="/user/website/{{ wid }}/page/{{pid}}/widget/{{widget._id}}" >
+
                 <span class="glyphicon glyphicon-cog  pull-right"></span>
               </a>
             </div>
@@ -104,7 +124,7 @@
   <div class="container-fluid">
 
     <b class="navbar-text pull-left">
-      StockSim
+      Busted
     </b>
 
     <div class="navbar-text pull-right">

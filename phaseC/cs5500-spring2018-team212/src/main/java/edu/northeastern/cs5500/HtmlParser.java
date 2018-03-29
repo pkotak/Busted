@@ -7,14 +7,19 @@ import java.util.logging.Logger;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
-public class HtmlParser {
+/**
+ * class to extract the data from the HTML report
+ * @author abhiruchi
+ *
+ */
+public class HtmlParser implements IHTMLParser{
 
 	private static final Logger LOGGER = Logger.getLogger(HtmlParser.class.getName());
 
-	public HtmlParser() {
-		// Empty constructor
-	}
-
+	/* (non-Javadoc)
+	 * @see edu.northeastern.cs5500.IHTMLParser#parse()
+	 */
+	@Override
 	public String parse() {
 		File in = new File("Results/match0-link.html");
 		try {

@@ -46,9 +46,11 @@ export class PageEditComponent implements OnInit {
     this.userId = this.user['_id'];
   }
 
+
+
   update() {
     if (!((this.user._id === this.page.owner) || (this.user.role === 'ADMIN'))) {
-      alert("Only admin can modify other's portfolio.");
+      alert("Current user is not allowed modify the assignment.");
     } else {
       if (!this.page.name) {
         alert('Please input portfolio name.');

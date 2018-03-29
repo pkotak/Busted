@@ -1,9 +1,10 @@
 package edu.northeastern.cs5500;
 
-import java.util.Random;
+import java.util.List;
 
 import org.junit.Test;
 
+import edu.northeastern.springbootjdbc.controllers.AdminService;
 import edu.northeastern.springbootjdbc.controllers.PersonService;
 import edu.northeastern.springbootjdbc.daos.PersonDao;
 import edu.northeastern.springbootjdbc.models.Person;
@@ -22,27 +23,18 @@ public class PersonTests {
 	@Test
 	public void testFindPeople() {
 		PersonService ps = new PersonService();
-		Random r = new Random();
-		Integer random = r.nextInt(50)+1;
-		String email = "rree@gmail.com";
-		ps.insertPerson(random.toString(), random.toString(), email, random.toString(), "123", "student");
-		//		Person p = ps.selectPersonByUsername(email);
-		//		ps.updatePerson(12, p);
-		//		ps.deletePersonByUsername(p.getEmail());
-		ps.selectAllPeople();
-
-
+		ps.insertPerson("{'firstname':'hello','lastname':'ak','email':'aisj@gma.com','password':'hi','role':'student'}");
+		ps.login("{'username':'ak@gmail.com','password':'hi'}");
+		ps.updatePerson("216", "{'firstName':'gg','lastName':'', 'password':'', 'username': ''}");
+		dao.deletePerson("aisj@gma.com");
 	}
 
-	/////for coverage
 	@Test
 	public void test2() {
 		PersonService ps = new PersonService();
-		ps.updatePerson(0 , "");
 		ps.selectPersonByUsername("");
 	}
 
-	/////for coverage
 	@Test
 	public void test3() {
 		Person p = new Person("A", "B", "ab@ccs.neu.edu", "hsakjfka","2838237582", RoleType.STUDENT.name());
@@ -52,4 +44,18 @@ public class PersonTests {
 		ReportRecipient.PROFESSOR.name();
 	}
 
+	@Test
+	public void testAdmin() {
+		AdminService as = new AdminService();
+		List<Person> pl = as.getUnapprovedUsers();
+		as.approveUser(30);
+		as.deleteUser(30);
+		pl = as.getUnapprovedUsers();
+		for (Person p: pl)
+			p.toString();
+		Person p = new Person("A", "B", "ab@ccs.neu.edu", "hsakjfka","2838237582", RoleType.STUDENT.name());
+		p.setId(30);
+		p.getIsApproved();
+		dao.createPerson(p);
+	}
 }

@@ -49,7 +49,7 @@ function updatePage(pageId, newpage){
   return PageModel.update({_id: pageId},{
     $set: {
       name:newpage.name,
-      title: newpage.description
+      description: newpage.description
     }
   });
 }

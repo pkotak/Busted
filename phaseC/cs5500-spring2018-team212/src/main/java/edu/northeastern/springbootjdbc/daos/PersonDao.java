@@ -16,7 +16,7 @@ import edu.northeastern.springbootjdbc.models.Person;
 /**
  * Person Database Interaction Class
  * @author Paarth
- *
+ * @author abhiruchi
  */
 public class PersonDao {
 	private static PersonDao instance = null;
@@ -145,6 +145,50 @@ public class PersonDao {
 	 *            the unique identifier of the person
 	 * @return Number of rows affected in the database
 	 */
+	public int deletePerson(String username) {
+		int rowsAffected = 0;
+		Connection conn = null;
+		PreparedStatement personStatement = null;
+		try {
+			Class.forName(Constants.JDBC_DRIVER);
+			conn = DriverManager.getConnection(Constants.CONNECTION_STRING, Constants.AWS_USERNAME,
+					Constants.AWS_P);
+			Person p = findPersonByUsername(username);
+			int personId = p.getId();
+			String personDelete = "DELETE FROM Person where id = ?";
+			try {
+				personStatement = conn.prepareStatement(personDelete);
+				personStatement.setInt(1, personId);
+				rowsAffected += personStatement.executeUpdate();
+			} finally {
+				if (personStatement != null)
+					personStatement.close();
+			}
+
+		} catch (ClassNotFoundException e) {
+			LOGGER.info(e.toString());
+		} catch (SQLException e) {
+			LOGGER.info(e.toString());
+		} finally {
+			try {
+				if (conn != null) {
+					conn.close();
+				}
+			} catch (SQLException e) {
+				LOGGER.info(e.toString());
+			}
+		}
+		return rowsAffected;
+	}
+
+	
+	/**
+	 * Delete a person from the database
+	 * 
+	 * @param personId
+	 *            the unique identifier of the person
+	 * @return Number of rows affected in the database
+	 */
 	public int deletePerson(int personId) {
 		int rowsAffected = 0;
 		Connection conn = null;
@@ -179,23 +223,27 @@ public class PersonDao {
 		}
 		return rowsAffected;
 	}
-
+	
+	
 	/**
 	 * Find all the people
 	 * 
 	 * @return the List of all the People and their details
 	 */
-	public List<Person> findAllPeople() {
+	public List<Person> findAllPeople(boolean unapproved) {
 		List<Person> personList = new ArrayList<Person>();
 		Connection conn = null;
 		PreparedStatement statement = null;
 		ResultSet results = null;
+		String sql = null;
 		try {
 			Class.forName(Constants.JDBC_DRIVER);
 			conn = DriverManager.getConnection(Constants.CONNECTION_STRING, Constants.AWS_USERNAME,
 					Constants.AWS_P);
-
-			String sql = "select * from Person";
+			if (unapproved)
+				sql = "select * from Person where isApproved = 0";
+			else
+				sql = "select * from Person";
 			try {
 				statement = conn.prepareStatement(sql);
 				try {
@@ -204,19 +252,21 @@ public class PersonDao {
 						int id = Integer.parseInt(results.getString("id"));
 						String firstName = results.getString(Constants.FIRSTNAME);
 						String lastName = results.getString(Constants.LASTNAME);
-						String email = results.getString("email");
+						String email = results.getString(Constants.EMAIL);
 						String password = results.getString(Constants.AWS_P);
 						String phone = results.getString(Constants.PHONE);
 						String type = results.getString("type");
+						int isApproved = results.getInt(Constants.APPROVED);
 
 						Person person = new Person();
 						person.setId(id);
 						person.setFirstName(firstName);
 						person.setLastName(lastName);
-						person.setEmail(email);
 						person.setPassword(password);
+						person.setEmail(email);
 						person.setPhone(phone);
 						person.setType(type);
+						person.setIsApproved(isApproved);
 
 						personList.add(person);
 					}
@@ -273,18 +323,21 @@ public class PersonDao {
 						int id = Integer.parseInt(results.getString("id"));
 						String firstName = results.getString("firstname");
 						String lastName = results.getString("lastname");
+						String email = results.getString("email");
 						String password = results.getString("password");
 						String phone = results.getString("phone");
 						String type = results.getString("type");
+						int isApproved = results.getInt("isApproved");
 
 						person = new Person();
 						person.setId(id);
 						person.setFirstName(firstName);
 						person.setLastName(lastName);
 						person.setPassword(password);
-						person.setEmail(username);
+						person.setEmail(email);
 						person.setPhone(phone);
 						person.setType(type);
+						person.setIsApproved(isApproved);
 					}
 				} finally {
 					if (results != null)
@@ -343,6 +396,7 @@ public class PersonDao {
 						String password = results.getString("password");
 						String phone = results.getString("phone");
 						String type = results.getString("type");
+						int isApproved = results.getInt("isApproved");
 
 						person = new Person();
 						person.setId(id);
@@ -352,7 +406,7 @@ public class PersonDao {
 						person.setEmail(email);
 						person.setPhone(phone);
 						person.setType(type);
-
+						person.setIsApproved(isApproved);
 					}
 				} finally {
 					if (results != null)
@@ -381,4 +435,45 @@ public class PersonDao {
 
 	}
 
+
+
+	/**
+	 * method for admin to approve a user as a valid user.
+	 * @param personId
+	 * @return the number of rows affected in the database
+	 */
+	public int approvePerson(int personId) {
+		int rowsAffected = 0;
+		Connection conn = null;
+		PreparedStatement personStatement = null;
+		try {
+			Class.forName(Constants.JDBC_DRIVER);
+			conn = DriverManager.getConnection(Constants.CONNECTION_STRING, Constants.AWS_USERNAME,
+					Constants.AWS_P);
+			String personUpdate = "UPDATE Person p SET p.isApproved = 1 WHERE p.id = ?";
+			try {
+				personStatement = conn.prepareStatement(personUpdate);
+				personStatement.setInt(1, personId);
+				rowsAffected += personStatement.executeUpdate();
+			} finally {
+				if (personStatement != null)
+					personStatement.close();
+			}
+
+		} catch (ClassNotFoundException e) {
+			LOGGER.info(e.toString());
+		} catch (SQLException e) {
+			LOGGER.info(e.toString());
+		} finally {
+			try {
+				if (conn != null) {
+					conn.close();
+				}
+			} catch (SQLException e) {
+				LOGGER.info(e.toString());
+			}
+		}
+		return rowsAffected;
+	} 
+	
 }

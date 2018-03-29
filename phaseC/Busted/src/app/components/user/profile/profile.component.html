@@ -9,18 +9,29 @@
 <nav class="navbar navbar-tiffany navbar-fixed-top">
   <div class="container-fluid">
 
-    <!--heading on the nav bar-->
-    <div class="navbar-brand pull-left">
-      <!--<a class="thick white nounderline " href="../page/page-list.html">-->
-      <b class="white">Profile</b>
-      <!--</a>-->
+    <div class="col-sm-4 hidden-xs">
+      <!--heading on the nav bar-->
+      <div class="navbar-brand pull-left">
+        <!--<a class="thick white nounderline " href="../page/page-list.html">-->
+        <b class="white">Profile</b>
+        <!--</a>-->
+      </div>
+
+      <div class="navbar-text pull-right">
+        <a (click)= "update ()" class="white ">
+          <span class="glyphicon glyphicon-ok "></span>
+        </a>
+      </div>
     </div>
 
-    <div class="navbar-text pull-right">
-      <a (click)= "update ()" class="white ">
-        <span class="glyphicon glyphicon-ok "></span>
+    <div class="navbar-brand pull-right">
+      <a (click) = addclass() class="white ">
+        <b>Add Course</b>
+        <!--<span class="glyphicon glyphicon-plus "></span>-->
       </a>
     </div>
+
+
 
     <!--tick mark-->
 
@@ -33,42 +44,7 @@
 
     <div class="row">
 
-      <div class="col-sm-8 hidden-xs padding padding-b">
 
-        <img src="https://advancedhearingslo.com/wp-content/uploads/2016/04/busted-526x200-2.png"
-             align="middle"/>
-        <!--<h3 >World Finance: Bloomberg Live News</h3>-->
-
-        <!--<div class="videoWrapper">-->
-          <!--<iframe  class="e2e-iframe-trusted-src" width="560" height="315"-->
-                   <!--src = 'https://www.youtube.com/embed/Ga3maNZ0x0w?autoplay=1&cc_load_policy=1&controls=0' frameborder="0" allowfullscreen>-->
-          <!--</iframe>-->
-          <!--<br/>-->
-        <!--</div>-->
-        <br/>
-
-        <!--<a routerLink="/news">-->
-          <!--<h3>Search Stock News</h3>-->
-          <!--&lt;!&ndash;<span class="glyphicon glyphicon-plus "></span>&ndash;&gt;-->
-        <!--</a>-->
-        <br/>
-        <br/>
-
-        <!--<div class="padding"></div>-->
-        <!--<ul *ngFor = "let website of websites"  class="list-group ">-->
-        <!--<li class="list-group-item blue borderless">-->
-
-        <!--&lt;!&ndash;<a routerLink="/profile/{{ userId }}/website/{{ wid }}/page">&ndash;&gt;-->
-        <!--{{ website.name }}-->
-        <!--&lt;!&ndash;</a>&ndash;&gt;-->
-
-        <!--<a class="pull-right" >-->
-        <!--<span class="glyphicon glyphicon-cog"></span>-->
-        <!--</a>-->
-        <!--</li>-->
-        <!--</ul>-->
-
-      </div>
 
       <div class="col-sm-4  padding40 padding-b">
 
@@ -85,13 +61,14 @@
               <br/>
             </form>
 
-        <!--<label class = 'blue'>Welcome to StockSim, {{user.firstName}} !</label>-->
+            <label class ='letter-tiffany '>Hi, {{user.firstName}}! &nbsp; &nbsp; Role: {{user.role}}</label>
 
-        <b class ='letter-tiffany '>Name: &nbsp;{{user.firstName}}!&nbsp; Role: {{user.role}}</b>
+            <!--<label class = 'blue'>Welcome to StockSim, {{user.firstName}} !</label>-->
+
+        <!--<b class ='letter-tiffany '>Name: &nbsp;{{user.firstName}}!&nbsp; Role: {{user.role}}</b>-->
         <br/>
-        <b class ='letter-tiffany'>My class:&nbsp; {{this.user.classname}}</b>
-        <br/>
-        <br/>
+
+
 
           <form #f="ngForm">
               <div class="form-group ">
@@ -137,8 +114,7 @@
               </div>
           </form>
 
-          <a class="btn btn-primary btn-block"
-             [routerLink]="['/user', 'website']">Class list</a>
+
 
           <a class="btn btn-danger btn-block "
              (click)="logout()" >Logout</a>
@@ -146,12 +122,82 @@
           <a (click)="deleteUser()"
             class="btn btn-danger btn-block " routerLink="/login" >Delete User</a>
 
-          <a class="btn btn-info btn-block " (click)=gotoAdmin() >Admin</a>
+          <a class="btn btn-primary btn-block"
+             routerLink="/user/website">All Courses</a>
+
+          <a class="btn btn-info btn-block " (click)=gotoAdmin() >All Users(Admin only)</a>
           <br/>
       </div>
     </div>
 
   </div>
+
+
+      <div class="col-sm-8 hidden-xs padding40 padding-b ">
+
+
+          <h3 class="blue paddingleft15">My Courses</h3>
+
+
+        <div *ngFor = "let website of websites" class="container-fluid ">
+          <ul  class="list-group">
+            <li class="list-group-item blue ">
+
+
+              <a routerLink="/user/website/{{ website._id }}/page" class="thick">
+                <b> {{ website.name }}: {{ website.description }} </b>
+              </a>
+
+
+
+              <!--<button class="pull-right btn-primary " routerLink="/user/website/{{ website._id }}/page">-->
+                <!--Go to assignments-->
+              <!--</button>-->
+
+              <button class="pull-right btn-info " routerLink="/user/website/{{ website._id }}">
+                Edit
+              </button>
+
+            </li>
+          </ul>
+        </div>
+
+        <div class = "paddingleft">
+          <img src="https://advancedhearingslo.com/wp-content/uploads/2016/04/busted-526x200-2.png" align="middle"/>
+        </div>
+
+        <!--<h3 >World Finance: Bloomberg Live News</h3>-->
+
+        <!--<div class="videoWrapper">-->
+        <!--<iframe  class="e2e-iframe-trusted-src" width="560" height="315"-->
+        <!--src = 'https://www.youtube.com/embed/Ga3maNZ0x0w?autoplay=1&cc_load_policy=1&controls=0' frameborder="0" allowfullscreen>-->
+        <!--</iframe>-->
+        <!--<br/>-->
+        <!--</div>-->
+        <br/>
+
+        <!--<a routerLink="/news">-->
+        <!--<h3>Search Stock News</h3>-->
+        <!--&lt;!&ndash;<span class="glyphicon glyphicon-plus "></span>&ndash;&gt;-->
+        <!--</a>-->
+        <br/>
+        <br/>
+
+        <!--<div class="padding"></div>-->
+        <!--<ul *ngFor = "let website of websites"  class="list-group ">-->
+        <!--<li class="list-group-item blue borderless">-->
+
+        <!--&lt;!&ndash;<a routerLink="/profile/{{ userId }}/website/{{ wid }}/page">&ndash;&gt;-->
+        <!--{{ website.name }}-->
+        <!--&lt;!&ndash;</a>&ndash;&gt;-->
+
+        <!--<a class="pull-right" >-->
+        <!--<span class="glyphicon glyphicon-cog"></span>-->
+        <!--</a>-->
+        <!--</li>-->
+        <!--</ul>-->
+
+      </div>
 <!--</form>-->
 
 <!-- Footer -->

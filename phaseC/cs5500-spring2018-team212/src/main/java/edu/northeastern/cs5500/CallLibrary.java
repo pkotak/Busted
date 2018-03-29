@@ -13,14 +13,6 @@ public class CallLibrary {
 	private static final Logger LOGGER = Logger.getLogger(CallLibrary.class.getName());
 
 	/**
-	public static void main(String[] args) {
-		AppMain app = new AppMain();
-		app.runLibrary();
-	}
-	*/
-
-
-	/**
 	 * Runs the comparison in 3 modes: 
 	 * Extreme strict, Moderate Strictness, Easy
 	 */

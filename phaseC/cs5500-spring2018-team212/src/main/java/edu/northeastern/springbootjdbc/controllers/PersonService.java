@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import edu.northeastern.cs5500.Constants;
 import edu.northeastern.springbootjdbc.daos.PersonDao;
 import edu.northeastern.springbootjdbc.models.Person;
 import edu.northeastern.springbootjdbc.models.RoleType;
@@ -79,24 +80,6 @@ public class PersonService {
 	}
 	
 	/**
-	 * Find all people
-	 * @return List of people in the database
-	 */
-	@CrossOrigin(origins = "http://localhost:4200")
-	@RequestMapping("/api/register")
-	public @ResponseBody List<Person> insertPerson(@RequestParam("firstname") String firstname,
-			@RequestParam("lastname") String lastname,
-			@RequestParam("email") String email,
-			@RequestParam("password") String password,
-			@RequestParam("phone") String phone,
-			@RequestParam("type") String type) {
-		PersonDao dao = PersonDao.getInstance();
-		Person p = new Person(firstname, lastname, email, password, phone, type);
-		dao.createPerson(p);
-		return dao.findAllPeople();
-	}
-	
-	/**
 	 * Find a person by user name
 	 * @param username unique string based on which the search is conducted
 	 * @return Person details
@@ -106,6 +89,18 @@ public class PersonService {
 	public @ResponseBody Person selectPersonByUsername(@RequestParam("username") String username) {
 		PersonDao dao = PersonDao.getInstance();
 		return dao.findPersonByUsername(username);
+	}
+	
+	/**
+	 * Find all people
+	 * @param username unique string based on which the search is conducted
+	 * @return List of People details
+	 */
+	@CrossOrigin(origins = "http://localhost:4200")
+	@RequestMapping("/api/user/all")
+	public @ResponseBody List<Person> selectAllPeople() {
+		PersonDao dao = PersonDao.getInstance();
+		return dao.findAllPeople(false);
 	}
 	
 	/**
@@ -123,7 +118,7 @@ public class PersonService {
 			obj = new JSONObject(json);
 			String firstname = obj.getString("firstName");
 			String lastname = obj.getString("lastName");
-			String password = obj.getString("password");
+			String password = obj.getString(Constants.AWS_P);
 			String email = obj.getString("username");
 			Person p = new Person(firstname, lastname, email, password, "123", RoleType.STUDENT.name());
 			dao.updatePerson(Integer.parseInt(id),p);
