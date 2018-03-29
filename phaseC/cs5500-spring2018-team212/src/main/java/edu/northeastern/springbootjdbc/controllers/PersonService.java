@@ -52,6 +52,7 @@ public class PersonService {
 		}
 		return dao.findPersonByUsername(email);
 	}
+
 	/**
 	 * Creates a person in the database
 	 * @return 
@@ -88,6 +89,18 @@ public class PersonService {
 	public @ResponseBody Person selectPersonByUsername(@RequestParam("username") String username) {
 		PersonDao dao = PersonDao.getInstance();
 		return dao.findPersonByUsername(username);
+	}
+	
+	/**
+	 * Find all people
+	 * @param username unique string based on which the search is conducted
+	 * @return List of People details
+	 */
+	@CrossOrigin(origins = "http://localhost:4200")
+	@RequestMapping("/api/user/all")
+	public @ResponseBody List<Person> selectAllPeople() {
+		PersonDao dao = PersonDao.getInstance();
+		return dao.findAllPeople(false);
 	}
 	
 	/**
