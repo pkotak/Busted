@@ -15,8 +15,11 @@
 log/
 target/
 
-#Jplag
+# Jplag
 phaseC/cs5500-spring2018-team212/Results/
 
-#springbootjdbc
+# springbootjdbc
 phaseC/cs5500-spring2018-team212/derby.log
+
+# npm-debug
+phaseC/cs5500-spring2018-team212/npm-debug.log

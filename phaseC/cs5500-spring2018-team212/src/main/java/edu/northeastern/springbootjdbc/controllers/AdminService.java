@@ -26,7 +26,7 @@ public class AdminService {
 		 * @return a list of all the unapproved persons
 		 */
 		@CrossOrigin(origins = "http://localhost:4200")
-		@RequestMapping("/api/find/unapprovedusers")
+		@RequestMapping("/api/admin/find/unapprovedusers")
 		public @ResponseBody List<Person> getUnapprovedUsers() {
 			return dao.findAllPeople(true);
 		}
@@ -36,7 +36,7 @@ public class AdminService {
 		 * @return int indicating whether the person was approved
 		 */
 		@CrossOrigin(origins = "http://localhost:4200")
-		@RequestMapping("/api/approve/user")
+		@RequestMapping("/api/admin/approve/user")
 		public @ResponseBody int approveUser(@RequestParam("userid") int userid) {
 			return dao.approvePerson(userid);
 		}
@@ -46,7 +46,7 @@ public class AdminService {
 		 * @return int indicating whether the person was removed from the database
 		 */
 		@CrossOrigin(origins = "http://localhost:4200")
-		@RequestMapping("/api/approve/user")
+		@RequestMapping("/api/admin/delete/user")
 		public @ResponseBody int deleteUser(@RequestParam("userid") int userid) {
 			return dao.deletePerson(userid);
 		}
@@ -57,7 +57,7 @@ public class AdminService {
 		 * @return the number of rows affected
 		 */
 		@CrossOrigin(origins = "http://localhost:4200")
-		@RequestMapping("/api/register")
+		@RequestMapping("/api/admin/register")
 		public @ResponseBody Person insertPerson(@RequestBody String json) {
 			PersonService ps = new PersonService();
 			return ps.insertPerson(json);
