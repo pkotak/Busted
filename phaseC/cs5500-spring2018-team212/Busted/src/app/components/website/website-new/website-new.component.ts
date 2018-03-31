@@ -7,6 +7,7 @@ import { WebsiteService} from '../../../services/website.service.client';
 import { Website} from '../../../models/website.model.client';
 import { NgForm } from '@angular/forms';
 import {SharedService} from '../../../services/shared.service.client';
+import {CookieService} from 'ngx-cookie-service';
 
 
 @Component({
@@ -22,17 +23,20 @@ export class WebsiteNewComponent implements OnInit {
   user: any;
   name: String;
   developerId: String;
-  websitename: String;
-  websites: Website[];
+  code: String;
+  semester: String;
+  courses: [{}];
   description: String;
-  newWebsite: any;
+  newCourse: any;
 
   // inject route info in constructor
   constructor(
     private websiteService: WebsiteService,
     private route: ActivatedRoute,
     private router: Router,
-    private sharedService: SharedService) { }
+    private sharedService: SharedService,
+    private cookieService: CookieService,
+    private userService: UserService) { }
 
   getUser() {
     // this.user = JSON.parse(localStorage.getItem("user"));
@@ -42,36 +46,34 @@ export class WebsiteNewComponent implements OnInit {
 
   create() {
 
-    this.websitename = this.createForm.value.websitename;
-    this.description = this.createForm.value.description;
-    if (this.websitename === "") {
-      alert('Please input class name');
+    this.name = this.createForm.value.name;
+    this.code = this.createForm.value.code;
+    this.semester = this.createForm.value.semester;
+
+    if (this.semester === "") {
+      alert('Please input semester');
+    } else if (this.code === "") {
+      alert('Please input course code');
+    } else if (this.name === "") {
+      alert('Please input course name');
     } else {
-      if (this.user.role !== 'ORGANIZER') {
-        this.newWebsite = {
-          _id: this.websiteService.newId(),
-          name: this.websitename,
-          developerId: this.userId,
-          description: this.description,
-          competition: 0
-        };
-      } else {
-        this.newWebsite = {
-          _id: this.websiteService.newId(),
-          name: this.websitename + ' (Trading Competition)',
-          developerId: this.userId,
-          description: this.description,
-          competition: 1
-        };
-      }
-      this.websiteService.createWebsite(this.userId, this.newWebsite)
-        .subscribe((websites) => {
-          // this.websites = websites;
-          this.router.navigate(['user', 'profile']);
-        });
-      console.log(this.newWebsite);
+      this.newCourse = {
+        // _id: this.websiteService.newId(),
+        name: this.name,
+        code: this.code,
+        semester: this.semester
+      };
     }
+    console.log(this.newCourse);
+
+
+    this.websiteService.createWebsite(this.userId, this.newCourse)
+      .subscribe((courses) => {
+        // this.websites = websites;
+        this.router.navigate(['profile']);
+      });
   }
+
 
   // notify the changes of the route
   ngOnInit() {
@@ -80,16 +82,22 @@ export class WebsiteNewComponent implements OnInit {
       this.wid = params['wid'];
     });
 
-    this.getUser();
 
-    this.user = this.sharedService.user;
+    this.userId = this.cookieService.get('user');
 
-    this.userId = this.user['_id'];
+    console.log(this.userId);
+
+    this.userService.findUserById(this.userId).subscribe((user: User) => {
+      this.user = user;
+      console.log(this.user);
+    });
+
+    // this.userId = this.user['id'];
 
     this.websiteService.findWebsitesByUser(this.userId)
-      .subscribe((classes) => {
-        this.websites = classes;
-        console.log(classes);
+      .subscribe((courses) => {
+        this.courses = courses;
+        console.log(courses);
       });
 
     // this.websiteService.findWebsitesByUser(this.userId)

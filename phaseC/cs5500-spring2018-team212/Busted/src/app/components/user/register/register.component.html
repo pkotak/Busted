@@ -16,7 +16,7 @@
 
   <form (ngSubmit) = "register()" #f="ngForm">
     <input ngModel
-           placeholder="username"
+           placeholder="username(email)"
            name="username"
            class="form-control"
            type="text"
@@ -36,6 +36,22 @@
            name="passwordvalid"
            class="form-control"
            type="password"
+           required
+           #passwordvalid="ngModel"/>
+
+    <input ngModel
+           placeholder="First Name"
+           name="firstName"
+           class="form-control"
+           type="firstName"
+           required
+           #password="ngModel"/>
+
+    <input ngModel
+           placeholder="Last Name"
+           name="lastName"
+           class="form-control"
+           type="lastName"
            required
            #passwordvalid="ngModel"/>
 

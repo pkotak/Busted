@@ -4,6 +4,8 @@ import java.util.List;
 
 import org.junit.Test;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+
 import edu.northeastern.springbootjdbc.controllers.AdminService;
 import edu.northeastern.springbootjdbc.controllers.PersonService;
 import edu.northeastern.springbootjdbc.daos.PersonDao;
@@ -25,12 +27,12 @@ public class PersonTests {
 		PersonService ps = new PersonService();
 		ps.insertPerson("{'firstname':'hello','lastname':'ak','email':'aisj@gma.com','password':'hi','role':'student'}");
 		ps.login("{'username':'ak@gmail.com','password':'hi'}");
-		ps.updatePerson("216", "{'firstName':'gg','lastName':'', 'password':'', 'username': ''}");
+		ps.updatePerson("216", "{'firstName':'gg','lastName':'','email':'gg@gmail.com', 'phone':'', 'type':'STUDENT','password':'', 'username': ''}");
 		dao.deletePerson("aisj@gma.com");
 	}
 
 	@Test
-	public void test2() {
+	public void test2() throws JsonProcessingException {
 		PersonService ps = new PersonService();
 		ps.selectPersonByUsername("");
 	}
@@ -45,11 +47,36 @@ public class PersonTests {
 	}
 
 	@Test
+	public void testSelectAllPeople() {
+		PersonService ps = new PersonService();
+		ps.selectAllPeople();
+	}
+	
+	@Test
+	public void testSelectPersonById() {
+		PersonService ps = new PersonService();
+		ps.selectPersonById("3");
+	}
+	
+	@Test
+	public void testBadJson() {
+		PersonService ps = new PersonService();
+		String badJson = "{firstName':'gg','lastName':'','email':'gg@gmail.com', 'phone':'', 'type':'STUDENT','password':'', 'username': ''}";
+		ps.updatePerson("216", badJson);
+	}
+	
+	@Test
+	public void testPersonByUsername() throws JsonProcessingException {
+		PersonService ps = new PersonService();
+		ps.selectPersonByUsername("jga@ccs.neu.edu");
+	}
+	
+	@Test
 	public void testAdmin() {
 		AdminService as = new AdminService();
 		List<Person> pl = as.getUnapprovedUsers();
-		as.approveUser(30);
-		as.deleteUser(30);
+		as.approveUser("30");
+		as.deleteUser("30");
 		pl = as.getUnapprovedUsers();
 		for (Person p: pl)
 			p.toString();

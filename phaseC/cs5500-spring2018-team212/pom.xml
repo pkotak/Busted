@@ -84,6 +84,16 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>com.sun.mail</groupId>
+			<artifactId>mailapi</artifactId>
+			<version>1.5.2</version>
+		</dependency>
+		<dependency>
+			<groupId>com.sun.mail</groupId>
+			<artifactId>smtp</artifactId>
+			<version>1.5.2</version>
+		</dependency>
 
 		<dependency>
 			<groupId>org.apache.derby</groupId>
@@ -111,7 +121,11 @@
 			<artifactId>json</artifactId>
 			<version>20160810</version>
 		</dependency>
-
+		<dependency>
+			<groupId>org.codehaus.jackson</groupId>
+			<artifactId>jackson-mapper-asl</artifactId>
+			<version>1.9.10</version>
+		</dependency>
 	</dependencies>
 
 	<build>
@@ -167,7 +181,7 @@
 							<goal>prepare-agent</goal>
 						</goals>
 					</execution>
-					<execution>	
+					<execution>
 						<id>default-report</id>
 						<phase>prepare-package</phase>
 						<goals>
@@ -176,6 +190,7 @@
 					</execution>
 				</executions>
 			</plugin>
+
 		</plugins>
 	</build>
 

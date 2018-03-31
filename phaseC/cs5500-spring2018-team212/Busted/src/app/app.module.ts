@@ -5,6 +5,8 @@ import { AppComponent } from './app.component';
 import { LoginComponent } from './components/user/login/login.component';
 import { RegisterComponent } from './components/user/register/register.component';
 import { FormsModule } from '@angular/forms';
+import { CookieService } from 'ngx-cookie-service';
+
 
 
 // import routing in appmodule.
@@ -91,7 +93,8 @@ import { AdminComponent } from './components/user/admin/admin.component';
     FlickrService,
     SharedService,
     AuthenticationService,
-    GoogleFinanceServiceClient
+    GoogleFinanceServiceClient,
+    CookieService
   ],
   bootstrap: [AppComponent]
 })

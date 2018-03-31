@@ -9,6 +9,7 @@ import { Website} from '../../../models/website.model.client';
 import { ViewChild } from '@angular/core';
 import {SharedService} from '../../../services/shared.service.client';
 import { QuillEditorModule } from 'ngx-quill-editor';
+import {CookieService} from 'ngx-cookie-service';
 
 @Component({
   selector: 'app-website-edit',
@@ -24,11 +25,14 @@ export class WebsiteEditComponent implements OnInit {
   user: any;
   name: String;
   developerId: String;
-  websites: Website[];
+  courses: [{}];
   description: String;
   website: any;
+  semester: String;
+  code: String;
   websitename: String;
   updatedUser: any;
+  course: any;
 
   // inject route info in constructor
   constructor(
@@ -37,13 +41,8 @@ export class WebsiteEditComponent implements OnInit {
     private router: Router,
     private activatedRoute: ActivatedRoute,
     private sharedService: SharedService,
-    private userService: UserService) { }
-
-    getUser() {
-      // this.user = JSON.parse(localStorage.getItem("user"));
-      this.user = this.sharedService.user;
-      this.userId = this.user['_id'];
-    }
+    private userService: UserService,
+    private cookieService: CookieService) { }
 
     // findClassName(classID) {
     //   this.websiteService.findWebsiteById(this.userId, classID)
@@ -53,26 +52,32 @@ export class WebsiteEditComponent implements OnInit {
     // }
 
     update() {
-      if (this.user.role === 'STUDENT') {
+      if (this.user.type === 'STUDENT') {
         alert ('Students cannot modify class information.');
-      } else if (this.user.role === 'TA') {
+      } else if (this.user.type === 'TA') {
         alert ('TA cannot modify class information.');
-      } else if ((this.user.role === 'PROFESSOR') && (this.user._id !== this.website._user)) {
-        alert ('Professors can only modify own class information.');
-      }else if ((this.user.role === 'ORGANIZER') && (this.user._id !== this.website._user)) {
-        alert ('Organizer can only modify own class information.');
-      }else {
+      }
+
+      // else if ((this.user.type === 'PROFESSOR') && (this.user._id !== this.website._user)) {
+      //   alert ('Professors can only modify own class information.');
+      // }
+
+      else {
         console.log();
-        if (!this.website.name) {
+        if (!this.course.semester) {
+          alert('Please input class semester');
+        } else if (!this.course.name) {
           alert('Please input class name');
+        } else if (!this.course.code) {
+          alert('Please input class code');
         } else {
-          const newWebsite: Website = {
-            _id: this.wid,
-            name: this.website.name,
-            developerId: this.userId,
-            description: this.website.description,
+          const newCourse = {
+            id: this.wid,
+            name: this.course.name,
+            code: this.course.code,
+            semester: this.course.semester
           };
-          this.websiteService.updateWebsite(this.wid, newWebsite)
+          this.websiteService.updateWebsite(this.wid, newCourse)
             .subscribe((status) => {
               console.log(status);
               this.router.navigate(['profile']);
@@ -82,98 +87,58 @@ export class WebsiteEditComponent implements OnInit {
     }
 
     joinClass() {
-      console.log(this.user);
-     if ((!this.user.class) || (!this.user.competition))  {
-
-       if ((this.website.competition === 0)) {
-         this.updatedUser = {
-           _id: this.userId,
-           username: this.user.username,
-           password: this.user.password,
-           firstName: this.user.firstName,
-           lastName: this.user.lastName,
-           email: this.user.email,
-           class: this.wid,
-           classname: this.website.name,
-           competition: this.user.competition,
-           competitionName: this.user.competitionName
-         };
-       } else if ((this.website.competition === 1)) {
-         this.updatedUser = {
-           _id: this.userId,
-           username: this.user.username,
-           password: this.user.password,
-           firstName: this.user.firstName,
-           lastName: this.user.lastName,
-           email: this.user.email,
-           class: this.user.class,
-           classname: this.user.classname,
-           competition: this.wid,
-           competitionName: this.website.name
-         };
-       }
-
-       console.log(this.updatedUser);
-
-       this.userService.updateUser(this.userId, this.updatedUser).subscribe((newuser) => {
-         // console.log(status);
-         this.user = newuser;
-         console.log(this.user);
-         alert('Welcome to class "' + this.website.name + '"');
-         window.location.reload(false); // reload page
-       });
-     } else {
-        alert('You are currently enrolled in an investment class. You can only enroll one each semester.');
-      }
+      this.userService.findUserInCourse(this.user.id, this.course.id, this.user.type)
+        .subscribe((user) => {
+          if (user.id === this.user.id) {
+            alert('You are enrolled in this course already!');
+          } else {
+            const newCourseRole = {
+              userId: this.user.id,
+              type: this.user.type,
+              courseId: this.course.id
+            };
+            console.log(newCourseRole);
+            this.userService.joinCourse(newCourseRole)
+              .subscribe((newuser) => {
+                // console.log(status);
+                // this.user = newuser;
+                console.log(this.user);
+                alert('Welcome to class "' + this.course.code + this.course.name + '"');
+                window.location.reload(false); // reload page
+              });
+          }
+        });
     }
 
     dropClass() {
-      if ((this.user.class === '') || ((this.user.class !== this.wid) && (this.user.competition !== this.wid))) {
-        alert ('You are currently not enrolled in this class.');
-      } else {
-        if (this.website.competition === 0) {
-          this.updatedUser = {
-            _id: this.userId,
-            username: this.user.username,
-            password: this.user.password,
-            firstName: this.user.firstName,
-            lastName: this.user.lastName,
-            email: this.user.email,
-            class: null,
-            classname: null,
-            competition: this.user.competition,
-            competitionName: this.user.competitionName
-          };
-        } else {
-          this.updatedUser = {
-            _id: this.userId,
-            username: this.user.username,
-            password: this.user.password,
-            firstName: this.user.firstName,
-            lastName: this.user.lastName,
-            email: this.user.email,
-            class: this.user.class,
-            classname: this.user.classname,
-            competition: null,
-            competitionName: null
-          };
-        }
-        console.log(this.updatedUser);
+      this.userService.findUserInCourse(this.user.id, this.course.id, this.user.type)
+        .subscribe((user) => {
+          if (user.id !== this.user.id) {
+            alert('You are not enrolled in this course!');
+          } else {
+            const courseRole = {
+              userId: this.user.id,
+              type: this.user.type,
+              courseId: this.course.id
+            };
+            console.log(courseRole);
+            this.userService.dropCourse(courseRole)
+              .subscribe((newuser) => {
+                // console.log(status);
+                // this.user = newuser;
+                console.log(this.user);
+                alert('You have dropped "' + this.course.code + this.course.name + '"');
+                window.location.reload(false); // reload page
+              });
 
-        this.userService.updateUser(this.userId, this.updatedUser).subscribe((newuser) => {
-          // console.log(status);
-          this.user = newuser;
-          console.log(this.user);
-          alert('You have dropped course "' + this.website.name + '"');
-          this.router.navigate(['user', 'website']);
+          }
         });
-      }
     }
 
 
     goToMyPortfolio() {
-    if ((this.user.role === 'STUDENT') && ((this.user.class !== this.website._id) &&
-          (this.user.competition !== this.website._id))) {
+    if ((this.user.type === 'STUDENT') && ((this.user.class !== this.course.id) &&
+          (this.user.competition !== this.course.id))) {
         alert ('You are currently not enrolled in this course.');
       } else  {
         this.router.navigate(['user', 'website', this.wid, 'page']);
@@ -181,18 +146,20 @@ export class WebsiteEditComponent implements OnInit {
     }
 
     deleteWebsite() {
-      if (this.user.role === 'STUDENT') {
+      if (this.user.type === 'STUDENT') {
         alert ('Student cannot delete courses!');
-      } else if (this.user.role === 'TA') {
+      } else if (this.user.type === 'TA') {
         alert ('TA cannot delete courses!');
-      } else if ((this.user.role === 'PROFESSOR') && (this.user._id !== this.website._user)) {
-        alert ('Professors can only delete own courses.');
-      } else if ((this.user.role === 'ORGANIZER') && (this.user._id !== this.website._user)) {
-        alert('Competition organizer can only delete own competitions.');
-      } else {
+      }
+
+      // else if ((this.user.type === 'PROFESSOR') && (this.user._id !== this.website._user)) {
+      //   alert ('Professors can only delete own courses.');
+      // }
+
+      else {
         this.websiteService.deleteWebsite(this.userId, this.wid)
-          .subscribe((websites: any) => {
-            this.router.navigate(['user', 'website']);
+          .subscribe((courses: any) => {
+            this.router.navigate(['profile']);
           });
       }
     }
@@ -200,35 +167,42 @@ export class WebsiteEditComponent implements OnInit {
   // notify the changes of the route
   ngOnInit() {
     // invoke a function that can pass the value of the parameters
+
     this.route.params.subscribe((params: any) => {
       this.wid = params['wid'];
     });
 
-    this.getUser();
 
-    this.user = this.sharedService.user;
+    this.userId = this.cookieService.get('user');
 
-    this.userId = this.user['_id'];
-
-    // this.websiteService.findWebsitesByUser(this.userId)
-    //   .subscribe((websites) => {
-    //     this.websites = websites;
-    //   });
-
-    this.websiteService.findWebsitesByUser(this.userId)
-      .subscribe((classes) => {
-        this.websites = classes;
-        console.log(classes);
-      });
-
-    this.websiteService.findWebsiteById(this.userId, this.wid)
-      .subscribe((website) => {
-        this.website = website;
-      });
+    console.log(this.userId);
 
     this.userService.findUserById(this.userId).subscribe((user: User) => {
       this.user = user;
       console.log(this.user);
     });
+
+    // this.userId = this.user['id'];
+
+    this.websiteService.findWebsitesByUser(this.userId)
+      .subscribe((courses) => {
+        this.courses = courses;
+        console.log(courses);
+      });
+    // this.websiteService.findWebsitesByUser(this.userId)
+    //   .subscribe((websites) => {
+    //     this.websites = websites;
+    //   });
+
+    // this.websiteService.findWebsitesByUser(this.userId)
+    //   .subscribe((courses) => {
+    //     this.courses = courses;
+    //     console.log(courses);
+    //   });
+
+    this.websiteService.findWebsiteById(this.userId, this.wid)
+      .subscribe((course) => {
+        this.course = course;
+      });
   }
 }

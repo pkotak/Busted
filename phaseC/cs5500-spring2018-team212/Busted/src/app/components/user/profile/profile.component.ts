@@ -10,6 +10,7 @@ import { SharedService } from '../../../services/shared.service.client';
 import {CanActivate} from '@angular/router';
 import {DomSanitizer, SafeResourceUrl} from '@angular/platform-browser';
 import {Website} from '../../../models/website.model.client';
+import {CookieService} from 'ngx-cookie-service';
 
 @Component({
   selector: 'app-profile',
@@ -19,17 +20,21 @@ import {Website} from '../../../models/website.model.client';
 export class ProfileComponent implements OnInit {
 
   @ViewChild('f') updateForm: NgForm;
+  cookieValue = 'unknown';
   baseUrl = environment.baseUrl;
+  type: String;
   user: any;
+  phone: String;
   userId: String;
   username: String;
   email: String;
   firstName: String;
   lastName: String;
   class: String;
+  password: String;
   youtubeUrl: SafeResourceUrl;
   url: String;
-  websites: Website[];
+  courses: [{}];
   // inject route info in constructor
   constructor(
           private userService: UserService,
@@ -37,7 +42,8 @@ export class ProfileComponent implements OnInit {
           private sharedService: SharedService,
           private websiteService: WebsiteService,
           private router: Router,
-          public sanitizer: DomSanitizer) { }
+          public sanitizer: DomSanitizer,
+          private cookieService: CookieService) { }
 
   updateVideoUrl() {
     // const aurl = 'https://www.youtube.com/embed/qdA32j7_U6U';
@@ -45,25 +51,15 @@ export class ProfileComponent implements OnInit {
       .bypassSecurityTrustResourceUrl('https://www.youtube.com/embed/Ga3maNZ0x0w?autoplay=1&cc_load_policy=1&controls=0');
   }
 
-  updateImageUrl(string) {
-    let newurl = '';
-    if (string.substring(1, 4) === 'ass') {
-      newurl = this.baseUrl + string;
-    } else {
-      newurl = this.baseUrl + '/assets/images/placeholder-user-1-400x400.png';
-    }
-    return newurl;
-  }
-
-  getUser() {
-    this.user = this.sharedService.user;
-    this.username = this.user['username'];
-    this.firstName = this.user['firstName'];
-    this.lastName = this.user['lastName'];
-    this.email = this.user['email'];
-    this.userId = this.user['_id'];
-    this.class = this.user.class;
-  }
+  // updateImageUrl(string) {
+  //   let newurl = '';
+  //   if (string.substring(1, 4) === 'ass') {
+  //     newurl = this.baseUrl + string;
+  //   } else {
+  //     newurl = this.baseUrl + '/assets/images/placeholder-user-1-400x400.png';
+  //   }
+  //   return newurl;
+  // }
 
   // issue a logout request to the server. On successful logout, set the currentUser to null.
   // Use the code below as an example.
@@ -76,19 +72,23 @@ export class ProfileComponent implements OnInit {
 
   update() {
     // console.log(user);
-    this.username = this.updateForm.value.username;
+    // this.username = this.updateForm.value.username;
     this.firstName = this.updateForm.value.firstName;
     this.lastName = this.updateForm.value.lastName;
     this.email = this.updateForm.value.email;
+    this.password = this.updateForm.value.password;
+    this.phone = this.updateForm.value.phone;
+    this.type = this.updateForm.value.type;
+
+
 
     const updatedUser = {
-      _id: this.userId,
-      username: this.username,
       password: this.user.password,
       firstName: this.firstName,
       lastName: this.lastName,
       email: this.email,
-      class: this.class
+      phone: this.phone,
+      type: this.type
     };
 
     console.log(updatedUser);
@@ -98,7 +98,7 @@ export class ProfileComponent implements OnInit {
       // console.log(status);
       this.user = newuser;
       console.log(this.user);
-      window.location.reload(false); // reload page
+      // window.location.reload(false); // reload page
     });
   }
 
@@ -109,7 +109,7 @@ export class ProfileComponent implements OnInit {
   }
 
   gotoAdmin() {
-    if (this.user.role !== 'ADMIN') {
+    if (this.user.type !== 'ADMIN') {
       alert('Access forbidden');
     } else {
       this.router.navigate(['user', 'admin']);
@@ -137,11 +137,21 @@ export class ProfileComponent implements OnInit {
   // notify the changes of the route
   ngOnInit() {
 
-    console.log(this.sharedService.user);
+    // this.cookieService.set( 'user', String(this.userId) );
 
-    this.getUser();
+    this.userId = this.cookieService.get('user');
 
-    this.user = this.sharedService.user;
+    console.log(this.userId);
+
+    this.userService.findUserById(this.userId).subscribe((user: User) => {
+      this.user = user;
+      console.log(this.user);
+    });
+
+
+    // console.log(this.sharedService.user);
+    // this.getUser();
+    // this.user = this.sharedService.user;
 
     // this.websiteService.findWebsitesByUserAndRole(this.userId, this.user.role)
     //   .subscribe((classes) => {
@@ -150,20 +160,22 @@ export class ProfileComponent implements OnInit {
     //   });
 
     this.websiteService.findWebsitesByUser(this.userId)
-      .subscribe((classes) => {
-        this.websites = classes;
-        console.log(classes);
+      .subscribe((courses) => {
+        this.courses = courses;
+        console.log(courses);
       });
+
+
     // invoke a function that can pass the value of the parameters
     // this.activatedRoute.params.subscribe((params) => {
     //   this.userId = params['userId'];
     // });
 
     // this.user = this.userService.findUserById(this.userId);
-    this.userService.findUserById(this.userId).subscribe((user: User) => {
-        this.user = user;
-        console.log(this.user);
-    });
+    // this.userService.findUserById(this.userId).subscribe((user: User) => {
+    //     this.user = user;
+    //     console.log(this.user);
+    // });
     // alert('userId: ' + this.userId);
   }
 

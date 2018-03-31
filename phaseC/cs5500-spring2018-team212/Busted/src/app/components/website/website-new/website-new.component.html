@@ -43,18 +43,24 @@
   </nav>
 </div>
 
+
+
+
 <div class="container-fluid">
 
   <div class="row">
 
     <div class="col-sm-4 hidden-xs">
 
-      <div class="padding"></div>
-      <ul *ngFor = "let website of websites"  class="list-group ">
+
+      <div class="padding padding"></div>
+      <label class ='letter-tiffany paddingleft'>Welcom, {{user.firstName}}! &nbsp; &nbsp; Role: {{user.type}}</label>
+
+      <ul *ngFor = "let course of courses"  class="list-group ">
         <li class="list-group-item blue borderless">
 
           <!--<a routerLink="/profile/{{ userId }}/website/{{ wid }}/page">-->
-          {{ website.name }}
+          <b>  {{ course.semester }}:    {{course.code}}   {{course.name}}  </b>
           <!--</a>-->
 
           <!--<a class="pull-right" >-->
@@ -70,27 +76,32 @@
       <form (ngSubmit) = "create()" #f="ngForm">
         <div class="container-fluid">
 
-            <b class="blue">Name</b>
-
+          <b class="blue">Semester</b>
           <input ngModel
-                 placeholder="Course name"
-                 name="websitename"
+                 placeholder="Semester"
+                 name="semester"
                  class="form-control"
                  type="text"
                  required
-                 #websitename = "ngModel"/>
-
-            <b class="blue">Description</b>
+                 #semester = "ngModel"/>
 
 
-
+          <b class="blue">Course Code</b>
           <textarea ngModel
                     class="form-control"
                     type="text"
-                    placeholder='Description'
-                    rows="6"
-                    name="description"
-                    #description = "ngModel"></textarea>
+                    placeholder='Course code'
+                    name="code"
+                    #code = "ngModel"></textarea>
+
+
+          <b class="blue">Course Name</b>
+          <textarea ngModel
+                    class="form-control"
+                    type="text"
+                    placeholder='Course Name'
+                    name="name"
+                    #name = "ngModel"></textarea>
 
         </div>
       </form>
@@ -102,7 +113,7 @@
 <nav class="navbar navbar-tiffany navbar-fixed-bottom">
   <div class="container-fluid">
     <b class="navbar-text pull-left white">
-      StockSim
+      Busted
     </b>
     <div class="navbar-text pull-right">
       <a routerLink="/profile" class="white">
