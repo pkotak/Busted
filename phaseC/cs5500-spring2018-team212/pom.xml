@@ -111,7 +111,11 @@
 			<artifactId>json</artifactId>
 			<version>20160810</version>
 		</dependency>
-
+		<dependency>
+			<groupId>org.codehaus.jackson</groupId>
+			<artifactId>jackson-mapper-asl</artifactId>
+			<version>1.9.10</version>
+		</dependency>
 	</dependencies>
 
 	<build>
@@ -167,7 +171,7 @@
 							<goal>prepare-agent</goal>
 						</goals>
 					</execution>
-					<execution>	
+					<execution>
 						<id>default-report</id>
 						<phase>prepare-package</phase>
 						<goals>

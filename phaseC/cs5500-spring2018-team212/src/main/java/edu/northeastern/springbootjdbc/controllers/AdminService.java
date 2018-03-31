@@ -3,8 +3,10 @@ package edu.northeastern.springbootjdbc.controllers;
 import java.util.List;
 
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -36,9 +38,9 @@ public class AdminService {
 		 * @return int indicating whether the person was approved
 		 */
 		@CrossOrigin(origins = "http://localhost:4200")
-		@RequestMapping("/api/admin/approve/user")
-		public @ResponseBody int approveUser(@RequestParam("userid") int userid) {
-			return dao.approvePerson(userid);
+		@RequestMapping("/api/admin/approve/user/{id}")
+		public @ResponseBody int approveUser(@PathVariable("id") String id) {
+			return dao.approvePerson(Integer.parseInt(id));
 		}
 
 		/**
@@ -46,9 +48,9 @@ public class AdminService {
 		 * @return int indicating whether the person was removed from the database
 		 */
 		@CrossOrigin(origins = "http://localhost:4200")
-		@RequestMapping("/api/admin/delete/user")
-		public @ResponseBody int deleteUser(@RequestParam("userid") int userid) {
-			return dao.deletePerson(userid);
+		@RequestMapping(value="/api/user/{userId}", method=RequestMethod.DELETE)
+		public @ResponseBody int deleteUser(@PathVariable("userId") String userid) {
+			return dao.deletePerson(Integer.parseInt(userid));
 		}
 		
 		/**

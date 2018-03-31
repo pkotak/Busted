@@ -14,22 +14,29 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import edu.northeastern.cs5500.Constants;
+
 import edu.northeastern.springbootjdbc.daos.PersonDao;
 import edu.northeastern.springbootjdbc.models.Person;
 import edu.northeastern.springbootjdbc.models.RoleType;
 
 /**
  * Person Web Service
+ * 
  * @author Paarth
  *
  */
 @RestController
 public class PersonService {
 	private static final Logger LOGGER = Logger.getLogger(PersonService.class.getName());
+
 	/**
 	 * Creates a person in the database
-	 * @return 
+	 * 
+	 * @return
 	 * @return the number of rows affected
 	 */
 	@CrossOrigin(origins = "http://localhost:4200")
@@ -46,6 +53,8 @@ public class PersonService {
 			String password = obj.getString("password");
 			String type = obj.getString("role");
 			Person p = new Person(firstname, lastname, email, password, null, type);
+			if (type.equals(RoleType.STUDENT.name()))
+				p.setIsApproved(1);
 			dao.createPerson(p);
 		} catch (JSONException e) {
 			LOGGER.info(e.toString());
@@ -55,7 +64,8 @@ public class PersonService {
 
 	/**
 	 * Creates a person in the database
-	 * @return 
+	 * 
+	 * @return
 	 * @return the number of rows affected
 	 */
 	@CrossOrigin(origins = "http://localhost:4200")
@@ -73,27 +83,37 @@ public class PersonService {
 			LOGGER.info(e.toString());
 		}
 		Person p = dao.findPersonByUsername(email);
-		if(email.equals(p.getEmail()) && pass.equals(p.getPassword()))
+		if (email.equals(p.getEmail()) && pass.equals(p.getPassword()))
 			return p;
 		else
 			return null;
 	}
-	
+
 	/**
 	 * Find a person by user name
-	 * @param username unique string based on which the search is conducted
+	 * 
+	 * @param username
+	 *            unique string based on which the search is conducted
 	 * @return Person details
+	 * @throws JsonProcessingException 
 	 */
 	@CrossOrigin(origins = "http://localhost:4200")
-	@RequestMapping("/api/find/person")
-	public @ResponseBody Person selectPersonByUsername(@RequestParam("username") String username) {
+	@RequestMapping(value = "/api/user", method = RequestMethod.GET)
+	public @ResponseBody String selectPersonByUsername(@RequestParam("username") String email) throws JsonProcessingException {
 		PersonDao dao = PersonDao.getInstance();
-		return dao.findPersonByUsername(username);
+		ObjectMapper mapperObj = new ObjectMapper();
+		Person p = dao.findPersonByUsername(email);
+		if (p == null) 
+			return "";
+		else
+			return mapperObj.writeValueAsString(p);
 	}
-	
+
 	/**
 	 * Find all people
-	 * @param username unique string based on which the search is conducted
+	 * 
+	 * @param username
+	 *            unique string based on which the search is conducted
 	 * @return List of People details
 	 */
 	@CrossOrigin(origins = "http://localhost:4200")
@@ -102,16 +122,31 @@ public class PersonService {
 		PersonDao dao = PersonDao.getInstance();
 		return dao.findAllPeople(false);
 	}
+
+	/**
+	 * Find all people
+	 * 
+	 * @param username
+	 *            unique string based on which the search is conducted
+	 * @return List of People details
+	 */
+	@CrossOrigin(origins = "http://localhost:4200")
+	@RequestMapping(value="/api/user/{userId}", method=RequestMethod.GET)
+	public @ResponseBody Person selectPersonById(@PathVariable("userId") String id) {
+		PersonDao dao = PersonDao.getInstance();
+		return dao.findPersonById(Integer.parseInt(id));
+	}
 	
 	/**
 	 * Find a person by user name
-	 * @param username unique string based on which the search is conducted
+	 * 
+	 * @param username
+	 *            unique string based on which the search is conducted
 	 * @return Person details
 	 */
 	@CrossOrigin(origins = "http://localhost:4200")
-	@RequestMapping(value = "/api/person/{userid}", method=RequestMethod.POST)
-	public @ResponseBody Person updatePerson(@PathVariable("userid") String id,
-			@RequestBody String json) {
+	@RequestMapping(value = "/api/user/{userid}", method = RequestMethod.POST)
+	public @ResponseBody Person updatePerson(@PathVariable("userid") String id, @RequestBody String json) {
 		PersonDao dao = PersonDao.getInstance();
 		JSONObject obj;
 		try {
@@ -119,9 +154,11 @@ public class PersonService {
 			String firstname = obj.getString("firstName");
 			String lastname = obj.getString("lastName");
 			String password = obj.getString(Constants.AWS_P);
-			String email = obj.getString("username");
-			Person p = new Person(firstname, lastname, email, password, "123", RoleType.STUDENT.name());
-			dao.updatePerson(Integer.parseInt(id),p);
+			String email = obj.getString("email");
+			String phone = obj.getString("phone");
+			String type = obj.getString("type");
+			Person p = new Person(firstname, lastname, email, password, phone, type);
+			dao.updatePerson(Integer.parseInt(id), p);
 		} catch (JSONException e) {
 			LOGGER.info(e.toString());
 		}

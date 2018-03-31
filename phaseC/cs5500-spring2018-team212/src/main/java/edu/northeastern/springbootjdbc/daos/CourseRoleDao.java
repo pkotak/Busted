@@ -42,7 +42,7 @@ public class CourseRoleDao {
 	 * @param person - object representation of the given person.
 	 * @return the list of courses for the given person.
 	 */
-	public List<Course> getCourseForPerson(int personid, String role) {
+	public List<Course> getCourseForPerson(int personid) {
 		List<Course> clist = new ArrayList<Course>();
 		Connection conn = null;
 		PreparedStatement statement = null;
@@ -52,11 +52,10 @@ public class CourseRoleDao {
 			conn = DriverManager.getConnection(Constants.CONNECTION_STRING, Constants.AWS_USERNAME,
 					Constants.AWS_P);
 
-			String sql = "SELECT courseid FROM CourseRole as cr where cr.personid = ? and cr.roletype = ?";
+			String sql = "SELECT courseid FROM CourseRole as cr where cr.personid = ?";
 			try {
 				statement = conn.prepareStatement(sql);
 				statement.setInt(1, personid);
-				statement.setString(2, role);
 				try {
 					results = statement.executeQuery();
 					while (results.next()) {
