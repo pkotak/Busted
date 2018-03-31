@@ -56,73 +56,71 @@
   <div class="row">
 
     <div class="col-sm-4 hidden-xs">
-      <div class="padding"></div>
-      <label class ='letter-tiffany '>Welcome, &nbsp; {{user.firstName}}! &nbsp; &nbsp; Role: {{user.role}}</label>
 
-      <ul *ngFor = "let website of websites"  class="list-group ">
-        <li class="list-group-item blue borderless ">
+
+      <div class="padding padding"></div>
+      <label class ='letter-tiffany paddingleft'>Welcom, {{user.firstName}}! &nbsp; &nbsp; Role: {{user.type}}</label>
+
+      <ul *ngFor = "let course of courses"  class="list-group ">
+        <li class="list-group-item blue borderless">
 
           <!--<a routerLink="/profile/{{ userId }}/website/{{ wid }}/page">-->
-          <b>  {{ website.name }}    {{website.description}}     </b>
+          <b>  {{ course.semester }}:    {{course.code}}   {{course.name}}  </b>
           <!--</a>-->
 
           <!--<a class="pull-right" >-->
-            <!--<span class="glyphicon glyphicon-cog"></span>-->
+          <!--<span class="glyphicon glyphicon-cog"></span>-->
           <!--</a>-->
         </li>
       </ul>
+
     </div>
 
     <div class="col-sm-8 padding">
       <div class="container-fluid">
 
-        <b class ='blue'>My Course: &nbsp;{{this.user.classname}}</b>
         <br/>
         <!--<b class ='blue'>My competition:&nbsp; {{this.user.competitionName}}</b>-->
         <!--<br/>-->
 
 
-        <b class ='blue'>Class Name</b>
-
-        <input [(ngModel)]="this.website.name"
+        <b class ='blue'>Semester</b>
+        <input [(ngModel)]="this.course.semester"
                 class="form-control"
                 type="text"
-                placeholder='name'>
+                placeholder='Semester'>
 
-        <b class ='blue'>Class Description</b>
-
-
-        <textarea [(ngModel)]="this.website.description"
+        <b class ='blue'>Course Code</b>
+        <textarea [(ngModel)]="this.course.code"
                   class="form-control"
                    type="text"
-                   placeholder='description'
-                   rows="6"></textarea>
+                   placeholder='Course Name'></textarea>
 
-          <!--<b class ='blue'>Class Description</b>-->
 
-        <!--<div class="form-group">-->
-          <!--<quill-editor [(ngModel)]="website.description" name="text"></quill-editor>-->
-        <!--</div>-->
+        <b class ='blue'>Course Name</b>
+        <textarea [(ngModel)]="this.course.name"
+                  class="form-control"
+                  type="text"
+                  placeholder='Course Name'></textarea>
 
-        <!--<textarea class="form-control" placeholder="Description" rows="6"></textarea>-->
 
         <a (click)=goToMyPortfolio()
            class="btn btn-primary btn-block" >
           Go to course assignments
         </a>
 
-        <a (click)="joinClass()"
+        <a *ngIf="(user.type !== 'PROFESSOR' )" (click)="joinClass()"
            class="btn btn-success btn-block" >
           Join Course
         </a>
 
-        <a (click)="dropClass()"
+        <a *ngIf="(user.type !== 'PROFESSOR' )" (click)="dropClass()"
            class="btn btn-warning btn-block" >
           Drop Course
         </a>
 
 
-        <a (click)="deleteWebsite()"
+        <a *ngIf="(user.type === 'PROFESSOR' ) || (user.type === 'ADMIN' )" (click)="deleteWebsite()"
           class="btn btn-danger btn-block" >
           Delete (Admin & Professors only)
         </a>

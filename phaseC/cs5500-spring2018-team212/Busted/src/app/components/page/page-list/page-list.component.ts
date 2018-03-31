@@ -9,6 +9,7 @@ import { NgForm } from '@angular/forms';
 import {Page} from '../../../models/page.model.client';
 import {PageService} from '../../../services/page.service.client';
 import { SharedService } from '../../../services/shared.service.client';
+import {CookieService} from 'ngx-cookie-service';
 
 
 @Component({
@@ -24,11 +25,11 @@ export class PageListComponent implements OnInit {
   userId: String;
   user: any;
   developerId: String;
-  websites: Website[];
-  pages: [{}];
+  courses: [{}];
+  assignments: [{}];
   pid: String;
   description: String;
-  website: any;
+  course: any;
 
   // inject route info in constructor
   constructor(
@@ -37,7 +38,8 @@ export class PageListComponent implements OnInit {
     private pageService: PageService,
     private route: ActivatedRoute,
     private sharedService: SharedService,
-    private router: Router) { }
+    private router: Router,
+    private cookieService: CookieService) { }
 
 
   // goEditAss() {
@@ -64,11 +66,11 @@ export class PageListComponent implements OnInit {
     }
   }
 
-  getUser() {
-    // this.user = JSON.parse(localStorage.getItem("user"));
-    this.user = this.sharedService.user;
-    this.userId = this.user['_id'];
-  }
+  // getUser() {
+  //   // this.user = JSON.parse(localStorage.getItem("user"));
+  //   this.user = this.sharedService.user;
+  //   this.userId = this.user['_id'];
+  // }
 
   // notify the changes of the route
   ngOnInit() {
@@ -77,26 +79,32 @@ export class PageListComponent implements OnInit {
       this.wid = params['wid'];
     });
 
-    this.getUser();
+    // this.getUser();
 
-    this.user = this.sharedService.user;
+    this.userId = this.cookieService.get('user');
 
-    this.userId = this.user['_id'];
+    console.log(this.userId);
+
+    this.userService.findUserById(this.userId).subscribe((user: User) => {
+      this.user = user;
+      console.log(this.user);
+    });
+
 
     this.websiteService.findWebsitesByUser(this.userId)
-      .subscribe((websites) => {
-        this.websites = websites;
-        console.log(websites);
+      .subscribe((courses) => {
+        this.courses = courses;
+        console.log(courses);
       });
 
     this.websiteService.findWebsiteById(this.userId, this.wid)
-      .subscribe((website) => {
-        this.website = website;
+      .subscribe((course) => {
+        this.course = course;
       });
 
     this.pageService.findPagesByWebsiteId(this.wid)
       .subscribe((data: any) => {
-        this.pages = data;
+        this.assignments = data;
         console.log(data);
       });
 

@@ -19,17 +19,18 @@ export class PageService {
     return (Number( Math.floor((Math.random()) * 10000))).toString();
   }
 
-  createPage(websiteId, page: Page) {
-    const url = this.baseUrl + '/api/website/' + websiteId + '/page';
-    return this.http.post(url, page)
+  // create assignment for a course
+  createPage(courseId, assignment) {
+    const url = this.baseUrl + '/api/course/' + courseId + '/assignment';
+    return this.http.post(url, assignment)
       .map((response: Response) => {
         return response.json();
       });
   }
 
-  // retrieves the pages in local pages array whose websiteId matches the parameter websiteId
-  findPagesByWebsiteId(websiteId) {
-    const url = this.baseUrl + '/api/website/' + websiteId + '/page';
+  // retrieves the assignments in a course
+  findPagesByWebsiteId(courseId) {
+    const url = this.baseUrl + '/api/course/' + courseId + '/assignment';
     return this.http.get(url).map((response: Response) => {
       return response.json();
     });

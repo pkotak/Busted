@@ -9,7 +9,7 @@
 <nav class="navbar navbar-tiffany navbar-fixed-top">
   <div class="container-fluid">
 
-    <div class="col-sm-4 hidden-xs">
+    <div class="col-sm-4 ">
       <!--heading on the nav bar-->
       <div class="navbar-brand pull-left">
         <!--<a class="thick white nounderline " href="../page/page-list.html">-->
@@ -25,7 +25,7 @@
     </div>
 
     <div class="navbar-brand pull-right">
-      <a (click) = addclass() class="white ">
+      <a *ngIf="(user.type !== 'STUDENT' ) && (user.type !== 'TA' )  " (click) = addclass() class="white ">
         <b>Add Course</b>
         <!--<span class="glyphicon glyphicon-plus "></span>-->
       </a>
@@ -50,18 +50,30 @@
 
         <!--<img src="../../../../assets/images/placeholder-user-1-400x400.png" height="400" width="400"/>-->
         <div class="w3-card w3-margin w3-margin-top center">
-          <img [attr.src]= updateImageUrl(user.url) style="width:100%">
+
+
+          <!--<br/>-->
+          <!--<img class="img-responsive" [src] = updateImageUrl(user.url)  />-->
+          <!--<br/>-->
+
+
+
+          <!--<img src = "" style="width:100%">-->
+          <!--<img src="../../../../assets/images/annunziato.jpg"-->
+               <!--height="240" width="240" style="border:2px solid blue;">-->
+
           <div class="w3-container w3-white">
-            <br/>
 
-            <form ngNoForm action="{{baseUrl}}/api/uploadpicture" method="post" enctype="multipart/form-data">
-              <input  name="myFile"   type="file" class="form-control"/>
-              <input  name="userId" value="{{userId}}"   style="display: none"/>
-              <button type="submit" class="btn btn-primary btn-block ">Upload Image</button>
-              <br/>
-            </form>
 
-            <label class ='letter-tiffany '>Hi, {{user.firstName}}! &nbsp; &nbsp; Role: {{user.role}}</label>
+            <!--<form ngNoForm action="{{baseUrl}}/api/uploadpicture" method="post" enctype="multipart/form-data">-->
+              <!--<input  name="myFile"   type="file" class="form-control"/>-->
+              <!--<input  name="userId" value="{{userId}}"   style="display: none"/>-->
+              <!--<button type="submit" class="btn btn-primary btn-block ">Upload Image</button>-->
+              <!--<br/>-->
+            <!--</form>-->
+
+
+            <label class ='letter-tiffany '>Hi, {{user.firstName}}! &nbsp; &nbsp; Role: {{user.type}}</label>
 
             <!--<label class = 'blue'>Welcome to StockSim, {{user.firstName}} !</label>-->
 
@@ -71,61 +83,96 @@
 
 
           <form #f="ngForm">
-              <div class="form-group ">
-                <label class = 'blue'>Username</label>
-                <input [(ngModel)] = "username"
-                       name="username"
-                       type="email" class="form-control"
-                       placeholder="alice"
-                       required>
-              </div>
-
-
-              <div class="form-group">
-                <label class = 'blue'>Email address</label>
-                <input [(ngModel)] = "email"
-                       name="email"
-                       type="email" class="form-control"
-                       placeholder="a@unicorn.com"
-                       required>
-              </div>
-
-
-              <div class="form-group">
-                <label class = 'blue'>First Name </label>
-                <input [(ngModel)] = "firstName"
-                       name="firstName"
-                       type="text"
-                       class="form-control"
-                       placeholder = "firstName"
-                       required>
-              </div>
+              <!--<div class="form-group ">-->
+                <!--<label class = 'blue'>Username</label>-->
+                <!--<input [(ngModel)] = "username"-->
+                       <!--name="username"-->
+                       <!--type="email" class="form-control"-->
+                       <!--placeholder="alice"-->
+                       <!--required>-->
+              <!--</div>-->
 
 
 
-              <div class="form-group">
-                <label class = 'blue'>Last Name</label>
-                <input [(ngModel)] = "lastName"
-                       name="lastName"
-                       type="text"
-                       class="form-control"
-                       placeholder = "lastName"
-                       required>
-              </div>
+
+            <div class="form-group">
+              <label class = 'blue'>Type</label>
+              <input [(ngModel)] = "user.type"
+                     name="type"
+                     type="type" class="form-control"
+                     placeholder="a@unicorn.com"
+                     required>
+            </div>
+
+            <div class="form-group">
+              <label class = 'blue'>Username</label>
+              <input [(ngModel)] = "user.email"
+                     name="email"
+                     type="email" class="form-control"
+                     placeholder="a@unicorn.com"
+                     required>
+            </div>
+
+
+            <div class="form-group">
+              <label class = 'blue'>First Name </label>
+              <input [(ngModel)] = "user.firstName"
+                     name="firstName"
+                     type="text"
+                     class="form-control"
+                     placeholder = "firstName"
+                     required>
+            </div>
+
+
+
+            <div class="form-group">
+              <label class = 'blue'>Last Name</label>
+              <input [(ngModel)] = "user.lastName"
+                     name="lastName"
+                     type="text"
+                     class="form-control"
+                     placeholder = "lastName"
+                     required>
+            </div>
+
+
+            <div class="form-group">
+              <label class = 'blue'>Phone</label>
+              <input [(ngModel)] = "user.phone"
+                     name="phone"
+                     type="phone" class="form-control"
+                     placeholder="a@unicorn.com"
+                     required>
+            </div>
+
+            <div class="form-group">
+              <label class = 'blue'>Password</label>
+              <input [(ngModel)] = "user.password"
+                     name="password"
+                     type="password" class="form-control"
+                     placeholder="a@unicorn.com"
+                     required>
+            </div>
+
+
           </form>
 
 
 
-          <a class="btn btn-danger btn-block "
-             (click)="logout()" >Logout</a>
+
+
+          <a class="btn btn-danger btn-block " routerLink="/login">Logout</a>
+             <!--(click)="logout()" -->
+
 
           <a (click)="deleteUser()"
             class="btn btn-danger btn-block " routerLink="/login" >Delete User</a>
 
           <a class="btn btn-primary btn-block"
-             routerLink="/user/website">All Courses</a>
+             routerLink="/website">All Courses</a>
 
-          <a class="btn btn-info btn-block " (click)=gotoAdmin() >All Users(Admin only)</a>
+          <a *ngIf="(user.type === 'ADMIN' )" class="btn btn-info btn-block " (click)=gotoAdmin() >All Users(Admin only)</a>
           <br/>
       </div>
     </div>
@@ -139,32 +186,63 @@
           <h3 class="blue paddingleft15">My Courses</h3>
 
 
-        <div *ngFor = "let website of websites" class="container-fluid ">
-          <ul  class="list-group">
-            <li class="list-group-item blue ">
+
+        <div class = "container-fluid  paddingleft padding-b">
+          <table id = 'customers'>
+
+            <thead>
+            <tr>
+              <th>&nbsp; Semester</th>
+              <th>&nbsp; Code</th>
+              <th>&nbsp; Name</th>
+              <th *ngIf="(user.type !== 'STUDENT' && (user.type !== 'TA' ) )">  Edit</th>
+            </tr>
+            </thead>
+
+            <tbody>
+            <tr *ngFor="let course of courses" routerLink="/user/website/{{ course.id }}/page">
+              <td>&nbsp; {{course.semester}}</td>
+              <td>&nbsp; {{course.code}}</td>
+              <td>&nbsp; {{course.name}}</td>
+              <td *ngIf="(user.type !== 'STUDENT' ) && (user.type !== 'TA' )">
+                <a class="glyphicon glyphicon-cog" routerLink="/user/website/{{ course.id }}">
+
+                </a>
+              </td>
 
 
-              <a routerLink="/user/website/{{ website._id }}/page" class="thick">
-                <b> {{ website.name }}: {{ website.description }} </b>
-              </a>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+
+
+        <!--<div *ngFor = "let course of courses" class="container-fluid ">-->
+          <!--<ul  class="list-group">-->
+            <!--<li class="list-group-item blue ">-->
+
+
+              <!--<a routerLink="/user/website/{{ course.id }}/page" class="thick">-->
+                <!--<b> {{ course.semester }}: {{ course.code }} {{ course.name }} </b>-->
+              <!--</a>-->
 
 
 
-              <!--<button class="pull-right btn-primary " routerLink="/user/website/{{ website._id }}/page">-->
-                <!--Go to assignments-->
+              <!--&lt;!&ndash;<button class="pull-right btn-primary " routerLink="/user/website/{{ website._id }}/page">&ndash;&gt;-->
+                <!--&lt;!&ndash;Go to assignments&ndash;&gt;-->
+              <!--&lt;!&ndash;</button>&ndash;&gt;-->
+
+              <!--<button *ngIf="(user.type !== 'STUDENT' )" class="pull-right btn-info " routerLink="/user/website/{{ course.id }}">-->
+                <!--Edit-->
               <!--</button>-->
 
-              <button class="pull-right btn-info " routerLink="/user/website/{{ website._id }}">
-                Edit
-              </button>
+            <!--</li>-->
+          <!--</ul>-->
+        <!--</div>-->
 
-            </li>
-          </ul>
-        </div>
-
-        <div class = "paddingleft">
-          <img src="https://advancedhearingslo.com/wp-content/uploads/2016/04/busted-526x200-2.png" align="middle"/>
-        </div>
+        <!--<div class = "paddingleft">-->
+          <!--<img src="https://advancedhearingslo.com/wp-content/uploads/2016/04/busted-526x200-2.png" align="middle"/>-->
+        <!--</div>-->
 
         <!--<h3 >World Finance: Bloomberg Live News</h3>-->
 

@@ -25,20 +25,21 @@ export class UserService {
 
   // used by authentication service to verify loggedin user
   loggedIn() {
-    const url = this.baseUrl + '/api/loggedIn';
-    this.options.withCredentials = true;
-    return this.http.post(url, '', this.options)
-      .map((res: Response) => {
-        const user = res.json();
-        if (user !== 0) {
-          this.sharedService.user = user; // setting user so as to share with all components
-          return true;
-        } else {
-          this.router.navigate(['/login']);
-          alert('Please login first');
-          return false;
-        }
-      });
+    return true;
+    // const url = this.baseUrl + '/api/loggedIn';
+    // this.options.withCredentials = true;
+    // return this.http.post(url, '', this.options)
+    //   .map((res: Response) => {
+    //     const user = res.json();
+    //     if (user !== 0) {
+    //       this.sharedService.user = user; // setting user so as to share with all components
+    //       return true;
+    //     } else {
+    //       this.router.navigate(['/login']);
+    //       alert('Please login first');
+    //       return false;
+    //     }
+    //   });
   }
 
   // add a logout API to post a logout request to the server. The API should return an observable
@@ -53,13 +54,15 @@ export class UserService {
   }
 
   // posting a register request to the server.
-  register (username, password, role) {
+  register (username, password, role, firstName, lastName) {
     const url = this.baseUrl + '/api/register';
     // create an object to keep track of the username and password
     const credentials = {
-      username: username,
+      email: username,
       password: password,
-      role: role
+      role: role,
+      firstname: firstName,
+      lastname: lastName
     };
     // turn on credentials to make sure the communication is secure
     this.options.withCredentials = true;
@@ -101,9 +104,16 @@ export class UserService {
   // updates the user in local users array whose _id matches the userId parameter
   updateUser(userId, user) {
     const url = this.baseUrl + '/api/user/' + userId;
-    return this.http.put(url, user).map((res: Response) => {
+    return this.http.post(url, user).map((res: Response) => {
         return res.json();
       });
+  }
+
+  approveUser(userId) {
+    const url = this.baseUrl + '/api/admin/approve/user/' + userId;
+    return this.http.post(url, userId).map((res: Response) => {
+      return res.json();
+    });
   }
 
 // returns the user whose username and password match the username and password parameters
@@ -143,6 +153,38 @@ export class UserService {
   findAllUsers() {
     const url = this.baseUrl + '/api/user/all';
     return this.http.get(url)
+      .map((response: Response) => {
+        return response.json();
+      });
+  }
+
+  joinCourse(newCourseRole) {
+    const url = this.baseUrl + '/api/user/course/join';
+    console.log(newCourseRole);
+    return this.http.post(url, newCourseRole)
+      .map((response: Response) => {
+        return response.json();
+      });
+  }
+
+  dropCourse(courseRole) {
+    const url = this.baseUrl + '/api/user/course/drop';
+    // console.log(courseRole);
+    return this.http.post(url, courseRole)
+      .map((response: Response) => {
+        return response.json();
+      });
+  }
+
+  findUserInCourse(userId, courseId, role) {
+
+    const myType = {
+      // _id: this.userService.newId(),
+      type: role
+    };
+    const url =  this.baseUrl + '/api/user/' + userId + '/course/' + courseId;
+    console.log(myType);
+    return this.http.post(url, myType)
       .map((response: Response) => {
         return response.json();
       });

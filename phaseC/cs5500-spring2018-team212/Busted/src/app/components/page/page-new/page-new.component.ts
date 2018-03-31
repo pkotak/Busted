@@ -29,6 +29,7 @@ export class PageNewComponent implements OnInit {
   pagename: String;
   title: String;
   pages: Page[];
+  duedate: Date;
 
   // inject route info in constructor
   constructor(
@@ -45,17 +46,13 @@ export class PageNewComponent implements OnInit {
     this.userId = this.user['_id'];
   }
 
-  create(name, description) {
+  create(name, duedate) {
     if (!name) {
       alert('Please input portfolio name');
     } else {
       const newPage = {
-        _id: this.websiteService.newId(),
         name: name,
-        websiteId: this.wid,
-        description: description,
-        owner: this.user._id,
-        ownername: this.user.username
+        duedate: duedate
       };
 
       this.pageService.createPage(this.wid, newPage).subscribe((pages) => {

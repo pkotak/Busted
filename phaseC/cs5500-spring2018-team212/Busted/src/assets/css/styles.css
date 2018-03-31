@@ -37,6 +37,8 @@ a:hover {
   text-decoration: none !important;
 }
 
+.pointer {cursor: default;}
+
 
 .paddingleft {
   padding-left: 30px;

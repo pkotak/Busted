@@ -23,6 +23,8 @@ export class RegisterComponent implements OnInit {
   disabledFlag: boolean;
   error: any;
   role: String;
+  firstName: String;
+  lastName: String;
 
   constructor(private userService: UserService,
               private router: Router,
@@ -33,13 +35,16 @@ export class RegisterComponent implements OnInit {
     this.username = this.registerForm.value.username;
     this.password = this.registerForm.value.password;
     this.passwordvalid = this.registerForm.value.passwordvalid;
+    this.firstName = this.registerForm.value.firstName;
+    this.lastName = this.registerForm.value.lastName;
 
     if (!this.role) {
       alert('Please select your role!');
     } else {
       this.userService.findUserByUsername(this.username)
         .subscribe((user: User) => {
-          if (user) {
+          if (user.username === this.username) {
+            console.log(user);
             alert('Username "' + this.username + '" already exists');
             this.router.navigate(['/register']);
           } else if (this.password !== this.passwordvalid) {
@@ -47,16 +52,12 @@ export class RegisterComponent implements OnInit {
             this.router.navigate(['/register']);
           } else {
             const newUser = {
-              _id: this.userService.newId(),
-              username: this.username,
+              // _id: this.userService.newId(),
+              email: this.username,
               password: this.password,
-              firstName: '',
-              lastName: '',
+              firstname: this.firstName,
+              lastname: this.lastName,
               role: this.role,
-              class: null,
-              classname: null,
-              competition: null,
-              competitionName: null
             };
             console.log(newUser);
             // this.userService.createUser(newUser).subscribe((auser) => {
@@ -65,7 +66,7 @@ export class RegisterComponent implements OnInit {
             //   this.router.navigate(['profile', this.user._id]);
             // });
             this.userService
-              .register(this.username, this.password, this.role)
+              .register(this.username, this.password, this.role, this.firstName, this.lastName)
               .subscribe((auser) => {
                   this.sharedService.user = auser;
                   // passport will save user information so no need to include userId in router

@@ -25,15 +25,15 @@ export class WebsiteService {
   // The new website's developerId is set to the userId parameter
 
   findAllClasses() {
-    const url = this.baseUrl + '/api/allClasses';
+    const url = this.baseUrl + '/api/allCourses';
     return this.http.get(url).map((response: Response) => {
       return response.json();
     });
   }
 
-  createWebsite(userId: String, website: Website) {
-    const url = this.baseUrl + '/api/user/' + userId + '/website';
-    return this.http.post(url, website)
+  createWebsite(userId: String, course) {
+    const url = this.baseUrl + '/api/user/' + userId + '/courses';
+    return this.http.post(url, course)
       .map((response: Response) => {
         return response.json();
       });
@@ -44,7 +44,8 @@ export class WebsiteService {
   findWebsitesByUser(userId: String) {
     // initiate the array
     // const webs: Website[] = [];
-    const url = this.baseUrl + '/api/user/' + userId + '/website';
+    console.log(userId);
+    const url = this.baseUrl + '/api/user/' + userId + '/courses';
     return this.http.get(url).map((response: Response) => {
       return response.json();
     });
@@ -62,8 +63,8 @@ export class WebsiteService {
 
   // retrieves the website in local websites array whose _id matches the websiteId parameter
 
-  findWebsiteById(userId, websiteId) {
-    const url = this.baseUrl + '/api/user/' + userId + '/website/' + websiteId;
+  findWebsiteById(userId, courseId) {
+    const url = this.baseUrl + '/api/user/' + userId + '/course/' + courseId;
     return this.http.get(url)
       .map((response: Response) => {
       return response.json();
@@ -72,9 +73,9 @@ export class WebsiteService {
 
   // updates the website in local websites array whose _id matches the websiteId parameter
 
-  updateWebsite(websiteId, website) {
-    const url = this.baseUrl + '/api/user/' + website._user + '/website/' + websiteId;
-    return this.http.put(url, website)
+  updateWebsite(courseId, course) {
+    const url = this.baseUrl + '/api/user/course/' + courseId;
+    return this.http.post(url, course)
       .map((response: Response) => {
         return response.json();
       });
@@ -82,8 +83,8 @@ export class WebsiteService {
 
   // removes the website from local websites array whose _id matches thewebsiteId parameter
 
-  deleteWebsite(userId, websiteId) {
-    const url = this.baseUrl + '/api/user/' + userId + '/website/' + websiteId;
+  deleteWebsite(userId, courseId) {
+    const url = this.baseUrl + '/api/user/course/' + courseId;
     return this.http.delete(url)
       .map((response: Response) => {
         return response.json();

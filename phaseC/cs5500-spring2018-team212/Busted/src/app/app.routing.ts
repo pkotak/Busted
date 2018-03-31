@@ -32,7 +32,7 @@ const appRoutes: Routes = [
   {path: 'profile/:userId', component: ProfileComponent},
   // go to profile if canActivate
   {path: 'profile', component: ProfileComponent, canActivate: [AuthenticationService]},
-  {path: 'user/website', component: WebsiteListComponent, canActivate: [AuthenticationService]},
+  {path: 'website', component: WebsiteListComponent, canActivate: [AuthenticationService]},
   {path: 'user/website/new', component: WebsiteNewComponent, canActivate: [AuthenticationService]},
   {path: 'user/website/:wid', component: WebsiteEditComponent, canActivate: [AuthenticationService]},
   {path: 'user/website/:wid/page', component: PageListComponent, canActivate: [AuthenticationService]},

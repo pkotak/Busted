@@ -24,8 +24,10 @@ export class AdminComponent implements OnInit {
   firstName: String;
   lastName: String;
   class: String;
-  youtubeUrl: SafeResourceUrl;
+  isApproved: Number;
+  phone: String;
   users: [{}];
+  // filter: User ;
 
   constructor(private userService: UserService,
               private activatedRoute: ActivatedRoute,
@@ -39,9 +41,18 @@ export class AdminComponent implements OnInit {
     this.firstName = this.user['firstName'];
     this.lastName = this.user['lastName'];
     this.email = this.user['email'];
-    this.userId = this.user['_id'];
-    this.class = this.user.class;
+    this.userId = this.user['id'];
+    this.isApproved = this.user['isApproved'];
+    this.phone = this.user['phone'];
   }
+
+  approve(userId) {
+    this.userService.approveUser(userId).subscribe((status) => {
+      console.log(status);
+      window.location.reload(false); // reload page
+    });
+  }
+
 
   deleteUser(userId) {
     this.userService.deleteUser(userId).subscribe((status) => {

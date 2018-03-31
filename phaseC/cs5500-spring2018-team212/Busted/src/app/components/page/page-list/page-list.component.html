@@ -11,7 +11,7 @@
 
     <div class="navbar-brand pull-left">
 
-        <b class = white>Assignments Dashboard:&nbsp;&nbsp;    Course {{this.website.name}}  </b>
+        <b class = white>Assignments Dashboard:&nbsp;&nbsp; {{this.course.semester}}  {{this.course.code}} {{this.course.name}}  </b>
 
     </div>
 
@@ -28,14 +28,14 @@
 </nav>
 
 <div class="container-fluid padding"></div>
-<label class ='letter-tiffany paddingleft'> Hi, &nbsp;{{user.firstName}}!&nbsp; &nbsp; Role: {{user.role}}</label>
+<label class ='letter-tiffany paddingleft'> Hi, &nbsp;{{user.firstName}}!&nbsp; &nbsp; Role: {{user.type}}</label>
 
-<div *ngFor = "let page of pages" class="container-fluid ">
+<div *ngFor = "let assignment of assignments" class="container-fluid ">
   <ul  class="list-group">
     <li class="list-group-item blue ">
 
-      <a routerLink="/user/website/{{ wid }}/page/{{page._id}}/widget/" class="thick">
-       <b> {{ page.name }}: &nbsp;&nbsp; {{page.description}} </b>
+      <a routerLink="/user/website/{{ wid }}/page/{{assignment._id}}/widget/" class="thick">
+       <b> {{ assignment.name }}: &nbsp;&nbsp; {{assignment.duedate}} </b>
       </a>
 
       <!--<a class="pull-right" routerLink="/user/website/{{ wid }}/page/{{page._id}}">-->
@@ -50,7 +50,7 @@
 
       &nbsp;
 
-      <button class="pull-right btn-primary " routerLink="/user/website/{{ wid }}/page/{{page._id}}">
+      <button class="pull-right btn-primary " routerLink="/user/website/{{ wid }}/page/{{course.id}}">
         Edit assignment
       </button>
 

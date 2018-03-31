@@ -7,6 +7,7 @@ import { WebsiteService} from '../../../services/website.service.client';
 import { Website } from '../../../models/website.model.client';
 import { NgForm } from '@angular/forms';
 import {SharedService} from '../../../services/shared.service.client';
+import { CookieService} from 'ngx-cookie-service';
 
 
 @Component({
@@ -21,7 +22,7 @@ export class WebsiteListComponent implements OnInit {
   userId: String;
   user: any;
   developerId: String;
-  websites: Website[];
+  courses: [{}];
   description: String;
   pid: String;
   mywebsite: String;
@@ -33,12 +34,13 @@ export class WebsiteListComponent implements OnInit {
     private route: ActivatedRoute,
     private userService: UserService,
     private sharedService: SharedService,
-    private router: Router) { }
+    private router: Router,
+    private cookieService: CookieService) { }
 
   addclass() {
-    if (this.user.role === 'STUDENT') {
+    if (this.user.type === 'STUDENT') {
       alert('Student cannot create courses');
-    } else if (this.user.role === 'TA') {
+    } else if (this.user.type === 'TA') {
       alert('TA cannot create courses');
     } else {
       this.router.navigate(['user', 'website', 'new']);
@@ -56,11 +58,14 @@ export class WebsiteListComponent implements OnInit {
   // notify the changes of the route
   ngOnInit() {
 
-      this.getUser();
+    this.userId = this.cookieService.get('user');
 
-      this.user = this.sharedService.user;
+    console.log(this.userId);
 
-      this.userId = this.user['_id'];
+    this.userService.findUserById(this.userId).subscribe((user: User) => {
+      this.user = user;
+      console.log(this.user);
+    });
 
       // this.websiteService.findWebsitesByUser(this.userId)
       // .subscribe((websites) => {
@@ -70,7 +75,7 @@ export class WebsiteListComponent implements OnInit {
 
       this.websiteService.findAllClasses()
         .subscribe((classes) => {
-          this.websites = classes;
+          this.courses = classes;
           console.log(classes);
         });
 
@@ -79,7 +84,7 @@ export class WebsiteListComponent implements OnInit {
         console.log(this.user);
       });
 
-      console.log(this.websites);
+      console.log(this.courses);
   }
 
 

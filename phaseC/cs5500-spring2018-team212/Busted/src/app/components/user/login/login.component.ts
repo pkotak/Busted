@@ -7,6 +7,7 @@ import {Response} from '@angular/http';
 import { SharedService} from '../../../services/shared.service.client';
 import {environment} from '../../../../environments/environment';
 import {DomSanitizer, SafeResourceUrl} from '@angular/platform-browser';
+import {CookieService} from 'ngx-cookie-service';
 
 // below is an angular component
 @Component({
@@ -17,6 +18,7 @@ import {DomSanitizer, SafeResourceUrl} from '@angular/platform-browser';
 
 export class LoginComponent implements OnInit {
   hello: String = 'Hello from the component';
+  cookieValue = 'UNKNOWN';
   // create component attached to username
   @ViewChild('f') loginForm: NgForm;
   username: String;
@@ -34,7 +36,8 @@ export class LoginComponent implements OnInit {
   constructor(private userService: UserService,
               private router: Router,
               private sharedService: SharedService,
-              public sanitizer: DomSanitizer) { }
+              public sanitizer: DomSanitizer,
+              private cookieService: CookieService) { }
 
 
   updateVideoUrl() {
@@ -56,7 +59,9 @@ export class LoginComponent implements OnInit {
         (data: any) => {
       // store current logged in user in SharedService
         this.sharedService.user = data;
-        this.router.navigate(['/profile']); },
+        this.cookieService.set('user', String(data.id));
+        this.router.navigate(['/profile']);
+        console.log(this.cookieService.get('user')); },
         (error: any) => {
           console.log(error);
           alert('Invalid username or password');
