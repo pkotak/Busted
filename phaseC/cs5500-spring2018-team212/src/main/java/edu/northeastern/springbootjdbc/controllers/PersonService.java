@@ -30,7 +30,6 @@ import edu.northeastern.springbootjdbc.models.RoleType;
 @RestController
 public class PersonService {
 	private static final Logger LOGGER = Logger.getLogger(PersonService.class.getName());
-
 	/**
 	 * Creates a person in the database
 	 * 
@@ -86,6 +85,7 @@ public class PersonService {
 		else
 			return null;
 	}
+
 
 	/**
 	 * Find a person by user name
@@ -143,6 +143,7 @@ public class PersonService {
 	 * @return Person details
 	 */
 	@CrossOrigin(origins = "http://localhost:4200")
+
 	@RequestMapping(value = "/api/user/{userid}", method = RequestMethod.POST)
 	public @ResponseBody Person updatePerson(@PathVariable("userid") String id, @RequestBody String json) {
 		PersonDao dao = PersonDao.getInstance();
