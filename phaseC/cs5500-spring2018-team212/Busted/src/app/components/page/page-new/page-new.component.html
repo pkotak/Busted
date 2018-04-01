@@ -11,7 +11,7 @@
 
     <div class="navbar-brand pull-left">
       <div class="black">
-        <b>New Assignment</b>
+        <b>{{this.course.semester}}  {{this.course.code}} {{this.course.name}} &nbsp;  New Assignment: </b>
       </div>
     </div>
 
@@ -39,8 +39,8 @@
     <label>Due Date</label>
     <input [(ngModel)]="description"
            class="form-control"
-           type="text"
-           placeholder="Description"/>
+           type="date"
+           placeholder="Due Date"/>
 
 
 </div>

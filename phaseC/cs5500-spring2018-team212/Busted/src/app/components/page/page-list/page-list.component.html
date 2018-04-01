@@ -17,7 +17,7 @@
 
     <!--tick mark-->
     <div class="navbar-brand pull-right ">
-      <a (click)= createPortfolio() class="white " >
+      <a *ngIf="(user.type !== 'STUDENT' )"(click)= createAssignment() class="white " >
         <b>New</b>
         <!--<span class="glyphicon glyphicon-plus "></span>-->
         <!--<button class="btn btn-primary">Create a portfolio</button>-->
@@ -34,14 +34,14 @@
   <ul  class="list-group">
     <li class="list-group-item blue ">
 
-      <a routerLink="/user/website/{{ wid }}/page/{{assignment._id}}/widget/" class="thick">
-       <b> {{ assignment.name }}: &nbsp;&nbsp; {{assignment.duedate}} </b>
+      <a routerLink="/user/website/{{ wid }}/page/{{assignment}}/widget/" class="thick">
+       <b> {{ assignment }}: &nbsp;&nbsp; {{assignment.duedate}} </b>
       </a>
 
       <!--<a class="pull-right" routerLink="/user/website/{{ wid }}/page/{{page._id}}">-->
         <!--<span class="glyphicon glyphicon-cog"></span>-->
       <!--</a>-->
-      <button class="pull-right btn-success "
+      <button *ngIf="(user.type !== 'STUDENT' )" class="pull-right btn-success "
               (click)= "gotoReport()" >
 
               <!--routerLink="/user/website/{{ wid }}/page/{{page._id}}/widget/new">-->
@@ -50,7 +50,7 @@
 
       &nbsp;
 
-      <button class="pull-right btn-primary " routerLink="/user/website/{{ wid }}/page/{{course.id}}">
+      <button *ngIf="(user.type !== 'STUDENT' )" class="pull-right btn-primary " routerLink="/user/website/{{ wid }}/page/{{course.id}}">
         Edit assignment
       </button>
 

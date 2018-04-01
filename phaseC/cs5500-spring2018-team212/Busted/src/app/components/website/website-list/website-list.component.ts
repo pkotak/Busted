@@ -4,8 +4,6 @@ import { UserService } from '../../../services/user.service.client';
 import { User } from '../../../models/user.model.client';
 import { Router } from '@angular/router';
 import { WebsiteService} from '../../../services/website.service.client';
-import { Website } from '../../../models/website.model.client';
-import { NgForm } from '@angular/forms';
 import {SharedService} from '../../../services/shared.service.client';
 import { CookieService} from 'ngx-cookie-service';
 
@@ -66,12 +64,6 @@ export class WebsiteListComponent implements OnInit {
       this.user = user;
       console.log(this.user);
     });
-
-      // this.websiteService.findWebsitesByUser(this.userId)
-      // .subscribe((websites) => {
-      //   this.websites = websites;
-      //   console.log(websites);
-      // });
 
       this.websiteService.findAllClasses()
         .subscribe((classes) => {

@@ -9,6 +9,7 @@ import { NgForm } from '@angular/forms';
 import {Page} from '../../../models/page.model.client';
 import {PageService} from '../../../services/page.service.client';
 import {SharedService} from '../../../services/shared.service.client';
+import {CookieService} from 'ngx-cookie-service';
 
 @Component({
   selector: 'app-page-edit',
@@ -30,6 +31,7 @@ export class PageEditComponent implements OnInit {
   developerId: String;
   websites: Website[];
   description: String;
+  course: any;
 
   // inject route info in constructor
   constructor(
@@ -38,7 +40,8 @@ export class PageEditComponent implements OnInit {
     private pageService: PageService,
     private router: Router,
     private route: ActivatedRoute,
-    private sharedService: SharedService) { }
+    private sharedService: SharedService,
+    private cookieService: CookieService) { }
 
   getUser() {
     // this.user = JSON.parse(localStorage.getItem("user"));
@@ -50,7 +53,7 @@ export class PageEditComponent implements OnInit {
 
   update() {
     if (!((this.user._id === this.page.owner) || (this.user.role === 'ADMIN'))) {
-      alert("Current user is not allowed modify the assignment.");
+      alert('Current user is not allowed modify the assignment.');
     } else {
       if (!this.page.name) {
         alert('Please input portfolio name.');
@@ -78,7 +81,7 @@ export class PageEditComponent implements OnInit {
 
   deletePage(websiteId, pageId) {
     if (!((this.user._id === this.page.owner) || (this.user.role === 'ADMIN'))) {
-      alert("Only admin can modify other's portfolio.");
+      alert('Only admin can modify other\'s portfolio.');
     } else {
       this.pageService.deletePage(websiteId, pageId)
         .subscribe((pages) => {
@@ -97,20 +100,19 @@ export class PageEditComponent implements OnInit {
     });
 
     this.pageService.findPageById(this.wid, this.pid)
-      .subscribe((page) => {
-        this.page = page;
+      .subscribe((course) => {
+        this.course = course;
       });
 
-    this.pageService.findPagesByWebsiteId(this.wid)
-      .subscribe((pages) => {
-        this.pages = pages;
-      });
+    this.userId = this.cookieService.get('user');
 
-    this.getUser();
+    console.log(this.userId);
 
-    this.user = this.sharedService.user;
+    this.userService.findUserById(this.userId).subscribe((user: User) => {
+      this.user = user;
+      console.log(this.user);
+    });
 
-    this.userId = this.user['_id'];
 
   }
 }

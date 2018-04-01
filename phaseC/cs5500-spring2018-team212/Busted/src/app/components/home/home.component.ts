@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { TestComponent } from '../test/test.component';
 import {NgModel} from '@angular/forms';
 import {Router} from '@angular/router';
 import {NgForm} from '@angular/forms';

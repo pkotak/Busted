@@ -177,7 +177,6 @@ export class UserService {
   }
 
   findUserInCourse(userId, courseId, role) {
-
     const myType = {
       // _id: this.userService.newId(),
       type: role

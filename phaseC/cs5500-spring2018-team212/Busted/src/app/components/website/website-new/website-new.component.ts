@@ -70,6 +70,7 @@ export class WebsiteNewComponent implements OnInit {
     this.websiteService.createWebsite(this.userId, this.newCourse)
       .subscribe((courses) => {
         // this.websites = websites;
+        alert('You have added "' + this.newCourse.code + ' ' + this.newCourse.name + '"');
         this.router.navigate(['profile']);
       });
   }
@@ -100,10 +101,6 @@ export class WebsiteNewComponent implements OnInit {
         console.log(courses);
       });
 
-    // this.websiteService.findWebsitesByUser(this.userId)
-    //   .subscribe((websites) => {
-    //     this.websites = websites;
-    //   });
   }
 
 }

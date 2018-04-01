@@ -39,13 +39,6 @@ export class LoginComponent implements OnInit {
               public sanitizer: DomSanitizer,
               private cookieService: CookieService) { }
 
-
-  updateVideoUrl() {
-    // const aurl = 'https://www.youtube.com/embed/qdA32j7_U6U';
-    return this.youtubeUrl = this.sanitizer
-      .bypassSecurityTrustResourceUrl('https://www.youtube.com/embed/Ga3maNZ0x0w?autoplay=1&cc_load_policy=1&controls=0');
-  }
-
   // api function for login
   login() {
     this.username = this.loginForm.value.username;
@@ -67,19 +60,6 @@ export class LoginComponent implements OnInit {
           alert('Invalid username or password');
         }
       );
-
-    // calling and subscribe dynamic result from the http function located in user.service.client
-    // this.userService.findUserByCredentials(this.username, this.password)
-    //   .subscribe((user: User) => {
-    //     if (user) {
-    //       // alert(user._id);
-    //       this.router.navigate(['/profile/', user._id]);
-    //     } else {
-    //       this.errorFlag = true;
-    //       this.errorMsg = 'Error';
-    //       alert('wrong username or password');
-    //     }
-    // });
   }
 
 

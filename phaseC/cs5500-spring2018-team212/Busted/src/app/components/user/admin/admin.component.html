@@ -14,8 +14,6 @@
       <!--</a>-->
     </div>
 
-    <!--tick mark-->
-
   </div>
 </nav>
 
@@ -23,15 +21,6 @@
 
 <div class = "container-fluid padding paddingleft padding-b">
   <table id = "customers">
-    <!--<thead>-->
-    <!--<tr>-->
-      <!--<th><input type="text" name="email" [(ngModel)]="filter.email"  placeholder="Email"></th>-->
-      <!--<th><input type="text" name="firstName" [(ngModel)]="filter.firstName" placeholder="FirstName"></th>-->
-      <!--<th><input type="text" name="lastName" [(ngModel)]="filter.lastName" placeholder="LastName"></th>-->
-      <!--<th><input type="text" name="role" [(ngModel)]="filter.role" placeholder="Role"></th>-->
-      <!--<th><input type="text" name="status" [(ngModel)]="filter.status" placeholder="Status"></th>-->
-    <!--</tr>-->
-    <!--</thead>-->
 
     <thead>
     <tr>
@@ -46,14 +35,6 @@
     </tr>
     </thead>
 
-    <!--<tfoot>-->
-    <!--<tr>-->
-      <!--&lt;!&ndash;<td colspan="5">&ndash;&gt;-->
-        <!--&lt;!&ndash;<label for="limit">Limit: </label><input type="number" name="limit" [(ngModel)]="limit" min="1" [attr.max]="[numberOfBooks]" step="1" placeholder="Limit">&ndash;&gt;-->
-        <!--&lt;!&ndash;<label for="page">Page: </label><input type="number" name="page" [(ngModel)]="page" min="1" [attr.max]="[numberOfBooks]" step="1" placeholder="Page">&ndash;&gt;-->
-      <!--&lt;!&ndash;</td>&ndash;&gt;-->
-    <!--</tr>-->
-    <!--</tfoot>-->
     <tbody>
     <tr *ngFor="let user of users" >
       <td>&nbsp; {{user.id}}</td>
@@ -68,14 +49,12 @@
         &nbsp;&nbsp;&nbsp;&nbsp;
         <a *ngIf="(user.isApproved === false )" (click)=approve(user.id)
                 class="glyphicon glyphicon-ok media-middle" >
-          <!--Approve User-->
         </a>
       </td>
 
       <td align="middle">
         &nbsp;&nbsp;&nbsp;&nbsp;
       <a (click)=deleteUser(user.id) class="glyphicon glyphicon-remove " >
-        <!--Delete User-->
       </a>
       </td>
 
@@ -84,37 +63,6 @@
   </table>
 </div>
 
-<!--<div class="padding padding-b">-->
-
-  <!--<div *ngFor = "let user of users" class="container-fluid">-->
-
-    <!--<ul  class="list-group">-->
-      <!--<li class="list-group-item blue ">-->
-
-
-          <!--<b >-->
-            <!--Email: &nbsp;{{ user.username }}   &nbsp;&nbsp;&nbsp;   Full&nbsp;Name:&nbsp;{{user.lastName}}.{{user.firstName}} &nbsp;&nbsp;&nbsp;&nbsp;-->
-            <!--Role: {{user.role}} &nbsp;&nbsp;  &nbsp;&nbsp; &nbsp;-->
-            <!--Phone: {{user.phone}} &nbsp;&nbsp;-->
-            <!--Status:&nbsp;&nbsp;{{user.status}}-->
-          <!--</b>-->
-
-          <!--<button (click)=deleteUser(user.userId) class="pull-right btn-danger " >-->
-            <!--Delete User-->
-          <!--</button>-->
-
-
-          <!--<button *ngIf="(user.status === false)" (click)=approve(user.userId)-->
-                  <!--class="pull-right btn-group " >-->
-            <!--Approve User-->
-          <!--</button>-->
-
-      <!--</li>-->
-    <!--</ul>-->
-
-  <!--</div>-->
-
-<!--</div>-->
 
 <nav class="navbar navbar-tiffany navbar-fixed-bottom">
   <div class="container-fluid">
