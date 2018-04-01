@@ -2,6 +2,8 @@ package edu.northeastern.cs5500;
 
 public class Constants {
 	
+	private Constants() {}
+	
 	public static final String LIBRARY_PATH = "jplag-2.11.9-SNAPSHOT-jar-with-dependencies.jar";
 	public static final String LANGUAGE = "python3";
 	public static final String OUTPUT_DIRECTORY = "Results";
@@ -18,4 +20,7 @@ public class Constants {
 	public static final String PHONE = "phone";
 	public static final String EMAIL = "email";
 	public static final String APPROVED = "isApproved";
+	public static final String AWS_ACCESS_KEY = "AKIAJB6XAQ7PJSDTGGLQ";
+	public static final String AWS_SECRET_KEY = "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";
+	public static final String S3_REGION = "us-east-2";
 }

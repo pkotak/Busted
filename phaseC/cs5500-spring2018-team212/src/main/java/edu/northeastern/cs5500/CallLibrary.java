@@ -1,68 +1,168 @@
 package edu.northeastern.cs5500;
 
+import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.zeroturnaround.zip.commons.FileUtils;
+
 /**
- * @author Paarth
+ * class to run the JPlag library.
+ * @author abhiruchi
+ *
+ */
+/**
+ * @author abhiruchi
  *
  */
 public class CallLibrary {
 
 	private static final Logger LOGGER = Logger.getLogger(CallLibrary.class.getName());
+	private static final String PATH_DELIM = "/";
 
 	/**
-	 * Runs the comparison in 3 modes: 
-	 * Extreme strict, Moderate Strictness, Easy
+	 * method to compare the files in given input directory for plagiarism with JPlag. 
+	 * @param ipdir
+	 * @param opdir
+	 * @param strictness
+	 * @param threshold
 	 */
-	public void runLibrary(int strictness) {
+	public void compareFiles(String ipdir, String opdir, int strictness, int threshold) {
 		String jarCommand = "java -jar ";
-		String directorycommand = " -s \"";
 		String cmd = "";
-		if(strictness == 1) {
-			cmd = jarCommand + Constants.LIBRARY_PATH + " -l " + Constants.LANGUAGE + " -r "
-					+ Constants.OUTPUT_DIRECTORY +" -t "+Constants.STRICTNESS_EXTREME+directorycommand+ Constants.INPUT_DIRECTORY + "\"";
-			LOGGER.info(cmd);
-		}else if(strictness == 2) {
-			cmd = jarCommand + Constants.LIBRARY_PATH + " -l " + Constants.LANGUAGE + " -r "
-					+ Constants.OUTPUT_DIRECTORY +" -t "+Constants.STRICTNESS_MEDIUM+directorycommand+ Constants.INPUT_DIRECTORY + "\"";
-		}else {
-			cmd = jarCommand + Constants.LIBRARY_PATH + " -l " + Constants.LANGUAGE + " -r "
-					+ Constants.OUTPUT_DIRECTORY +" -t "+Constants.STRICTNESS_EASY+directorycommand+ Constants.INPUT_DIRECTORY + "\"";
-		}
-			
+		cmd = jarCommand + Constants.LIBRARY_PATH +
+				" -l " + Constants.LANGUAGE + 
+				" -r " + opdir + 
+				" -t " + strictness +
+				" -m " + threshold + "%"+
+				" -s " + ipdir;
 		try {
 			Runtime.getRuntime().exec(cmd);
 		} catch (IOException e) {
 			LOGGER.log(Level.INFO, e.toString());
 		}
+	}
+
+	/** 
+	 * method to put two given directories into one in the given path.
+	 * @param dir1, dir2 - given directories to be merged.
+	 * @param rootdir - path of the root directory
+	 * @return
+	 */
+	public static String mergeDir(String dir1, String dir2, String rootdir) {
+		File srcDir1 = new File(dir1);
+		File srcDir2 = new File(dir2);
+
+		String destination = rootdir + PATH_DELIM + srcDir1.getName() + srcDir2.getName() ;
+		File destDir1 = new File(destination + PATH_DELIM + srcDir1.getName());
+		File destDir2 = new File(destination + PATH_DELIM + srcDir2.getName());
+
+		try {
+			FileUtils.copyDirectory(srcDir1, destDir1);
+			FileUtils.copyDirectory(srcDir2, destDir2);
+		} catch (IOException e) {
+			LOGGER.info(e.toString());
+		}
+		return destination;
+	}
+
+	/**
+	 * method to get all the other directories present in the rootdirectory except the given directory.
+	 * @param newdir - given directory.
+	 * @param rootdir - the root directory.
+	 * @return the list of other directories present in the rootdirectory
+	 */
+	public static List<File> getOtherDirs(String newdir, String rootdir) {
+		File folder = new File(rootdir);
+		List<File> fileList = new ArrayList<File>();
+		File[] listOfFiles = folder.listFiles();
+		for (int i = 0; i < listOfFiles.length; i++) {
+			if (listOfFiles[i].isDirectory()) {
+				File x = listOfFiles[i];
+				String xname = x.getParentFile()+PATH_DELIM+x.getName();
+				if (!xname.equalsIgnoreCase(newdir))
+					fileList.add(x);
+			}
+		}
+		return fileList;
+	}
+
+	/**
+	 * method to compare the files in given input directory for plagiarism with JPlag
+	 * with every other directory, incrementally. 
+	 * @param newdir
+	 * @param rootdir
+	 * @param strictness
+	 * @param threshold
+	 * @return
+	 */
+	public static String compareDir(String newdir, String rootdir, int strictness, int threshold) {
+		CallLibrary cl = new CallLibrary();
+		List<File> listOfDir = getOtherDirs(newdir, rootdir);
+		String rootopdir = rootdir + "op";
+		String rootmergedir = rootdir + "merge";
+		for (int i = 0; i < listOfDir.size(); i++) {
+			String currdir = listOfDir.get(i).getName();
+			String ipdir = mergeDir(newdir, rootdir+PATH_DELIM+currdir, rootmergedir);
+			String mdir = ipdir.replaceAll(rootmergedir, "");
+			String tempopdir = rootopdir+mdir+"op";
+			new File(tempopdir).mkdirs();
+
+			cl.compareFiles(ipdir, tempopdir, strictness, threshold);	
+		}
+		return rootopdir;
+	}
+
+	/**
+	 * method to get the reports for the plagiarism check run on the given directory
+	 * with every other directory present in the root directory if the 
+	 * plagiarism score crosses the given threshold, and given strictness.
+	 * @param newdir - given directory
+	 * @param rootdir - root directory
+	 * @param strictness - given strictness score
+	 * @param threshold - given threshold for plagiarsism score.
+	 * @return
+	 */
+	public List<PlagiarismResult> getReports(String newdir, String rootdir, int strictness, int threshold){
+		try{
+			String resdir = compareDir(newdir, rootdir, strictness, threshold);
+			Thread.sleep(10000); 
+			HtmlParser parser = new HtmlParser();
+			return parser.getSimilarityScore(resdir);
+		}
+		catch(Exception e){  
+			LOGGER.info(e.toString());
+		}
+		return new ArrayList<PlagiarismResult>();
 	}
 	
-	/**
-	 * Runs the comparison in 3 modes: 
-	 * Extreme strict, Moderate Strictness, Easy
-	 */
-	public void compareFiles(String ipdir, String opdir, int strictness) {
-		String jarCommand = "java -jar ";
-		String directorycommand = " -s \"";
-		String cmd = "";
-		if(strictness == 1) {
-			cmd = jarCommand + Constants.LIBRARY_PATH + " -l " + Constants.LANGUAGE + " -r "
-					+ opdir +" -t "+Constants.STRICTNESS_EXTREME+directorycommand+ ipdir + "\"";
-			LOGGER.info(cmd);
-		}else if(strictness == 2) {
-			cmd = jarCommand + Constants.LIBRARY_PATH + " -l " + Constants.LANGUAGE + " -r "
-					+ opdir +" -t "+Constants.STRICTNESS_MEDIUM+directorycommand+ ipdir + "\"";
-		}else {
-			cmd = jarCommand + Constants.LIBRARY_PATH + " -l " + Constants.LANGUAGE + " -r "
-					+ opdir +" -t "+Constants.STRICTNESS_EASY+directorycommand+ ipdir + "\"";
-		}
-			
-		try {
-			Runtime.getRuntime().exec(cmd);
-		} catch (IOException e) {
-			LOGGER.log(Level.INFO, e.toString());
-		}
+	public static String compareTwoFiles(String dir1, String dir2, int strictness, int threshold){
+		CallLibrary cl = new CallLibrary();
+		String ipdir = mergeDir(dir1, dir2, "test_merge");
+		String rootopdir = "test_op";
+		String opdir = rootopdir + PATH_DELIM + dir1+dir2;
+		new File(opdir).mkdirs();
+		cl.compareFiles(ipdir, opdir, strictness, threshold);
+		return rootopdir;
+		
 	}
+	
+	public List<PlagiarismResult> getIndividualReport(String dir1, String dir2, int strictness, int threshold){	
+		try{
+			String rootopdir = compareTwoFiles(dir1, dir2, strictness, threshold);
+			Thread.sleep(10000); 
+			HtmlParser parser = new HtmlParser();
+			return parser.getSimilarityScore(rootopdir);
+			
+		}
+		catch(Exception e){  
+			LOGGER.info(e.toString());
+		}
+		return new ArrayList<PlagiarismResult>();
+	}
+
+
 }

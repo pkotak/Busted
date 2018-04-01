@@ -9,11 +9,5 @@ public class SendMailSSLTests {
 		SendMailSSL mailSSL = new SendMailSSL();
 		mailSSL.send("^EjHs0R4&wot", "kotak.p@husky.neu.edu", "ATTENTION!","Test project status mail from server.",System.getProperty("user.dir")+"/config.properties");
 	}
-	
-	@Test (expected = NullPointerException.class)
-	public void testProperties() {
-		SendMailSSL mailSSL = new SendMailSSL();
-		mailSSL.send("^EjHs0R4&wot", "kotak.p@husky.neu.edu", "ATTENTION!","Test project status mail from server.",System.getProperty("user.dir")+"/config.propertie");
-	}
 
 }

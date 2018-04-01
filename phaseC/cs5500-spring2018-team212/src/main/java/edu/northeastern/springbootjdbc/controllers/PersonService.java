@@ -36,7 +36,7 @@ public class PersonService {
 	 * @return
 	 * @return the number of rows affected
 	 */
-	@CrossOrigin(origins = "http://localhost:4200")
+	@CrossOrigin(origins = {"http://localhost:4200", "http://ec2-18-222-88-122.us-east-2.compute.amazonaws.com:4200"})
 	@RequestMapping("/api/register")
 	public @ResponseBody Person insertPerson(@RequestBody String json) {
 		PersonDao dao = PersonDao.getInstance();
@@ -65,7 +65,7 @@ public class PersonService {
 	 * @return
 	 * @return the number of rows affected
 	 */
-	@CrossOrigin(origins = "http://localhost:4200")
+	@CrossOrigin(origins = {"http://localhost:4200", "http://ec2-18-222-88-122.us-east-2.compute.amazonaws.com:4200"})
 	@RequestMapping("/api/login")
 	public @ResponseBody Person login(@RequestBody String json) {
 		PersonDao dao = PersonDao.getInstance();
@@ -95,7 +95,7 @@ public class PersonService {
 	 * @return Person details
 	 * @throws JsonProcessingException 
 	 */
-	@CrossOrigin(origins = "http://localhost:4200")
+	@CrossOrigin(origins = {"http://localhost:4200", "http://ec2-18-222-88-122.us-east-2.compute.amazonaws.com:4200"})
 	@RequestMapping(value = "/api/user", method = RequestMethod.GET)
 	public @ResponseBody String selectPersonByUsername(@RequestParam("username") String email) throws JsonProcessingException {
 		PersonDao dao = PersonDao.getInstance();
@@ -114,7 +114,7 @@ public class PersonService {
 	 *            unique string based on which the search is conducted
 	 * @return List of People details
 	 */
-	@CrossOrigin(origins = "http://localhost:4200")
+	@CrossOrigin(origins = {"http://localhost:4200", "http://ec2-18-222-88-122.us-east-2.compute.amazonaws.com:4200"})
 	@RequestMapping("/api/user/all")
 	public @ResponseBody List<Person> selectAllPeople() {
 		PersonDao dao = PersonDao.getInstance();
@@ -128,7 +128,7 @@ public class PersonService {
 	 *            unique string based on which the search is conducted
 	 * @return List of People details
 	 */
-	@CrossOrigin(origins = "http://localhost:4200")
+	@CrossOrigin(origins = {"http://localhost:4200", "http://ec2-18-222-88-122.us-east-2.compute.amazonaws.com:4200"})
 	@RequestMapping(value="/api/user/{userId}", method=RequestMethod.GET)
 	public @ResponseBody Person selectPersonById(@PathVariable("userId") String id) {
 		PersonDao dao = PersonDao.getInstance();
@@ -142,8 +142,7 @@ public class PersonService {
 	 *            unique string based on which the search is conducted
 	 * @return Person details
 	 */
-	@CrossOrigin(origins = "http://localhost:4200")
-
+	@CrossOrigin(origins = {"http://localhost:4200", "http://ec2-18-222-88-122.us-east-2.compute.amazonaws.com:4200"})
 	@RequestMapping(value = "/api/user/{userid}", method = RequestMethod.POST)
 	public @ResponseBody Person updatePerson(@PathVariable("userid") String id, @RequestBody String json) {
 		PersonDao dao = PersonDao.getInstance();

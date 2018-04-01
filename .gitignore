@@ -16,10 +16,22 @@ log/
 target/
 
 # Jplag
-phaseC/cs5500-spring2018-team212/Results/
+phaseC/cs5500-spring2018-team212/results/
 
 # springbootjdbc
 phaseC/cs5500-spring2018-team212/derby.log
 
+# UploadedAssignment
+phaseC/cs5500-spring2018-team212/assignments/
+
+# springbootjdbc
+phaseC/cs5500-spring2018-team212/derby.log
+
+# Results output directory
+phaseC/cs5500-spring2018-team212/jplagOutput
+
 # npm-debug
 phaseC/cs5500-spring2018-team212/npm-debug.log
+
+# dist
+phaseC/cs5500-spring2018-team212/Busted/dist
