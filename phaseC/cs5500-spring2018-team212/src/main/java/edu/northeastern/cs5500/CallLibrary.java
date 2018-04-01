@@ -14,22 +14,16 @@ import org.zeroturnaround.zip.commons.FileUtils;
  * @author abhiruchi
  *
  */
-/**
- * @author abhiruchi
- *
- */
-public class CallLibrary {
+public class CallLibrary implements ICallLibrary{
 
 	private static final Logger LOGGER = Logger.getLogger(CallLibrary.class.getName());
 	private static final String PATH_DELIM = "/";
 
-	/**
-	 * method to compare the files in given input directory for plagiarism with JPlag. 
-	 * @param ipdir
-	 * @param opdir
-	 * @param strictness
-	 * @param threshold
+	
+	/* (non-Javadoc)
+	 * @see edu.northeastern.cs5500.ICallLibrary#compareFiles(java.lang.String, java.lang.String, int, int)
 	 */
+	@Override
 	public void compareFiles(String ipdir, String opdir, int strictness, int threshold) {
 		String jarCommand = "java -jar ";
 		String cmd = "";
@@ -116,16 +110,11 @@ public class CallLibrary {
 		return rootopdir;
 	}
 
-	/**
-	 * method to get the reports for the plagiarism check run on the given directory
-	 * with every other directory present in the root directory if the 
-	 * plagiarism score crosses the given threshold, and given strictness.
-	 * @param newdir - given directory
-	 * @param rootdir - root directory
-	 * @param strictness - given strictness score
-	 * @param threshold - given threshold for plagiarsism score.
-	 * @return
+	
+	/* (non-Javadoc)
+	 * @see edu.northeastern.cs5500.ICallLibrary#getReports(java.lang.String, java.lang.String, int, int)
 	 */
+	@Override
 	public List<PlagiarismResult> getReports(String newdir, String rootdir, int strictness, int threshold){
 		try{
 			String resdir = compareDir(newdir, rootdir, strictness, threshold);
@@ -139,6 +128,14 @@ public class CallLibrary {
 		return new ArrayList<PlagiarismResult>();
 	}
 	
+	/**
+	 * method to compare the files in given two directories for plagiarism with JPlag
+	 * @param newdir
+	 * @param rootdir
+	 * @param strictness
+	 * @param threshold
+	 * @return
+	 */
 	public static String compareTwoFiles(String dir1, String dir2, int strictness, int threshold){
 		CallLibrary cl = new CallLibrary();
 		String ipdir = mergeDir(dir1, dir2, "test_merge");
@@ -150,6 +147,10 @@ public class CallLibrary {
 		
 	}
 	
+	/* (non-Javadoc)
+	 * @see edu.northeastern.cs5500.ICallLibrary#getIndividualReport(java.lang.String, java.lang.String, int, int)
+	 */
+	@Override
 	public List<PlagiarismResult> getIndividualReport(String dir1, String dir2, int strictness, int threshold){	
 		try{
 			String rootopdir = compareTwoFiles(dir1, dir2, strictness, threshold);
