@@ -34,7 +34,7 @@ public class CourseRoleService {
 	 * @return the number of rows affected
 	 *        - indicating whether operation was successful.
 	 */
-	@CrossOrigin(origins = "http://localhost:4200")
+	@CrossOrigin(origins = {"http://localhost:4200", "http://ec2-18-222-88-122.us-east-2.compute.amazonaws.com:4200"})
 	@RequestMapping(value="/api/user/course/join", method=RequestMethod.POST)
 	public @ResponseBody int joinCourse(
 			@RequestBody String json) {
@@ -58,7 +58,7 @@ public class CourseRoleService {
 	 * @return the number of rows affected
 	 *        - indicating whether operation was successful.
 	 */
-	@CrossOrigin(origins = "http://localhost:4200")
+	@CrossOrigin(origins = {"http://localhost:4200", "http://ec2-18-222-88-122.us-east-2.compute.amazonaws.com:4200"})
 	@RequestMapping("/api/add/courseTA")
 	public @ResponseBody int addCourseTA(
 			@RequestParam("code") String code,
@@ -74,7 +74,7 @@ public class CourseRoleService {
 	 * @return the number of rows affected
 	 *        - indicating whether operation was successful.
 	 */
-	@CrossOrigin(origins = "http://localhost:4200")
+	@CrossOrigin(origins = {"http://localhost:4200", "ec2-18-222-88-122.us-east-2.compute.amazonaws.com:4200"})
 	@RequestMapping(value="/api/user/course/drop", method=RequestMethod.POST)
 	public @ResponseBody int deleteStudentFromCourse(
 			@RequestBody String json) {
@@ -96,7 +96,7 @@ public class CourseRoleService {
 	 * method to get Persons for a course
 	 * @return the list of Persons with given role.
 	 */
-	@CrossOrigin(origins = "http://localhost:4200")
+	@CrossOrigin(origins = {"http://localhost:4200", "http://ec2-18-222-88-122.us-east-2.compute.amazonaws.com:4200"})
 	@RequestMapping("/api/get/persons")
 	public @ResponseBody List<Person> getPersonsforCourse(
 			@RequestParam("code") String code,
@@ -122,7 +122,7 @@ public class CourseRoleService {
 	 * method to get Courses for a person
 	 * @return the list of Courses for the Person
 	 */
-	@CrossOrigin(origins = "http://localhost:4200")
+	@CrossOrigin(origins = {"http://localhost:4200", "http://ec2-18-222-88-122.us-east-2.compute.amazonaws.com:4200"})
 	@RequestMapping(value="/api/user/{id}/courses", method=RequestMethod.GET)
 	public @ResponseBody List<Course> getCoursesforPerson(
 			@PathVariable("id") String id) {
@@ -133,7 +133,7 @@ public class CourseRoleService {
 	 * method to get Courses for a person
 	 * @return the list of Courses for the Person
 	 */
-	@CrossOrigin(origins = "http://localhost:4200")
+	@CrossOrigin(origins = {"http://localhost:4200", "http://ec2-18-222-88-122.us-east-2.compute.amazonaws.com:4200"})
 	@RequestMapping(value="/api/user/{id}/course/{courseId}", method=RequestMethod.POST)
 	public @ResponseBody String checkIfPersonEnrolled(
 			@PathVariable("id") String id, @PathVariable("courseId") String cId,
@@ -162,6 +162,7 @@ public class CourseRoleService {
 	 * method to get course Professor's email
 	 * @return the String of Professor's email.
 	 */
+	@CrossOrigin(origins = {"http://localhost:4200", "http://ec2-18-222-88-122.us-east-2.compute.amazonaws.com:4200"})
 	@RequestMapping("/api/get/profemail")
 	public @ResponseBody String getProfEmail(
 			@RequestParam("code") String code,

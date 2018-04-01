@@ -14,15 +14,17 @@ public class Report {
 	private String downloadLink;
 	private Boolean isResolved = false;
 
-	public Report() {
+	public Report(int asst1id, int ass2id, int ss, String downloadLink, Boolean ir) {
 		super();
-	}
-
-	public Report(int id, int asst1id, int ass2id, int ss, String downloadLink, Boolean ir) {
-		super();
-		this.setId(id);
-		this.setAssignment1ID(asst1id);
-		this.setAssignment2ID(ass2id);
+		// This is to avoid redundant reports being generated.
+		if(asst1id > ass2id) {
+			this.setAssignment1ID(ass2id);
+			this.setAssignment2ID(asst1id);
+		}
+		else {
+			this.setAssignment1ID(asst1id);
+			this.setAssignment2ID(ass2id);
+		}
 		this.setSimilarityscore(ss);
 		this.setDownloadLink(downloadLink);
 		this.setIsResolved(ir);

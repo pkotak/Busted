@@ -19,7 +19,7 @@ import edu.northeastern.springbootjdbc.models.Report;
  *
  */
 public class ReportDao {
-	
+
 	private static ReportDao instance = null;
 	private static final Logger LOGGER = Logger.getLogger(PersonDao.class.getName());
 
@@ -47,21 +47,18 @@ public class ReportDao {
 		PreparedStatement reportStatement = null;
 		try {
 			Class.forName(Constants.JDBC_DRIVER);
-			conn = DriverManager.getConnection(Constants.CONNECTION_STRING, Constants.AWS_USERNAME,
-					Constants.AWS_P);
+			conn = DriverManager.getConnection(Constants.CONNECTION_STRING, Constants.AWS_USERNAME, Constants.AWS_P);
 
-			String personInsert = "insert INTO Report (id, assignment1, assignment2, similarityscore, downloadlink, isResolved) "
-					+ "VALUES (?,?,?,?,?,?)";
+			String personInsert = "insert INTO Report (assignment1, assignment2, similarityscore, downloadlink, isResolved) "
+					+ "VALUES (?,?,?,?,?)";
 
 			try {
 				reportStatement = conn.prepareStatement(personInsert);
-				reportStatement.setInt(1, report.getId());
-				reportStatement.setInt(2, report.getAssignment1ID());
-				reportStatement.setInt(3, report.getAssignment2ID());
-				reportStatement.setInt(4, report.getSimilarityscore());
-				reportStatement.setString(5, report.getDownloadLink());
-				reportStatement.setBoolean(6, report.getIsResolved());
-
+				reportStatement.setInt(1, report.getAssignment1ID());
+				reportStatement.setInt(2, report.getAssignment2ID());
+				reportStatement.setInt(3, report.getSimilarityscore());
+				reportStatement.setString(4, report.getDownloadLink());
+				reportStatement.setBoolean(5, report.getIsResolved());
 				rowsAffected += reportStatement.executeUpdate();
 			} finally {
 				if (reportStatement != null)
@@ -99,8 +96,7 @@ public class ReportDao {
 		PreparedStatement reportStatement = null;
 		try {
 			Class.forName(Constants.JDBC_DRIVER);
-			conn = DriverManager.getConnection(Constants.CONNECTION_STRING, Constants.AWS_USERNAME,
-					Constants.AWS_P);
+			conn = DriverManager.getConnection(Constants.CONNECTION_STRING, Constants.AWS_USERNAME, Constants.AWS_P);
 			String reportUpdate = "UPDATE Report "
 					+ "SET id = ?, assignment1 = ?, assignment2 = ?, similarityscore = ?,downloadlink = ?, isResolved = ? "
 					+ "WHERE id = ?";
@@ -113,7 +109,6 @@ public class ReportDao {
 				reportStatement.setString(5, report.getDownloadLink());
 				reportStatement.setBoolean(6, report.getIsResolved());
 				reportStatement.setInt(7, reportId);
-
 				rowsAffected += reportStatement.executeUpdate();
 			} finally {
 				if (reportStatement != null)
@@ -148,8 +143,7 @@ public class ReportDao {
 		PreparedStatement reportStatement = null;
 		try {
 			Class.forName(Constants.JDBC_DRIVER);
-			conn = DriverManager.getConnection(Constants.CONNECTION_STRING, Constants.AWS_USERNAME,
-					Constants.AWS_P);
+			conn = DriverManager.getConnection(Constants.CONNECTION_STRING, Constants.AWS_USERNAME, Constants.AWS_P);
 
 			String reportDelete = "DELETE FROM Report where id = ?";
 			try {
@@ -188,8 +182,7 @@ public class ReportDao {
 		ResultSet results = null;
 		try {
 			Class.forName(Constants.JDBC_DRIVER);
-			conn = DriverManager.getConnection(Constants.CONNECTION_STRING, Constants.AWS_USERNAME,
-					Constants.AWS_P);
+			conn = DriverManager.getConnection(Constants.CONNECTION_STRING, Constants.AWS_USERNAME, Constants.AWS_P);
 
 			String sql = "select * from Report";
 			try {
@@ -203,15 +196,8 @@ public class ReportDao {
 						int similarityScore = results.getInt("similarityscore");
 						String downloadLink = results.getString("downloadlink");
 						boolean isResolved = results.getBoolean("isResolved");
-
-						Report report = new Report();
+						Report report = new Report(assign1Id, assign2Id, similarityScore, downloadLink, isResolved);
 						report.setId(id);
-						report.setAssignment1ID(assign1Id);
-						report.setAssignment2ID(assign2Id);
-						report.setSimilarityscore(similarityScore);
-						report.setDownloadLink(downloadLink);
-						report.setIsResolved(isResolved);
-
 						reportList.add(report);
 					}
 				} finally {
@@ -222,8 +208,6 @@ public class ReportDao {
 				if (statement != null)
 					statement.close();
 			}
-
-			
 
 		} catch (ClassNotFoundException e) {
 			LOGGER.info(e.toString());
