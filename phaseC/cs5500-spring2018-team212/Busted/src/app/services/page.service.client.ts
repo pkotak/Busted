@@ -36,6 +36,13 @@ export class PageService {
     });
   }
 
+  findAssignmentsByCourseId(courseId) {
+    const url = this.baseUrl + '/api/course/' + courseId + '/assignment';
+    return this.http.get(url).map((response: Response) => {
+      return response.json();
+    });
+  }
+
   // retrieves the page in local pages array whose _id matches the pageId parameter
   findPageById(websiteId, pageId) {
     const url = this.baseUrl + '/api/website/' + websiteId + '/page/' + pageId;

@@ -12,7 +12,6 @@ import java.util.logging.Logger;
 
 import edu.northeastern.cs5500.Constants;
 import edu.northeastern.springbootjdbc.models.Assignment;
-import edu.northeastern.springbootjdbc.models.Person;
 
 /**
  * Assignment Data Access Object

@@ -4,9 +4,7 @@ import { UserService } from '../../../services/user.service.client';
 import { User } from '../../../models/user.model.client';
 import { Router } from '@angular/router';
 import { WebsiteService} from '../../../services/website.service.client';
-import { Website } from '../../../models/website.model.client';
 import { NgForm } from '@angular/forms';
-import {Page} from '../../../models/page.model.client';
 import {PageService} from '../../../services/page.service.client';
 import { SharedService } from '../../../services/shared.service.client';
 import {CookieService} from 'ngx-cookie-service';
@@ -56,7 +54,7 @@ export class PageListComponent implements OnInit {
     window.open("http://localhost:63342/Busted/Results/index.html");
   }
 
-  createPortfolio() {
+  createAssignment() {
     if (this.user.role === 'STUDENT') {
       alert('Student cannot create assignments.');
     } else if (this.user.role === 'TA') {
@@ -102,7 +100,13 @@ export class PageListComponent implements OnInit {
         this.course = course;
       });
 
-    this.pageService.findPagesByWebsiteId(this.wid)
+    // this.pageService.findPagesByWebsiteId(this.wid)
+    //   .subscribe((data: any) => {
+    //     this.assignments = data;
+    //     console.log(data);
+    //   });
+
+    this.pageService.findAssignmentsByCourseId(this.wid)
       .subscribe((data: any) => {
         this.assignments = data;
         console.log(data);

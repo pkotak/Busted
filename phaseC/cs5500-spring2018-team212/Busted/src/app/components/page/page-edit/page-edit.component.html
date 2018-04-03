@@ -30,19 +30,19 @@
 
 <div class="container-fluid padding">
 
-  <b>Name</b>
+  <b>Assignment Name</b>
 
     <input [(ngModel)]="this.page.name"
            class="form-control"
            type="text"
-           placeholder="page name">
+           placeholder="Assignment name">
 
-  <b>Description</b>
+  <b>Due Date</b>
 
     <input [(ngModel)]="this.page.description"
            class="form-control"
-           type="text"
-           placeholder="page title">
+           type="date"
+           placeholder="Due date">
 
     <a class="btn btn-danger btn-block"
        (click)="deletePage(this.wid, this.pid)"

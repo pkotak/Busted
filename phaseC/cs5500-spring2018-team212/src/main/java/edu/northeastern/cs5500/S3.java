@@ -17,6 +17,11 @@ import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 
+/**
+ * class to interact with the S3 database.
+ * @author sirushti
+ *
+ */
 public class S3 {
 	
 	static final Logger LOGGER = Logger.getLogger(S3.class.getName());
@@ -80,6 +85,11 @@ public class S3 {
 		return md5;
 	}
 
+	/**
+	 * Get the S3 client
+	 * 
+	 * @return
+	 */
 	public static AmazonS3 getS3client() {
 		return s3Client;
 	}

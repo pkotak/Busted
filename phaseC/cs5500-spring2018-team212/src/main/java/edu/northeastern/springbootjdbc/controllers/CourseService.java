@@ -13,12 +13,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
-
-import edu.northeastern.cs5500.Constants;
 import edu.northeastern.springbootjdbc.daos.CourseDao;
 import edu.northeastern.springbootjdbc.daos.CourseRoleDao;
 import edu.northeastern.springbootjdbc.models.Course;
-import edu.northeastern.springbootjdbc.models.Person;
 
 /**
  * Course web Service

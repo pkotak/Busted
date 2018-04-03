@@ -29,8 +29,6 @@ import { UserService } from './services/user.service.client';
 import { PageService } from './services/page.service.client';
 import { WidgetService } from './services/widget.service.client';
 import {HomeComponent} from './components/home/home.component';
-import {TestComponent} from './components/test/test.component';
-import {TestService} from './services/test.service.client';
 import {HttpModule} from '@angular/http';
 import { FlickrImageSearchComponent } from './components/widget/widget-edit/widget-image/flickr-image-search/flickr-image-search.component';
 import {FlickrService} from './services/flickr.service.clients';
@@ -41,11 +39,6 @@ import {SharedService} from './services/shared.service.client';
 import {AuthenticationService} from './services/authentication.service.client';
 import {SortableDirective} from './components/widget/widget-list/sortable.directive';
 import { OrderByPipe } from './components/widget/widget-list/order-by-pipe.pipe';
-import { GoogleStockBuyComponent } from './components/widget/google-finance/google-stock-buy/google-stock-buy.component';
-import { GoogleStockEditComponent } from './components/widget/google-finance/google-stock-edit/google-stock-edit.component';
-import { GoogleStockListComponent } from './components/widget/google-finance/google-stock-list/google-stock-list.component';
-import {GoogleFinanceServiceClient} from './services/googleFinance.service.client';
-import { GoogleStockNewsComponent } from './components/widget/google-finance/google-stock-news/google-stock-news.component';
 import { AdminComponent } from './components/user/admin/admin.component';
 
 @NgModule({
@@ -67,16 +60,11 @@ import { AdminComponent } from './components/user/admin/admin.component';
     WidgetImageComponent,
     WidgetYoutubeComponent,
     HomeComponent,
-    TestComponent,
     FlickrImageSearchComponent,
     WidgetHtmlComponent,
     WidgetTextComponent,
     SortableDirective,
     OrderByPipe,
-    GoogleStockBuyComponent,
-    GoogleStockEditComponent,
-    GoogleStockListComponent,
-    GoogleStockNewsComponent,
     AdminComponent
   ],
   imports: [
@@ -89,11 +77,9 @@ import { AdminComponent } from './components/user/admin/admin.component';
     WebsiteService,
     PageService,
     WidgetService,
-    TestService,
     FlickrService,
     SharedService,
     AuthenticationService,
-    GoogleFinanceServiceClient,
     CookieService
   ],
   bootstrap: [AppComponent]

@@ -7,6 +7,10 @@ import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.errors.GitAPIException;
 import org.eclipse.jgit.api.errors.JGitInternalException;
 
+/**
+ * @author sirushti
+ *
+ */
 public class GitUtil {
 
 	private GitUtil() {

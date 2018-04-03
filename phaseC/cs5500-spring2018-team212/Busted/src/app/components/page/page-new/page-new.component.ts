@@ -9,6 +9,7 @@ import { NgForm } from '@angular/forms';
 import {Page} from '../../../models/page.model.client';
 import {PageService} from '../../../services/page.service.client';
 import {SharedService} from '../../../services/shared.service.client';
+import {CookieService} from 'ngx-cookie-service';
 
 @Component({
   selector: 'app-page-new',
@@ -30,6 +31,7 @@ export class PageNewComponent implements OnInit {
   title: String;
   pages: Page[];
   duedate: Date;
+  course: any;
 
   // inject route info in constructor
   constructor(
@@ -38,6 +40,7 @@ export class PageNewComponent implements OnInit {
     private pageService: PageService,
     private route: ActivatedRoute,
     private router: Router,
+    private cookieService: CookieService,
     private sharedService: SharedService) { }
 
   getUser() {
@@ -48,7 +51,7 @@ export class PageNewComponent implements OnInit {
 
   create(name, duedate) {
     if (!name) {
-      alert('Please input portfolio name');
+      alert('Please input assignment name');
     } else {
       const newPage = {
         name: name,
@@ -74,10 +77,18 @@ export class PageNewComponent implements OnInit {
       console.log(this.websites);
     });
 
-    this.getUser();
+    this.userId = this.cookieService.get('user');
 
-    this.user = this.sharedService.user;
+    console.log(this.userId);
 
-    this.userId = this.user['_id'];
+    this.websiteService.findWebsiteById(this.userId, this.wid)
+      .subscribe((course) => {
+        this.course = course;
+      });
+
+    this.userService.findUserById(this.userId).subscribe((user: User) => {
+      this.user = user;
+      console.log(this.user);
+    });
   }
 }
