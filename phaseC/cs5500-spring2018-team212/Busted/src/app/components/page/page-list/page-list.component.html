@@ -9,6 +9,7 @@
       </a>
     </div>
 
+
     <div class="navbar-brand pull-left">
 
         <b class = white>Assignments Dashboard:&nbsp;&nbsp; {{this.course.semester}}  {{this.course.code}} {{this.course.name}}  </b>
@@ -27,37 +28,77 @@
   </div>
 </nav>
 
-<div class="container-fluid padding"></div>
-<label class ='letter-tiffany paddingleft'> Hi, &nbsp;{{user.firstName}}!&nbsp; &nbsp; Role: {{user.type}}</label>
+<div class="container-fluid padding">
+  <label class ='letter-tiffany paddingleft'> Hi, &nbsp;{{user.firstName}}!&nbsp; &nbsp; Role: {{user.type}}</label>
 
-<div *ngFor = "let assignment of assignments" class="container-fluid ">
-  <ul  class="list-group">
-    <li class="list-group-item blue ">
+  <!--<br>-->
+  <!--<meter value = "80"></meter>-->
 
-      <a routerLink="/user/website/{{ wid }}/page/{{assignment}}/widget/" class="thick">
-       <b> {{ assignment }}: &nbsp;&nbsp; {{assignment.duedate}} </b>
-      </a>
+  <!--<br>-->
 
-      <!--<a class="pull-right" routerLink="/user/website/{{ wid }}/page/{{page._id}}">-->
-        <!--<span class="glyphicon glyphicon-cog"></span>-->
-      <!--</a>-->
-      <button *ngIf="(user.type !== 'STUDENT' )" class="pull-right btn-success "
-              (click)= "gotoReport()" >
+  <div class = "container-fluid  paddingleft padding-b">
+    <table id = 'customers'>
 
-              <!--routerLink="/user/website/{{ wid }}/page/{{page._id}}/widget/new">-->
-        Check Report
-      </button>
+      <thead>
+      <tr>
+        <th>&nbsp; Name </th>
+        <th>&nbsp; Due Date</th>
+        <th *ngIf="(user.type !== 'STUDENT' && (user.type !== 'TA' ) )">  Edit Assignment</th>
+        <th *ngIf="(user.type !== 'STUDENT')">  Check reports</th>
 
-      &nbsp;
+      </tr>
+      </thead>
 
-      <button *ngIf="(user.type !== 'STUDENT' )" class="pull-right btn-primary " routerLink="/user/website/{{ wid }}/page/{{course.id}}">
-        Edit assignment
-      </button>
+      <tbody>
+      <tr *ngFor="let assignment of assignments" routerLink="/user/website/{{ wid }}/page/{{assignment.id}}/widget/">
+        <td>&nbsp; {{assignment.name}}</td>
+        <td>&nbsp; {{assignment.duedate}}</td>
+        <td *ngIf="(user.type !== 'STUDENT' ) && (user.type !== 'TA' )">
+          <a class="glyphicon glyphicon-cog" routerLink="/user/website/{{ wid }}/page/{{assignment.id}}">
+          </a>
+        </td>
+        <td *ngIf="(user.type !== 'STUDENT')">
+          <a class="glyphicon glyphicon-file" (click)= "gotoReport()" >
+          </a>
+        </td>
+      </tr>
+      </tbody>
+    </table>
 
-    </li>
-  </ul>
-</div>
+  <!--<div *ngFor = "let assignment of assignments" class="container-fluid ">-->
+    <!--<ul  class="list-group">-->
+      <!--<li class="list-group-item blue ">-->
 
+        <!--<a routerLink="/user/website/{{ wid }}/page/{{assignment}}/widget/" class="thick">-->
+         <!--<b> Name {{ assignment.name }}: &nbsp;&nbsp; Due date: {{assignment.duedate}} </b>-->
+        <!--</a>-->
+
+        <!--&lt;!&ndash;<a class="pull-right" routerLink="/user/website/{{ wid }}/page/{{page._id}}">&ndash;&gt;-->
+          <!--&lt;!&ndash;<span class="glyphicon glyphicon-cog"></span>&ndash;&gt;-->
+        <!--&lt;!&ndash;</a>&ndash;&gt;-->
+        <!--<button *ngIf="(user.type !== 'STUDENT' )" class="pull-right btn-success "-->
+                <!--(click)= "gotoReport()" >-->
+
+                <!--&lt;!&ndash;routerLink="/user/website/{{ wid }}/page/{{page._id}}/widget/new">&ndash;&gt;-->
+          <!--Check Report-->
+        <!--</button>-->
+
+        <!--&nbsp;-->
+        <!--<button *ngIf="(user.type !== 'STUDENT' )" class="pull-right btn-primary " routerLink="/user/website/{{ wid }}/page/{{course.id}}">-->
+          <!--Edit assignment-->
+        <!--</button>-->
+
+        <!--&lt;!&ndash;<div class="progress">&ndash;&gt;-->
+          <!--&lt;!&ndash;<div class="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="70"&ndash;&gt;-->
+               <!--&lt;!&ndash;aria-valuemin="0" aria-valuemax="100" style="width: getAssignmentProgress(assignment.name, this.wid,)">&ndash;&gt;-->
+            <!--&lt;!&ndash;70% Complete (danger)&ndash;&gt;-->
+          <!--&lt;!&ndash;</div>&ndash;&gt;-->
+        <!--&lt;!&ndash;</div>&ndash;&gt;-->
+
+      <!--</li>-->
+    <!--</ul>-->
+  <!--</div>-->
+<!--</div>-->
 
 <nav class="navbar navbar-tiffany navbar-fixed-bottom">
   <div class="container-fluid">

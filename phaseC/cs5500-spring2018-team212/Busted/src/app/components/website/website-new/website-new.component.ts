@@ -50,11 +50,11 @@ export class WebsiteNewComponent implements OnInit {
     this.code = this.createForm.value.code;
     this.semester = this.createForm.value.semester;
 
-    if (this.semester === "") {
+    if (this.semester === '') {
       alert('Please input semester');
-    } else if (this.code === "") {
+    } else if (this.code === '') {
       alert('Please input course code');
-    } else if (this.name === "") {
+    } else if (this.name === '') {
       alert('Please input course name');
     } else {
       this.newCourse = {
@@ -78,14 +78,13 @@ export class WebsiteNewComponent implements OnInit {
 
   // notify the changes of the route
   ngOnInit() {
+      
     // invoke a function that can pass the value of the parameters
     this.route.params.subscribe((params: any) => {
       this.wid = params['wid'];
     });
 
-
     this.userId = this.cookieService.get('user');
-
     console.log(this.userId);
 
     this.userService.findUserById(this.userId).subscribe((user: User) => {

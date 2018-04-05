@@ -74,7 +74,7 @@ public class CourseRoleService {
 	 * @return the number of rows affected
 	 *        - indicating whether operation was successful.
 	 */
-	@CrossOrigin(origins = {"http://localhost:4200", "ec2-18-222-88-122.us-east-2.compute.amazonaws.com:4200"})
+	@CrossOrigin(origins = {"http://localhost:4200", "http://ec2-18-222-88-122.us-east-2.compute.amazonaws.com:4200"})
 	@RequestMapping(value="/api/user/course/drop", method=RequestMethod.POST)
 	public @ResponseBody int deleteStudentFromCourse(
 			@RequestBody String json) {

@@ -20,7 +20,7 @@
 
         <div class="navbar-brand pull-left">
           <!--<a href="website-new.html" class="white">-->
-          <b class="white">Course list</b>
+          <b class="white">My Course list</b>
           <!--</a>-->
         </div>
 
@@ -61,18 +61,42 @@
       <div class="padding padding"></div>
       <label class ='letter-tiffany paddingleft'>Welcom, {{user.firstName}}! &nbsp; &nbsp; Role: {{user.type}}</label>
 
-      <ul *ngFor = "let course of courses"  class="list-group ">
-        <li class="list-group-item blue borderless">
+      <!--<ul *ngFor = "let course of courses"  class="list-group">-->
+        <!--<li class="list-group-item blue borderless">-->
 
-          <!--<a routerLink="/profile/{{ userId }}/website/{{ wid }}/page">-->
-          <b>  {{ course.semester }}:    {{course.code}}   {{course.name}}  </b>
-          <!--</a>-->
+          <!--&lt;!&ndash;<a routerLink="/profile/{{ userId }}/website/{{ wid }}/page">&ndash;&gt;-->
+          <!--<b>  {{ course.semester }}:    {{course.code}}   {{course.name}}  </b>-->
+          <!--&lt;!&ndash;</a>&ndash;&gt;-->
 
-          <!--<a class="pull-right" >-->
-          <!--<span class="glyphicon glyphicon-cog"></span>-->
+          <!--&lt;!&ndash;<a class="pull-right" >&ndash;&gt;-->
+          <!--&lt;!&ndash;<span class="glyphicon glyphicon-cog"></span>&ndash;&gt;-->
+          <!--&lt;!&ndash;</a>&ndash;&gt;-->
+        <!--</li>-->
+      <!--</ul>-->
+
+      <table id="customers">
+
+        <thead>
+        <tr>
+          <th>&nbsp; Semester</th>
+          <th>&nbsp; Code</th>
+          <th>&nbsp; Name</th>
+          <!--<th>  Go To Course</th>-->
+        </tr>
+        </thead>
+
+        <tbody>
+        <tr *ngFor="let course of courses" routerLink="/user/website/{{ course.id }}">
+          <td>&nbsp; {{course.semester}}</td>
+          <td>&nbsp; {{course.code}}</td>
+          <td>&nbsp; {{course.name}}</td>
+          <!--<td>&nbsp;-->
+          <!--<a class="glyphicon glyphicon-chevron-right " routerLink="/user/website/{{ course.id }}">-->
           <!--</a>-->
-        </li>
-      </ul>
+          <!--</td>-->
+        </tr>
+        </tbody>
+      </table>
 
     </div>
 

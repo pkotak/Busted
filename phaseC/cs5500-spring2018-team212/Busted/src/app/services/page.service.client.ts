@@ -28,6 +28,23 @@ export class PageService {
       });
   }
 
+  createAssignment(assignment) {
+    const url = this.baseUrl + '/api/assignment/new';
+    console.log(assignment);
+    return this.http.post(url, assignment)
+      .map((response: Response) => {
+        return response.json();
+      });
+  }
+
+  getAssignmentProgress(courseId, assignmentName) {
+    const url = this.baseUrl + '/api/course/' + courseId + '/assignment/' + assignmentName;
+    return this.http.get(url)
+      .map((response: Response) => {
+        return response.json();
+      });
+  }
+
   // retrieves the assignments in a course
   findPagesByWebsiteId(courseId) {
     const url = this.baseUrl + '/api/course/' + courseId + '/assignment';
@@ -36,11 +53,28 @@ export class PageService {
     });
   }
 
-  findAssignmentsByCourseId(courseId) {
-    const url = this.baseUrl + '/api/course/' + courseId + '/assignment';
+  findAssignmentById(assignmentId) {
+    const url = this.baseUrl + '/api/course/assignment/' + assignmentId;
     return this.http.get(url).map((response: Response) => {
+      console.log(response);
       return response.json();
     });
+  }
+
+  findAssignmentsByCourseId(userId , courseId) {
+    const url = this.baseUrl + '/api/' + userId + '/course/' + courseId + '/assignment';
+    return this.http.get(url).map((response: Response) => {
+      console.log(response);
+      return response.json();
+      });
+  }
+
+  findSubmissions(hwName, courseId, userId) {
+      const url = this.baseUrl + '/api/course/' + courseId + '/assignment/' + hwName + '/user/' + userId;
+      return this.http.get(url).map((response: Response) => {
+        console.log(response);
+        return response.json();
+        });
   }
 
   // retrieves the page in local pages array whose _id matches the pageId parameter
@@ -69,5 +103,19 @@ export class PageService {
 
   }
 
-
+  // uploads git repo
+  uploadGit(githublink, courseid, studentid, hwName, parentAssignmentId) {
+    console.log(githublink, courseid, studentid)
+    const data = {
+        'githublink': githublink,
+        'courseid': courseid,
+        'studentid': studentid,
+        'hwName': hwName,
+        'parentAssignment': parentAssignmentId
+    }
+    const url = this.baseUrl + '/api/assignment/uploadGit';
+    return this.http.post(url, data).map((response: Response) => {
+      return response.json();
+    });
+  }
 }

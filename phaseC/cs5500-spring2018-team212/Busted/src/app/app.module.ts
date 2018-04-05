@@ -6,7 +6,8 @@ import { LoginComponent } from './components/user/login/login.component';
 import { RegisterComponent } from './components/user/register/register.component';
 import { FormsModule } from '@angular/forms';
 import { CookieService } from 'ngx-cookie-service';
-
+// import { GaugeModule } from 'angular-gauge';
+// import { NgxGaugeModule} from 'ngx-gauge';
 
 
 // import routing in appmodule.
@@ -28,6 +29,7 @@ import {WebsiteService} from './services/website.service.client';
 import { UserService } from './services/user.service.client';
 import { PageService } from './services/page.service.client';
 import { WidgetService } from './services/widget.service.client';
+import { AssignmentService } from './services/assignment.service.client';
 import {HomeComponent} from './components/home/home.component';
 import {HttpModule} from '@angular/http';
 import { FlickrImageSearchComponent } from './components/widget/widget-edit/widget-image/flickr-image-search/flickr-image-search.component';
@@ -40,6 +42,7 @@ import {AuthenticationService} from './services/authentication.service.client';
 import {SortableDirective} from './components/widget/widget-list/sortable.directive';
 import { OrderByPipe } from './components/widget/widget-list/order-by-pipe.pipe';
 import { AdminComponent } from './components/user/admin/admin.component';
+
 
 @NgModule({
   declarations: [
@@ -65,10 +68,12 @@ import { AdminComponent } from './components/user/admin/admin.component';
     WidgetTextComponent,
     SortableDirective,
     OrderByPipe,
-    AdminComponent
+    AdminComponent,
   ],
   imports: [
-    BrowserModule, routing, FormsModule, HttpModule, QuillEditorModule
+    BrowserModule, routing, FormsModule, HttpModule, QuillEditorModule,
+    // GaugeModule.forRoot(),
+    // NgxGaugeModule
   ],
 
   // inject it into any constructors
@@ -80,7 +85,7 @@ import { AdminComponent } from './components/user/admin/admin.component';
     FlickrService,
     SharedService,
     AuthenticationService,
-    CookieService
+    CookieService,
   ],
   bootstrap: [AppComponent]
 })

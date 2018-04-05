@@ -15,6 +15,7 @@ import {DomSanitizer, SafeResourceUrl} from '@angular/platform-browser';
 import {environment} from '../../../../environments/environment';
 import {OrderByPipe} from './order-by-pipe.pipe';
 import { SortableDirective} from './sortable.directive';
+import {CookieService} from 'ngx-cookie-service';
 
 @Component({
   selector: 'app-widget-list',
@@ -39,7 +40,11 @@ export class WidgetListComponent implements OnInit {
   url: String;
   page: any;
   imageFileStream: String;
-  // testwidth: String;
+  gitUrl: String;
+  courseid: String;
+  assignmentid: String;
+  hwName: String;
+  
 
   // inject route info in constructor
   constructor(
@@ -47,14 +52,11 @@ export class WidgetListComponent implements OnInit {
     private websiteService: WebsiteService,
     private widgetService: WidgetService,
     private pageService: PageService,
+    private cookieService: CookieService,
     private route: ActivatedRoute,
+    private router: Router,
     public sanitizer: DomSanitizer) { }
 
-  // sanitizer youtuber url
-  updateVideoUrl(url: string) {
-    // const aurl = 'https://www.youtube.com/embed/qdA32j7_U6U';
-    return this.youtubeUrl = this.sanitizer.bypassSecurityTrustResourceUrl(url);
-  }
 
   updateImageUrl(string) {
     let newurl = '';
@@ -64,6 +66,14 @@ export class WidgetListComponent implements OnInit {
       newurl = string;
     }
     return newurl;
+  }
+  
+  uploadGit() {
+      this.pageService.uploadGit(this.gitUrl, this.courseid, this.userId, this.hwName, this.assignmentid)
+      .subscribe(
+        (data) => {console.log(data); this.router.navigate( ['user', 'website', this.courseid, 'page']);}
+      );
+      
   }
 
   reorderWidgets(indexes) {
@@ -83,25 +93,18 @@ export class WidgetListComponent implements OnInit {
     // invoke a function that can pass the value of the parameters
     this.route.params.subscribe((params: any) => {
       // this.user = this.userService.findUserById(this.userId);
-      this.wid = params['wid'];
-      this.pid = params['pid'];
+      this.courseid = params['wid'];
+      this.assignmentid = params['pid'];
+      this.pageService.findAssignmentById(this.assignmentid).subscribe(( assignment ) => {
+          if (assignment != null) {
+              this.hwName = assignment.name;
+              console.log(assignment);
+          }
+      } );
     });
 
-    this.pageService.findPageById(this.wid, this.pid)
-      .subscribe((page) => {
-        this.page = page;
-      });
-
-    this.widgetService.findAllWidgetsForPageId(this.pid)
-      .subscribe((data: any) => {
-        this.widgets = data;
-        console.log(this.widgets);
-      });
-
-    this.userService.findUserById(this.userId).subscribe((user: User) => {
-      this.user = user;
-      console.log(this.user);
-    });
+    console.log(this);
+    this.userId = this.cookieService.get('user');
   }
 
 }

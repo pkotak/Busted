@@ -120,15 +120,18 @@ export class WebsiteEditComponent implements OnInit {
 
 
     goToAssignment() {
-
-      this.userService.findUserInCourse(this.user.id, this.course.id, this.user.type)
-        .subscribe((user) => {
-          if (user.id !== this.user.id) {
-            alert('You are currently not enrolled in this course.');
-          } else {
-            this.router.navigate(['user', 'website', this.wid, 'page']);
-          }
-        });
+      if (this.user.type !== 'STUDENT') {
+        this.router.navigate(['user', 'website', this.wid, 'page']);
+      } else {
+        this.userService.findUserInCourse(this.user.id, this.course.id, this.user.type)
+          .subscribe((user) => {
+            if (user.id !== this.user.id) {
+              alert('You are currently not enrolled in this course.');
+            } else {
+              this.router.navigate(['user', 'website', this.wid, 'page']);
+            }
+          });
+      }
     }
 
     deleteWebsite() {
@@ -167,7 +170,6 @@ export class WebsiteEditComponent implements OnInit {
         this.courses = courses;
         console.log(courses);
       });
-
 
     this.websiteService.findWebsiteById(this.userId, this.wid)
       .subscribe((course) => {

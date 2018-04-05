@@ -247,14 +247,12 @@ public class CourseDao {
 			Class.forName(Constants.JDBC_DRIVER);
 			conn = DriverManager.getConnection(Constants.CONNECTION_STRING, Constants.AWS_USERNAME,
 					Constants.AWS_P);
-
 			String sql = "select * from Course WHERE id = ?";
 			try {
 				statement = conn.prepareStatement(sql);
 				statement.setInt(1, courseid);
 				try {
 					results = statement.executeQuery();
-
 					if (results.next()) {
 						int id = Integer.parseInt(results.getString("id"));
 						String name = results.getString("name");
@@ -265,7 +263,6 @@ public class CourseDao {
 						course.setName(name);
 						course.setSemester(semester);
 						course.setCode(code);
-			
 					}
 				} finally {
 					if (results != null) {
@@ -276,7 +273,6 @@ public class CourseDao {
 				if (statement != null)
 					statement.close();
 			}
-
 		} catch (ClassNotFoundException e) {
 			LOGGER.info(e.toString());
 		} catch (SQLException e) {

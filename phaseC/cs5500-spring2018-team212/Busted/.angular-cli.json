@@ -21,7 +21,19 @@
       "styles": [
         "styles.css"
       ],
-      "scripts": [],
+      "scripts": [
+        "assets/BustedHome/js/modernizr.custom.js",
+        "assets/BustedHome/js/jquery.1.11.1.js",
+        "assets/BustedHome/js/bootstrap.js",
+        "assets/BustedHome/js/SmoothScroll.js",
+        "assets/BustedHome/js/jquery.counterup.js",
+        "assets/BustedHome/js/waypoints.js",
+        "assets/BustedHome/js/jquery.prettyPhoto.js",
+        "assets/BustedHome/js/jquery.isotope.js",
+        "assets/BustedHome/js/jqBootstrapValidation.js",
+        "assets/BustedHome/js/contact_me.js",
+        "assets/BustedHome/js/main.js"
+      ],
       "environmentSource": "environments/environment.ts",
       "environments": {
         "dev": "environments/environment.ts",

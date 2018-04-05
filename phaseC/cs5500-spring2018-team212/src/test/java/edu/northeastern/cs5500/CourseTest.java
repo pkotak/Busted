@@ -34,7 +34,7 @@ public class CourseTest {
 	@Test
 	public void testselectCourseById() {
 		CourseService cs = new CourseService();
-		cs.selectCoursesByCourseId("5", "2");
+		System.out.println(cs.selectCoursesByCourseId("5", "2"));
 	}
 	
 	@Test

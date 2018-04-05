@@ -177,13 +177,8 @@ export class UserService {
   }
 
   findUserInCourse(userId, courseId, role) {
-    const myType = {
-      // _id: this.userService.newId(),
-      type: role
-    };
     const url =  this.baseUrl + '/api/user/' + userId + '/course/' + courseId;
-    console.log(myType);
-    return this.http.post(url, myType)
+    return this.http.get(url)
       .map((response: Response) => {
         return response.json();
       });

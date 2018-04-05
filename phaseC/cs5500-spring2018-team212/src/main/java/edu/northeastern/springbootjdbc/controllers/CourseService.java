@@ -32,7 +32,7 @@ public class CourseService {
 	 * @return the number of rows affected
 	 *        - indicating whether operation was successful.
 	 */
-	@CrossOrigin(origins = "http://localhost:4200")
+	@CrossOrigin(origins = {"http://localhost:4200", "http://ec2-18-222-88-122.us-east-2.compute.amazonaws.com:4200"})
 	@RequestMapping(value="/api/user/{userId}/courses",method=RequestMethod.POST)
 	public @ResponseBody int createCourse(@PathVariable("userId") String id,
 			@RequestBody String json) {
@@ -61,7 +61,7 @@ public class CourseService {
 	 * @return the number of rows affected - indicating whether operation was
 	 *         successful.
 	 */
-	@CrossOrigin(origins = "http://localhost:4200")
+	@CrossOrigin(origins = {"http://localhost:4200", "http://ec2-18-222-88-122.us-east-2.compute.amazonaws.com:4200"})
 	@RequestMapping("/api/update/course")
 	public @ResponseBody int updateCourse(@RequestParam("name") String name, @RequestParam("code") String semester,
 			@RequestParam("semester") String code, @RequestParam("courseID") int courseID) {
@@ -70,7 +70,7 @@ public class CourseService {
 		return cdao.updateCourse(courseID, c);
 	}
 
-	@CrossOrigin(origins = "http://localhost:4200")
+	@CrossOrigin(origins = {"http://localhost:4200", "http://ec2-18-222-88-122.us-east-2.compute.amazonaws.com:4200"})
 	@RequestMapping(value="/api/user/course/{courseId}",method=RequestMethod.POST)
 	public @ResponseBody int updateCourseById(@PathVariable("courseId") String id,
 			@RequestBody String json) {
@@ -96,21 +96,21 @@ public class CourseService {
 	 * 
 	 * @return List of all the courses in the database
 	 */
-	@CrossOrigin(origins = "http://localhost:4200")
+	@CrossOrigin(origins = {"http://localhost:4200", "http://ec2-18-222-88-122.us-east-2.compute.amazonaws.com:4200"})
 	@RequestMapping("/api/user/{userId}/course/{courseId}")
-	public Course selectCoursesByCourseId(@PathVariable("userId") String userId,
+	public @ResponseBody Course selectCoursesByCourseId(@PathVariable("userId") String userId,
 			@PathVariable("courseId") String courseId) {
 		CourseDao cdao = CourseDao.getInstance();
 		return cdao.findCoursebyID(Integer.parseInt(courseId));
 	}
-	
+
 	/**
 	 * Deletes a course in the database
 	 * 
 	 * @return the number of rows affected - indicating whether operation was
 	 *         successful.
 	 */
-	@CrossOrigin(origins = "http://localhost:4200")
+	@CrossOrigin(origins = {"http://localhost:4200", "http://ec2-18-222-88-122.us-east-2.compute.amazonaws.com:4200"})
 	@RequestMapping(value="/api/user/course/{courseId}", method=RequestMethod.DELETE)
 	public @ResponseBody int deleteCourse(@PathVariable("courseId") int courseID) {
 		CourseDao cdao = CourseDao.getInstance();
@@ -122,7 +122,7 @@ public class CourseService {
 	 * 
 	 * @return List of all the courses in the database
 	 */
-	@CrossOrigin(origins = "http://localhost:4200")
+	@CrossOrigin(origins = {"http://localhost:4200", "http://ec2-18-222-88-122.us-east-2.compute.amazonaws.com:4200"})
 	@RequestMapping("/api/allCourses")
 	public List<Course> selectAllCourses() {
 		CourseDao cdao = CourseDao.getInstance();

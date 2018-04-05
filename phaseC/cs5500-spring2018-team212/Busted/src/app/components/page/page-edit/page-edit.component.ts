@@ -32,6 +32,7 @@ export class PageEditComponent implements OnInit {
   websites: Website[];
   description: String;
   course: any;
+  assignment: any;
 
   // inject route info in constructor
   constructor(
@@ -52,27 +53,19 @@ export class PageEditComponent implements OnInit {
 
 
   update() {
-    if (!((this.user._id === this.page.owner) || (this.user.role === 'ADMIN'))) {
-      alert('Current user is not allowed modify the assignment.');
-    } else {
-      if (!this.page.name) {
-        alert('Please input portfolio name.');
-      } else {
+      const newPage = {
+        studentId: this.userId,
+        name: this.assignment.name,
+        duedate: this.assignment.duedate,
+        courseId: this.course.id,
+        githublink: '',
+      };
 
-        const newPage: Page = {
-          _id: this.pid,
-          name: this.page.name,
-          websiteId: this.userId,
-          description: this.page.description
-        };
-
-        this.pageService.updatePage(this.wid, this.pid, newPage)
-          .subscribe((pages) => {
-            // this.pages = pages;
-            this.router.navigate(['user', 'website', this.wid, 'page']);
-          });
-      }
-    }
+      this.pageService.updatePage(this.wid, this.pid, newPage)
+        .subscribe((pages) => {
+          // this.pages = pages;
+          this.router.navigate(['user', 'website', this.wid, 'page']);
+        });
   }
 
   // deletePage(pageId) {
@@ -97,12 +90,19 @@ export class PageEditComponent implements OnInit {
       // this.user = this.userService.findUserById(this.userId);
       this.wid = params['wid'];
       this.pid = params['pid'];
+      console.log(this.pid);
     });
 
-    this.pageService.findPageById(this.wid, this.pid)
+    this.websiteService.findWebsiteById(this.userId, this.wid)
       .subscribe((course) => {
         this.course = course;
       });
+
+    this.pageService.findAssignmentById(this.pid)
+      .subscribe((assignment) => {
+        this.assignment = assignment;
+      });
+
 
     this.userId = this.cookieService.get('user');
 
