@@ -103,10 +103,13 @@ public class PersonService {
 		PersonDao dao = PersonDao.getInstance();
 		ObjectMapper mapperObj = new ObjectMapper();
 		Person p = dao.findPersonByUsername(email);
-		if (p == null) 
-			return "";
-		else
+		String returnJson = "";
+		if (p == null) {
+			returnJson = "{\"email\": \"null\"}";
+			return returnJson;
+		} else {
 			return mapperObj.writeValueAsString(p);
+		}
 	}
 
 	/**

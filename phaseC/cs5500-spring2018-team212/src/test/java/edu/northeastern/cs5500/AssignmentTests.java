@@ -58,18 +58,25 @@ public class AssignmentTests {
 		when(S3.putObject(any(String.class), any(String.class), any(String.class), eq(false))).thenReturn("shaaaa");
 		when(S3.putObject(any(String.class), any(String.class), any(String.class), eq(true))).thenReturn("http://meh");
 		when(S3.uploadDir(any(String.class), any(String.class))).thenReturn("http://meh2");
-		JSONObject obj = new JSONObject();
+		JSONObject obj1 = new JSONObject();
+		JSONObject obj2 = new JSONObject();
 
 		try {
-			obj.put("name", "HW1");
-			obj.put("githublink", "https://github.com/team212test/test1");
-			obj.put("studentid", 4);
-			obj.put("courseid", 2);
-			obj.put("hwName", "HW1");
-			obj.put("parentAssignment", 1);
-			svc.uploadGit(obj.toString());
-			obj.put("githublink", "https://github.com/team212test/test2");
-			svc.uploadGit(obj.toString());
+			obj1.put("name", "HW1");
+			obj1.put("githublink", "https://github.com/team212test/test1");
+			obj1.put("studentid", 1);
+			obj1.put("courseid", 2);
+			obj1.put("hwName", "HW1");
+			obj1.put("parentAssignment", 1);
+			svc.uploadGit(obj1.toString());
+			obj2.put("name", "HW1");
+			obj2.put("githublink", "https://github.com/team212test/test2");
+			obj2.put("studentid", 2);
+			obj2.put("courseid", 2);
+			obj2.put("hwName", "HW1");
+			obj2.put("parentAssignment", 1);
+			svc.uploadGit(obj2.toString());
+
 		} catch (JSONException e1) {
 			e1.printStackTrace();
 		}
@@ -89,6 +96,12 @@ public class AssignmentTests {
 		AssignmentDao dao = AssignmentDao.getInstance();
 		dao.getAvailableAssignments(2, 1);
 		System.out.println(dao.getAvailableAssignments(2, 1));
+	}
+	
+	@Test
+	public void testIndividual() {
+		AssignmentService svc = new AssignmentService();
+		svc.testIndividual(780, 785);
 	}
 
 }

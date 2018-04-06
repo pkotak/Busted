@@ -24,4 +24,16 @@ public class ReportTests {
 		ReportService reps = new ReportService();
 		reps.getReports(599, "HW1");
 	}
+	
+	@Test
+	public void test2() {
+		
+		Report r1 = new Report(32, 23, 78, "", true);
+		r1.toString();
+	}
+	@Test
+	public void test3() {
+		ReportDao rs = ReportDao.getInstance();
+		rs.getReport(100);
+	}
 }

@@ -25,7 +25,7 @@ public class MetaDataTests {
 	@Test
 	public void test2() {
 		MetadataAnalyser mda = new MetadataAnalyser();
-		mda.getMetaData("C:\\Users\\abhir\\Documents\\team-212\\phaseC\\cs5500-spring2018-team212\\Python Code Sample\\sam.py");
+		mda.getMetaData("");
 	}
 	/**
 	 * tests MetadataAnalyser compare files 

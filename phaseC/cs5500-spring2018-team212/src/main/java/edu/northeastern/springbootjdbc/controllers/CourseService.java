@@ -1,6 +1,7 @@
 package edu.northeastern.springbootjdbc.controllers;
 
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Logger;
 
 import org.json.JSONException;
@@ -70,6 +71,7 @@ public class CourseService {
 		return cdao.updateCourse(courseID, c);
 	}
 
+
 	@CrossOrigin(origins = {"http://localhost:4200", "http://ec2-18-222-88-122.us-east-2.compute.amazonaws.com:4200"})
 	@RequestMapping(value="/api/user/course/{courseId}",method=RequestMethod.POST)
 	public @ResponseBody int updateCourseById(@PathVariable("courseId") String id,
@@ -128,4 +130,20 @@ public class CourseService {
 		CourseDao cdao = CourseDao.getInstance();
 		return cdao.findAllCourses();
 	}
+	
+	/**
+	 * Find all courses in the given semester
+	 * 
+	 * @return List of all the courses in the database
+	 */
+	@CrossOrigin(origins = "http://localhost:4200")
+	@RequestMapping(value = {"/api/allCourses/semester/{semester}"}, method = RequestMethod.GET)
+	public List<Course> selectCoursesbySemester(@PathVariable Map<String, String> pathVariablesMap) {
+		CourseDao cdao = CourseDao.getInstance();
+		if (pathVariablesMap.containsKey("semester"))
+			return cdao.findCoursesBySemester(pathVariablesMap.get("semester"));
+		else
+			return cdao.defaultCourses();
+	}
+
 }

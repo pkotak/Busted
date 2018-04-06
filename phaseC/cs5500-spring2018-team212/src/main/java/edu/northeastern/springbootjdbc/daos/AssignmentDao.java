@@ -7,13 +7,15 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Logger;
 
 import edu.northeastern.cs5500.Constants;
 import edu.northeastern.springbootjdbc.models.Assignment;
 
-/**
+/**	
  * Assignment Data Access Object
  * 
  * @author sirushti
@@ -259,7 +261,6 @@ public class AssignmentDao {
 			try {
 
 				try {
-
 				assignmentStatement = conn.prepareStatement(assignmentSql);
 				assignmentStatement.setString(1, hwName);
 				rs = assignmentStatement.executeQuery();
@@ -396,5 +397,95 @@ public class AssignmentDao {
 			}
 		}
 		return assignments;
+	}
+
+	public List<String> getPreviousSubmission(String hwname, int studentID, int courseID) {
+		List<String> listOfID = new ArrayList<String>();
+		Connection conn = null;
+		PreparedStatement assignmentStatement = null;
+		ResultSet rs = null;
+		
+		try {
+			Class.forName(Constants.JDBC_DRIVER);
+			conn = DriverManager.getConnection(Constants.CONNECTION_STRING, Constants.AWS_USERNAME, Constants.AWS_P);
+			String assignmentSelect = "select id from Assignment where name=? and studentid=? and courseid=?";
+			try {
+				assignmentStatement = conn.prepareStatement(assignmentSelect);
+				assignmentStatement.setString(1, hwname);
+				assignmentStatement.setInt(2, studentID);
+				assignmentStatement.setInt(3, courseID);
+				try {
+					rs = assignmentStatement.executeQuery();
+					while (rs.next()) {
+						int aid = rs.getInt("id");
+						listOfID.add(String.valueOf(aid));
+					}
+				} finally {
+					if (rs != null) {
+						rs.close();
+					}
+				}
+			} finally {
+				if (assignmentStatement != null)
+					assignmentStatement.close();
+			}
+		} catch (ClassNotFoundException e) {
+			LOGGER.info(e.toString());
+		} catch (SQLException e) {
+			LOGGER.info(e.toString());
+		} finally {
+			try {
+				if (conn != null)
+					conn.close();
+			} catch (SQLException e) {
+				LOGGER.info(e.toString());
+			}
+		}
+		return listOfID;
+	}
+
+	public Map<Integer, String> getInfoforAssignment(int assignmentID) {
+		Connection conn = null;
+		PreparedStatement assignmentStatement = null;
+		Map<Integer, String> hmap = new HashMap<Integer, String>(); 
+		ResultSet rs = null;
+		try {
+			Class.forName(Constants.JDBC_DRIVER);
+			conn = DriverManager.getConnection(Constants.CONNECTION_STRING, Constants.AWS_USERNAME, Constants.AWS_P);
+			try {
+				try {
+					assignmentStatement = conn
+							.prepareStatement("select * from Assignment where id = ?");
+					assignmentStatement.setInt(1, assignmentID);
+					rs = assignmentStatement.executeQuery();
+					if (rs.next()) {
+						String name = rs.getString("name");
+						int cid = rs.getInt("courseid");
+						hmap.put(1, name);
+						hmap.put(2, String.valueOf(cid));
+					}
+				} finally {
+					if (assignmentStatement != null) {
+						assignmentStatement.close();
+					}
+				}
+			} finally {
+				if (rs != null) {
+					rs.close();
+				}
+			}
+		} catch (ClassNotFoundException e) {
+			LOGGER.info(e.toString());
+		} catch (SQLException e) {
+			LOGGER.info(e.toString());
+		} finally {
+			try {
+				if (conn != null)
+					conn.close();
+			} catch (SQLException e) {
+				LOGGER.info(e.toString());
+			}
+		}
+		return hmap;
 	}
 }

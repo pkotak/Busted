@@ -82,7 +82,6 @@ export class PageListComponent implements OnInit {
         // invoke a function that can pass the value of the parameters
         this.route.params.subscribe(( params: any ) => {
             this.wid = params['wid'];
-            
         } );
 
         // this.getUser();

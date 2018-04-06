@@ -64,15 +64,14 @@ export class ProfileComponent implements OnInit {
     this.phone = this.updateForm.value.phone;
     this.type = this.updateForm.value.type;
 
-
-
     const updatedUser = {
       password: this.user.password,
       firstName: this.firstName,
       lastName: this.lastName,
       email: this.email,
       phone: this.phone,
-      type: this.type
+      type: this.user.type,
+      isApproved: this.user.isApproved
     };
 
     console.log(updatedUser);
@@ -82,13 +81,14 @@ export class ProfileComponent implements OnInit {
       // console.log(status);
       this.user = newuser;
       console.log(this.user);
-      // window.location.reload(false); // reload page
+      window.location.reload(false); // reload page
     });
   }
 
   deleteUser() {
     this.userService.deleteUser(this.userId).subscribe((status) => {
       console.log(status);
+      alert('User deleted!');
     });
   }
 

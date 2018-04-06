@@ -103,6 +103,7 @@ export class UserService {
 
   // updates the user in local users array whose _id matches the userId parameter
   updateUser(userId, user) {
+    console.log(userId);
     const url = this.baseUrl + '/api/user/' + userId;
     return this.http.post(url, user).map((res: Response) => {
         return res.json();
@@ -177,8 +178,12 @@ export class UserService {
   }
 
   findUserInCourse(userId, courseId, role) {
-    const url =  this.baseUrl + '/api/user/' + userId + '/course/' + courseId;
-    return this.http.get(url)
+    const url =  this.baseUrl + '/api/user/' + userId + '/course/' + courseId + '/uniqueid';
+    const type = {
+      type: role
+    };
+    console.log(type);
+    return this.http.post(url, type)
       .map((response: Response) => {
         return response.json();
       });

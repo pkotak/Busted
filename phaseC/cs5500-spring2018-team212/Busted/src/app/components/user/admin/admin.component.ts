@@ -16,6 +16,7 @@ import {DomSanitizer, SafeResourceUrl} from '@angular/platform-browser';
   styleUrls: ['./admin.component.css']
 })
 export class AdminComponent implements OnInit {
+  @ViewChild('f') updateForm: NgForm;
   baseUrl = environment.baseUrl;
   user: any;
   userId: String;
@@ -49,6 +50,27 @@ export class AdminComponent implements OnInit {
   approve(userId) {
     this.userService.approveUser(userId).subscribe((status) => {
       console.log(status);
+      window.location.reload(false); // reload page
+    });
+  }
+
+  updateUserByAdmin(id, email, firstName, lastName, type, phone, password, isApproved) {
+    const newUser = {
+      email: email,
+      firstName: firstName,
+      lastName: lastName,
+      type: type,
+      phone: phone,
+      password: password,
+      isApproved: isApproved
+    };
+    console.log(newUser);
+
+    this.userService.updateUser(id, newUser).
+    subscribe((newuser) => {
+      // console.log(status);
+      this.user = newuser;
+      console.log(this.user);
       window.location.reload(false); // reload page
     });
   }

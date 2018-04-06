@@ -96,6 +96,7 @@ export class WebsiteEditComponent implements OnInit {
     dropClass() {
       this.userService.findUserInCourse(this.user.id, this.course.id, this.user.type)
         .subscribe((user) => {
+          console.log(user);
           if (user.id !== this.user.id) {
             alert('You are not enrolled in this course!');
           } else {

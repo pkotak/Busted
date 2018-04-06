@@ -168,7 +168,7 @@ public class CourseRoleControllerTests {
 		 pList.add(p2);
 		 String json = "{ firstname = 'John', lastname = 'Snow', email ='snow@gmail.com', password = 'hola', phone = '6666', type = 'STUDENT'}";
 		 PowerMockito.when(mockDao.getPersonsForCourse(6, "STUDENT")).thenReturn(pList);
-		 MvcResult result = mockMvc.perform(post("/api/user/5/course/6").content(json))
+		 MvcResult result = mockMvc.perform(post("/api/user/5/course/6/uniqueid").content(json))
 				 .andExpect(status().isOk())
 				 .andReturn();
 		 

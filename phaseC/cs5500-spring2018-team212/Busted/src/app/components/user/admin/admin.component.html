@@ -29,27 +29,88 @@
       <th>&nbsp; First Name</th>
       <th>&nbsp; Last Name</th>
       <th>&nbsp; Role</th>
+      <th>&nbsp; Phone</th>
+      <th>&nbsp; Password</th>
       <th>&nbsp; Status</th>
-      <th>&nbsp; &nbsp; Approve</th>
-      <th>&nbsp; &nbsp; Delete User</th>
+      <th>&nbsp; Approve</th>
+      <th>&nbsp; &nbsp; Update</th>
+      <th>&nbsp; &nbsp; Delete</th>
     </tr>
     </thead>
 
     <tbody>
     <tr *ngFor="let user of users" >
       <td>&nbsp; {{user.id}}</td>
-      <td>&nbsp; {{user.email}}</td>
-      <td>&nbsp; {{user.firstName}}</td>
-      <td>&nbsp; {{user.lastName}}</td>
-      <td>&nbsp; {{user.type}}</td>
+      <!--<td>&nbsp; {{user.email}}</td>-->
+      <!--<td>&nbsp; {{user.firstName}}</td>-->
+      <!--<td>&nbsp; {{user.lastName}}</td>-->
+      <!--<td>&nbsp; {{user.type}}</td>-->
+
+
+      <td>      <input [(ngModel)] = "user.email"
+                       name="email"
+                       type="email" class="form-control"
+                       placeholder="a@unicorn.com"
+                       required>  </td>
+
+      <td>      <input [(ngModel)] = "user.firstName"
+                       name="firstName"
+                       type="text"
+                       class="form-control"
+                       placeholder = "firstName"
+                       required></td>
+
+      <td>      <input [(ngModel)] = "user.lastName"
+                       name="lastName"
+                       type="text"
+                       class="form-control"
+                       placeholder = "lastName"
+                       required></td>
+
+
+      <td>      <input [(ngModel)] = "user.type"
+                 name="type"
+                 type="text" class="form-control"
+                 placeholder="type"
+                 required></td>
+
+      <td><input [(ngModel)] = "user.phone"
+                 name="phone"
+                 type="phone" class="form-control"
+                 placeholder="1112223333"
+                 required></td>
+
+
+      <td><input [(ngModel)] = "user.password"
+                 name="password"
+                 type="password" class="form-control"
+                 placeholder="***"
+                 required></td>
+
+
       <td>&nbsp; {{user.isApproved}}</td>
 
+      <!--<td>  <input [(ngModel)] = "user.isApproved"-->
+                 <!--name="isApproved"-->
+                 <!--type="text" class="form-control"-->
+                 <!--placeholder="false"-->
+                 <!--required> </td>-->
 
       <td align="middle">
         &nbsp;&nbsp;&nbsp;&nbsp;
         <a *ngIf="(user.isApproved === false )" (click)=approve(user.id)
                 class="glyphicon glyphicon-ok media-middle" >
         </a>
+
+
+
+
+      </td>
+
+      <td>      <a (click) = "updateUserByAdmin (user.id, user.email, user.firstName, user.lastName, user.type,
+           user.phone, user.password, user.isApproved)"
+                   class="glyphicon glyphicon-ok media-middle" >
+      </a>
       </td>
 
       <td align="middle">

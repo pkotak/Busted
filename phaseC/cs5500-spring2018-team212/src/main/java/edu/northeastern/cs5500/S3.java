@@ -101,7 +101,4 @@ public class S3 {
 		return s3Client;
 	}
 	
-	public static void main(String[] args) {
-		uploadDir("plagiarismresults", "src/");
-	}
 }

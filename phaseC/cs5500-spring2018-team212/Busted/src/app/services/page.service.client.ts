@@ -94,16 +94,30 @@ export class PageService {
     });
   }
 
+  // updates the assignment
+  updateAssignment(courseId, assignmentId, assignment) {
+    const url = this.baseUrl + '/api/course/' + courseId + '/assignment/' + assignmentId;
+    return this.http.put(url, assignment).map((response: Response) => {
+      return response.json();
+    });
+  }
+
   // removes the page from local pages array whose _id matches the pageId parameter
   deletePage(websiteId, pageId) {
     const url = this.baseUrl + '/api/website/' + websiteId + '/page/' + pageId;
     return this.http.delete(url).map((response: Response) => {
       return response.json();
     });
-
   }
 
-  // uploads git repo
+  deleteAssignment(courseId, assignmentId) {
+    const url = this.baseUrl + '/api/course/' + courseId + '/assignment/' + assignmentId;
+    return this.http.delete(url).map((response: Response) => {
+      return response.json();
+    });
+  }
+
+//uploads git repo
   uploadGit(githublink, courseid, studentid, hwName, parentAssignmentId) {
     console.log(githublink, courseid, studentid)
     const data = {
@@ -117,5 +131,5 @@ export class PageService {
     return this.http.post(url, data).map((response: Response) => {
       return response.json();
     });
-  }
+  }  
 }

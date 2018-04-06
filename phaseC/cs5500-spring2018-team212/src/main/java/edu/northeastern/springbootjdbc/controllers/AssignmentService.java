@@ -74,28 +74,39 @@ public class AssignmentService {
 	 * @param hwDir
 	 * @param folderStructure
 	 */
-	public static void checkPlagiarism(String hwDir, String folderStructure) {
+	public static void checkPlagiarism(String hwDir, String folderStructure, int strictness,
+			int courseID, int studentID) {
 		CallLibrary jplagLib = new CallLibrary();
-		List<PlagiarismResult> results = jplagLib.getReports(hwDir, folderStructure, 1, 50); 
+		List<PlagiarismResult> results = jplagLib.getReports(hwDir, folderStructure, strictness); 
 		String reportBucketName = "plagiarismresults";
 		ReportDao rdao = ReportDao.getInstance();
+		AssignmentDao adao = AssignmentDao.getInstance();
 		File tempDir1 = new File(hwDir);
 		tempDir1.mkdirs();
-		for (PlagiarismResult pr : results) {
-			String keyName1 = folderStructure + "op" + PATH_DELIM + pr.getPath();
-			// Strip plagiarismResults in reportURL
-			String reportZipName = keyName1 + ".zip";
-			File keyDir = new File(keyName1);
-			if(keyDir.isDirectory() && keyDir.list().length == 0) {
-			    return;
-			}
 
-			ZipUtil.pack(keyDir, new File(reportZipName));
-			String reportURL = S3.putObject(reportBucketName, reportZipName, reportZipName, true);
-			S3.uploadDir("plagiarismresults", keyName1);
-			Report r1 = new Report(pr.getAssignmentID1(), pr.getAssignmentID2(), pr.getSimilarityScore(), reportURL, false);
-			rdao.createReport(r1);
+		if (results != null) {
+			for (PlagiarismResult pr : results) {
+				List<String> excludelist = adao.getPreviousSubmission(hwDir, studentID, courseID);
+				if (excludelist.contains(String.valueOf(pr.getAssignmentID1())) && excludelist.contains(String.valueOf(pr.getAssignmentID2())))
+					continue;
+				String keyName1 = folderStructure + "op" + PATH_DELIM + pr.getPath();
+				// Strip plagiarismResults in reportURL
+				String reportZipName = keyName1 + ".zip";
+				File keyDir = new File(keyName1);
+				if(keyDir.isDirectory() && keyDir.list().length == 0) {
+				    return;
+				}
+	
+				ZipUtil.pack(keyDir, new File(reportZipName));
+				String reportURL = S3.putObject(reportBucketName, reportZipName, reportZipName, true);
+				S3.uploadDir("plagiarismresults", keyName1);
+				Report r1 = new Report(pr.getAssignmentID1(), pr.getAssignmentID2(), pr.getSimilarityScore(), reportURL, false);
+				rdao.createReport(r1);
+
+			}
 		}
+		else
+			LOGGER.info("no reports");
 	}
 
 	/**
@@ -106,11 +117,12 @@ public class AssignmentService {
 	 * @param githublink
 	 * @param aid
 	 */
-	public static void cloneAndCheck(String folderStructure, String hwName, String githublink, int aid) {
+	public static void cloneAndCheck(String folderStructure, String hwName, String githublink, int aid,
+			int strictness,	int courseID, int studentID) {
 		String hwDir = "assignments" + PATH_DELIM + folderStructure;
 		String currDir = hwDir + PATH_DELIM + aid;
 		uploadGitRepo(hwDir, hwName, githublink, aid);
-		checkPlagiarism(currDir, hwDir);
+		checkPlagiarism(currDir, hwDir, strictness, courseID, studentID);
 	}
 
 	/**
@@ -131,6 +143,8 @@ public class AssignmentService {
 	@CrossOrigin(origins = {"http://localhost:4200", "http://ec2-18-222-88-122.us-east-2.compute.amazonaws.com:4200"})
 	@RequestMapping(value = "/api/assignment/uploadGit", method = RequestMethod.POST)
 	public @ResponseBody int uploadGit(@RequestBody String json) {
+		//change this as an input from user 
+		int strictness = 1;
 		AssignmentDao adao = AssignmentDao.getInstance();
 		JSONObject obj;
 		String hwName = ""; 
@@ -161,7 +175,7 @@ public class AssignmentService {
 			return 0;
 		}
 
-		cloneAndCheck(folderStructure, hwName, githublink, aid);
+		cloneAndCheck(folderStructure, hwName, githublink, aid, strictness, courseID, studentid);
 		adao.checkAssignment(aid);
 		return aid;
 	}
@@ -171,9 +185,9 @@ public class AssignmentService {
 	 * @param courseid
 	 * @return
 	 * @throws JsonProcessingException 
-	 */
+	 */ 	
 	@CrossOrigin(origins = {"http://localhost:4200", "http://ec2-18-222-88-122.us-east-2.compute.amazonaws.com:4200"})
-	@RequestMapping("/api/{userid}/course/{courseId}/assignment")
+	@RequestMapping(value = "/api/{userid}/course/{courseId}/assignment", method = RequestMethod.GET)
 	public @ResponseBody List<Assignment> getAssignments(@PathVariable("userid") int profid, @PathVariable("courseId") int courseid) throws JsonProcessingException {
 		AssignmentDao adao = AssignmentDao.getInstance();
 		return adao.getAvailableAssignments(courseid, profid);
@@ -189,10 +203,7 @@ public class AssignmentService {
 	@RequestMapping(value = "/api/course/assignment/{assignmentId}", method = RequestMethod.GET)
 	public @ResponseBody Assignment getAssignmentById(@PathVariable("assignmentId") int assignmentId) {
 		AssignmentDao adao = AssignmentDao.getInstance();
-		System.out.println(assignmentId);
-		Assignment a = adao.findAssignmentById(assignmentId);
-		System.out.println(a);
-		return a;
+		return adao.findAssignmentById(assignmentId);
 	}
 	
 	/**
@@ -203,8 +214,9 @@ public class AssignmentService {
 	 * @return
 	 */
 	@CrossOrigin(origins = {"http://localhost:4200", "http://ec2-18-222-88-122.us-east-2.compute.amazonaws.com:4200"})
-	@RequestMapping("/api/course/{courseId}/assignment/{hwName}/user/{userId}")
-	public @ResponseBody List<Assignment> getSubmissions(@RequestParam("studentid") int studentid, @RequestParam("courseid") int courseid, @RequestParam("hwName") String hwName) {
+	@RequestMapping(value = "/api/course/{courseId}/assignment/{hwName}/user/{userId}", method = RequestMethod.GET)
+	public @ResponseBody List<Assignment> getSubmissions(@RequestParam("studentid") int studentid,
+			@RequestParam("courseid") int courseid, @RequestParam("hwName") String hwName) {
 		AssignmentDao adao = AssignmentDao.getInstance();
 		return adao.getSubmissions(hwName, courseid, studentid);
 	}
@@ -217,7 +229,7 @@ public class AssignmentService {
 	 * @return
 	 */
 	@CrossOrigin(origins = {"http://localhost:4200", "http://ec2-18-222-88-122.us-east-2.compute.amazonaws.com:4200"})
-	@RequestMapping("/api/assignment/new")
+	@RequestMapping(value = "/api/assignment/new", method = RequestMethod.POST)
 	public @ResponseBody int createAssignmentForProfessor(@RequestBody Map<String, String> payload) {
 		String hwName = payload.get("name");
 		int profid = Integer.parseInt(payload.get("studentId"));
@@ -237,5 +249,34 @@ public class AssignmentService {
 		Long currentTime = utilDate.getTime();
 		Assignment assignment = new Assignment(hwName, profid, new Date(currentTime), duedate, false, false, "prof", 0, "",  courseid);
 		return adao.createAssignment(assignment);
+	}
+	
+	/**
+	 * method to compare assignments individually
+	 * @param assignmentid1
+	 * @param assignmentid2
+	 */
+	@CrossOrigin(origins = {"http://localhost:4200", "http://ec2-18-222-88-122.us-east-2.compute.amazonaws.com:4200"})
+	@RequestMapping(value = "/api/assignment/individual", method = RequestMethod.GET)
+	public @ResponseBody void testIndividual(@RequestParam("assignmentid1") int assignmentid1,
+			@RequestParam("assignmentid2") int assignmentid2) {
+		AssignmentDao adao = AssignmentDao.getInstance();
+		Map<Integer, String> aid1 = adao.getInfoforAssignment(assignmentid1);
+		Map<Integer, String> aid2 = adao.getInfoforAssignment(assignmentid2);
+		
+		String hwName1 = aid1.get(1);
+		String hwName2 = aid2.get(1);
+		CourseDao cdao = CourseDao.getInstance();
+		Course c1 = cdao.findCoursebyID(Integer.parseInt(aid1.get(2)));
+		Course c2 = cdao.findCoursebyID(Integer.parseInt(aid2.get(2)));
+		
+		if (hwName1.equalsIgnoreCase(hwName2) && c1.toString().equals(c2.toString())) {
+			String folderStructure ="assignments" + PATH_DELIM 
+					+ c1.getCode() + PATH_DELIM + c1.getSemester() + PATH_DELIM + hwName1;
+			String dir1 = folderStructure + PATH_DELIM + assignmentid1;
+			String dir2 = folderStructure + PATH_DELIM + assignmentid2;
+			CallLibrary lib = new CallLibrary();
+			lib.getIndividualReport(dir1, dir2, 1);
+		}
 	}
 }

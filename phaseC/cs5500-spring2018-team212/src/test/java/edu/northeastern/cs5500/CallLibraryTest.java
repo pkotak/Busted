@@ -7,12 +7,9 @@ import junit.framework.TestCase;
 public class CallLibraryTest extends TestCase {
 	
 	public void testcompareFiles() {
-		//CallLibrary cl = new CallLibrary();
-		//cl.getReports("testteam212/1", "testteam212", 1, 1);
+		CallLibrary cl = new CallLibrary();
+		cl.getIndividualReport("", "", 1);
+		cl.getReports("", "", 1);
 	}
 	
-	public void testtwoFiles() {
-		//CallLibrary cl = new CallLibrary();
-		//cl.getIndividualReport("1", "2", 1, 50);
-	}
 }

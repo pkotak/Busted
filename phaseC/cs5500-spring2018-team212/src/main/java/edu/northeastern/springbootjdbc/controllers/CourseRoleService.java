@@ -134,7 +134,7 @@ public class CourseRoleService {
 	 * @return the list of Courses for the Person
 	 */
 	@CrossOrigin(origins = {"http://localhost:4200", "http://ec2-18-222-88-122.us-east-2.compute.amazonaws.com:4200"})
-	@RequestMapping(value="/api/user/{userId}/course/{courseId}", method=RequestMethod.POST)
+	@RequestMapping(value="/api/user/{userId}/course/{courseId}/uniqueid", method=RequestMethod.POST)
 	public @ResponseBody String checkIfPersonEnrolled(
 			@PathVariable("userId") String id, @PathVariable("courseId") String cId,
 			@RequestBody String json) {

@@ -53,7 +53,7 @@ export class PageEditComponent implements OnInit {
 
 
   update() {
-      const newPage = {
+      const newAssignment = {
         studentId: this.userId,
         name: this.assignment.name,
         duedate: this.assignment.duedate,
@@ -61,7 +61,7 @@ export class PageEditComponent implements OnInit {
         githublink: '',
       };
 
-      this.pageService.updatePage(this.wid, this.pid, newPage)
+      this.pageService.updateAssignment(this.wid, this.pid, newAssignment)
         .subscribe((pages) => {
           // this.pages = pages;
           this.router.navigate(['user', 'website', this.wid, 'page']);
@@ -77,6 +77,17 @@ export class PageEditComponent implements OnInit {
       alert('Only admin can modify other\'s portfolio.');
     } else {
       this.pageService.deletePage(websiteId, pageId)
+        .subscribe((pages) => {
+          this.pages = pages;
+        });
+    }
+  }
+
+  deleteAssignment(websiteId, pageId) {
+    if (!((this.user._id === this.page.owner) || (this.user.role === 'ADMIN'))) {
+      alert('Only admin can modify other\'s portfolio.');
+    } else {
+      this.pageService.deleteAssignment(websiteId, pageId)
         .subscribe((pages) => {
           this.pages = pages;
         });
