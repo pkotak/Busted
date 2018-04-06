@@ -60,6 +60,7 @@ export class PageEditComponent implements OnInit {
         courseId: this.course.id,
         githublink: '',
       };
+      console.log(newAssignment);
 
       this.pageService.updateAssignment(this.wid, this.pid, newAssignment)
         .subscribe((pages) => {
@@ -79,19 +80,20 @@ export class PageEditComponent implements OnInit {
       this.pageService.deletePage(websiteId, pageId)
         .subscribe((pages) => {
           this.pages = pages;
+          this.router.navigate(['user', 'website', this.wid, 'page']);
+          // window.location.reload(false); // reload page
         });
     }
   }
 
-  deleteAssignment(websiteId, pageId) {
-    if (!((this.user._id === this.page.owner) || (this.user.role === 'ADMIN'))) {
-      alert('Only admin can modify other\'s portfolio.');
-    } else {
-      this.pageService.deleteAssignment(websiteId, pageId)
-        .subscribe((pages) => {
-          this.pages = pages;
-        });
-    }
+
+  deleteAssignment(courseId, assignmentId) {
+
+    this.pageService.deleteAssignment(courseId, assignmentId)
+      .subscribe((pages) => {
+        this.pages = pages;
+        this.router.navigate(['user', 'website', this.wid, 'page']);
+      });
   }
 
   // notify the changes of the route

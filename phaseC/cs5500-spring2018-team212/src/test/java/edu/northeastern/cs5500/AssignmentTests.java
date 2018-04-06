@@ -16,6 +16,8 @@ import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 import org.zeroturnaround.zip.ZipUtil;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+
 import edu.northeastern.springbootjdbc.controllers.AssignmentService;
 import edu.northeastern.springbootjdbc.daos.AssignmentDao;
 import edu.northeastern.springbootjdbc.models.Assignment;

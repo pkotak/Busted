@@ -45,9 +45,7 @@
            placeholder="Due date">
 
     <a class="btn btn-danger btn-block"
-       (click)="deleteAssignment(this.wid, this.pid)"
-       routerLink="/user/website/{{wid}}/page" >Delete</a>
-
+       (click)="deleteAssignment(this.wid, this.assignment.id)">Delete</a>
 
 </div>
 

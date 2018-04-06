@@ -252,7 +252,50 @@ public class AssignmentService {
 	}
 	
 	/**
-	 * method to compare assignments individually
+	 * Deletes a assignment in the database
+	 * 
+	 * @return the number of rows affected - indicating whether operation was
+	 *         successful.
+	 */
+	@CrossOrigin(origins = {"http://localhost:4200", "http://ec2-18-222-88-122.us-east-2.compute.amazonaws.com:4200"})
+	@RequestMapping(value="/api/course/assignment/{assignmentId}", method=RequestMethod.DELETE)
+	public @ResponseBody int deleteAssigment(@PathVariable("assignmentId") int assignmentId) {
+		AssignmentDao adao = AssignmentDao.getInstance();
+		return adao.deleteAssignment(assignmentId);
+	}
+	
+	/**
+	 * Updates a assignment in the database
+	 * 
+	 * @return the number of rows affected - indicating whether operation was
+	 *         successful.
+	 */
+	@CrossOrigin(origins = {"http://localhost:4200", "http://ec2-18-222-88-122.us-east-2.compute.amazonaws.com:4200"})
+	@RequestMapping("/api/course/{courseId}/assignment/{assignmentId}")
+	public @ResponseBody int updateCourse(@RequestParam("name") String name, @RequestParam("studentId") int profid,
+			@RequestParam("duedate") String duedate, @RequestParam("courseID") int courseID) {
+		
+		AssignmentDao adao = AssignmentDao.getInstance();
+		
+		SimpleDateFormat format = new SimpleDateFormat("yyyy-mm-dd");
+		java.util.Date parsed = null;
+		Date aduedate = null;
+		try {
+			parsed = format.parse(duedate);
+			aduedate = new Date(parsed.getTime());
+		} catch (ParseException e) {
+			LOGGER.info(e.toString());
+		}
+		java.util.Date utilDate = new java.util.Date();
+		Long currentTime = utilDate.getTime();
+
+		Assignment c = new Assignment(name, profid, new Date(currentTime), aduedate, false, false, "prof", 0 , "", courseID);
+//		Assignment assignment = new Assignment(hwName, profid, new Date(currentTime), duedate, false, false, "prof", 0, "",  courseid);
+		return adao.updateAssignment(courseID, c);
+	}
+	
+
+	 /** method to compare assignments individually
 	 * @param assignmentid1
 	 * @param assignmentid2
 	 */

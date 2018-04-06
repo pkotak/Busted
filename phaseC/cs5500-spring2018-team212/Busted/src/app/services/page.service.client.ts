@@ -111,25 +111,26 @@ export class PageService {
   }
 
   deleteAssignment(courseId, assignmentId) {
-    const url = this.baseUrl + '/api/course/' + courseId + '/assignment/' + assignmentId;
+    const url = this.baseUrl + '/api/course/assignment/' + assignmentId;
     return this.http.delete(url).map((response: Response) => {
       return response.json();
     });
   }
 
-//uploads git repo
+
+// uploads git repo
   uploadGit(githublink, courseid, studentid, hwName, parentAssignmentId) {
-    console.log(githublink, courseid, studentid)
+    console.log(githublink, courseid, studentid);
     const data = {
         'githublink': githublink,
         'courseid': courseid,
         'studentid': studentid,
         'hwName': hwName,
         'parentAssignment': parentAssignmentId
-    }
+    };
     const url = this.baseUrl + '/api/assignment/uploadGit';
     return this.http.post(url, data).map((response: Response) => {
       return response.json();
     });
-  }  
+  }
 }

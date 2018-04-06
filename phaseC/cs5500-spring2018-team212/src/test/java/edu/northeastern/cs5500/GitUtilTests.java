@@ -9,6 +9,7 @@ public class GitUtilTests {
 	public void testGitClone() {
 		GitUtil.cloneRepo("https://github.com/team212test/empty", new File("./empty"));
 	}
+
 	
 	@Test
 	public void testGitClone2() {

@@ -126,7 +126,7 @@ public class CourseService {
 	 */
 	@CrossOrigin(origins = {"http://localhost:4200", "http://ec2-18-222-88-122.us-east-2.compute.amazonaws.com:4200"})
 	@RequestMapping("/api/allCourses")
-	public @ResponseBody List<Course> selectAllCourses() {
+	public List<Course> selectAllCourses() {
 		CourseDao cdao = CourseDao.getInstance();
 		return cdao.findAllCourses();
 	}

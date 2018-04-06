@@ -98,18 +98,18 @@ public class AssignmentDao {
 			conn = DriverManager.getConnection(Constants.CONNECTION_STRING, Constants.AWS_USERNAME, Constants.AWS_P);
 			try {
 				try {
-				assignmentStatement = conn.prepareStatement("SELECT * from Assignment where id = ?");
-				
-				
-				assignmentStatement.setInt(1, id);
-				rs = assignmentStatement.executeQuery();
-				if (rs.next()) {
-					a = new Assignment(rs.getString("name"), rs.getInt("studentid"), rs.getDate("uploaddate"),
-							rs.getDate("duedate"), rs.getBoolean("metadatamismatch"), rs.getBoolean("ischecked"),
-							rs.getString("shaid"), rs.getInt("plagiarismcount"), rs.getString("githublink"),
-							rs.getInt("courseid"));
-					a.setId(rs.getInt("id"));
-				}
+					assignmentStatement = conn.prepareStatement("SELECT * from Assignment where id = ?");
+
+
+					assignmentStatement.setInt(1, id);
+					rs = assignmentStatement.executeQuery();
+					if (rs.next()) {
+						a = new Assignment(rs.getString("name"), rs.getInt("studentid"), rs.getDate("uploaddate"),
+								rs.getDate("duedate"), rs.getBoolean("metadatamismatch"), rs.getBoolean("ischecked"),
+								rs.getString("shaid"), rs.getInt("plagiarismcount"), rs.getString("githublink"),
+								rs.getInt("courseid"));
+						a.setId(rs.getInt("id"));
+					}
 				} finally {
 					if (assignmentStatement != null) {
 						assignmentStatement.close();
@@ -259,21 +259,21 @@ public class AssignmentDao {
 			conn = DriverManager.getConnection(Constants.CONNECTION_STRING, Constants.AWS_USERNAME, Constants.AWS_P);
 			String assignmentSql = "SELECT count(*) as total from Assignment where name = ?";
 			try {
-
 				try {
-				assignmentStatement = conn.prepareStatement(assignmentSql);
-				assignmentStatement.setString(1, hwName);
-				rs = assignmentStatement.executeQuery();
-				if (rs.next()) {
-					total = rs.getInt("total");
-				}
+					assignmentStatement = conn.prepareStatement(assignmentSql);
+					assignmentStatement.setString(1, hwName);
+					rs = assignmentStatement.executeQuery();
+					if (rs.next()) {
+						total = rs.getInt("total");
+					}
 				} finally {
 					if (assignmentStatement != null) {
 						assignmentStatement.close();
 					}
 				}
+
 			} finally {
-				
+
 				if (rs != null) {
 					rs.close();
 				}
@@ -399,12 +399,52 @@ public class AssignmentDao {
 		return assignments;
 	}
 
+
+	/**
+	 * method for deleting existing course
+	 * @param courseId - id of course to be deleted
+	 * @return value indicating whether the course was deleted.
+	 */
+	public int deleteAssignment (int assignmentId) {
+		int rowsaffected = 0;
+		Connection conn = null;
+		PreparedStatement courseStatement = null;
+		try {
+			Class.forName(Constants.JDBC_DRIVER);
+			conn = DriverManager.getConnection(Constants.CONNECTION_STRING, Constants.AWS_USERNAME,
+					Constants.AWS_P);
+
+			String coursedelete = "DELETE FROM Assignment where id = ?";
+			try {
+				courseStatement = conn.prepareStatement(coursedelete);
+				courseStatement.setInt(1, assignmentId);
+				rowsaffected += courseStatement.executeUpdate();
+			} finally {
+				if (courseStatement != null)
+					courseStatement.close();
+			} 
+		}catch (ClassNotFoundException e) {
+			LOGGER.info(e.toString());
+		} catch (SQLException e) {
+			LOGGER.info(e.toString());
+		} finally {
+			try {
+				if (conn != null)
+					conn.close();
+			} catch (SQLException e) {
+				LOGGER.info(e.toString());
+			}
+		}
+		return rowsaffected;
+	}
+
+
 	public List<String> getPreviousSubmission(String hwname, int studentID, int courseID) {
 		List<String> listOfID = new ArrayList<String>();
 		Connection conn = null;
 		PreparedStatement assignmentStatement = null;
 		ResultSet rs = null;
-		
+
 		try {
 			Class.forName(Constants.JDBC_DRIVER);
 			conn = DriverManager.getConnection(Constants.CONNECTION_STRING, Constants.AWS_USERNAME, Constants.AWS_P);
@@ -439,10 +479,57 @@ public class AssignmentDao {
 					conn.close();
 			} catch (SQLException e) {
 				LOGGER.info(e.toString());
+
+			} catch (NullPointerException e) {
+				LOGGER.info(e.toString());
 			}
 		}
+
 		return listOfID;
 	}
+
+
+
+	public int updateAssignment(int courseID, Assignment assignment) {
+		int rowsAffected = 0;
+		Connection conn = null;
+		PreparedStatement courseStatement = null;
+		try {
+			Class.forName(Constants.JDBC_DRIVER);
+			conn = DriverManager.getConnection(Constants.CONNECTION_STRING, Constants.AWS_USERNAME,
+					Constants.AWS_P);
+
+			String courseUpdate = "UPDATE Assignment c "
+					+ "SET c.name = ?, c.duedate = ? WHERE c.id = ?";
+			try {
+				courseStatement = conn.prepareStatement(courseUpdate);
+				courseStatement.setString(1, assignment.getName());
+				courseStatement.setDate(2, assignment.getDuedate());
+				courseStatement.setInt(3, assignment.getId());
+				rowsAffected += courseStatement.executeUpdate();
+			} finally {
+				if (courseStatement != null)
+					courseStatement.close();
+			}
+		}
+		catch (NullPointerException e) {
+			LOGGER.info(e.toString());
+		} catch (ClassNotFoundException e) {
+			LOGGER.info(e.toString());
+		} catch (SQLException e) {
+			LOGGER.info(e.toString());
+		} finally {
+			try {
+				if (conn != null)
+					conn.close();
+			} catch (SQLException e) {
+				LOGGER.info(e.toString());
+			}
+		}
+
+		return rowsAffected;
+	}
+
 
 	public Map<Integer, String> getInfoforAssignment(int assignmentID) {
 		Connection conn = null;

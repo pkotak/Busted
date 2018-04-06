@@ -22,7 +22,7 @@ export class ReportService {
         const data = {
                 'hwName': hwName,
                 'courseid': courseid
-        }
+        };
         return this.http.get( this.baseUrl + '/api/report/' + courseid + '/get/' + hwName)
             .map(( res: Response ) => {
                 return res.json();

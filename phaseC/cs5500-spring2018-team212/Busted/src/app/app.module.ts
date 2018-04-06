@@ -8,6 +8,7 @@ import { FormsModule } from '@angular/forms';
 import { CookieService } from 'ngx-cookie-service';
 // import { GaugeModule } from 'angular-gauge';
 // import { NgxGaugeModule} from 'ngx-gauge';
+// import {Ng2SearchPipeModule} from 'ng2-search-filter';
 
 
 // import routing in appmodule.
@@ -74,9 +75,11 @@ import { AdminComponent } from './components/user/admin/admin.component';
     SortableDirective,
     OrderByPipe,
     AdminComponent,
+    // Ng2SearchPipeModule
   ],
   imports: [
     BrowserModule, routing, FormsModule, HttpModule, QuillEditorModule,
+    // Ng2SearchPipeModule
     // GaugeModule.forRoot(),
     // NgxGaugeModule
   ],

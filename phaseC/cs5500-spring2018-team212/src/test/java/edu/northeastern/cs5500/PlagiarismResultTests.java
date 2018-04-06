@@ -11,6 +11,7 @@ public class PlagiarismResultTests {
 		pr.getAssignmentID2();
 		pr.getPath();
 		pr.getSimilarityScore();
+
 		pr.toString();
 	}
 
