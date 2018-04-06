@@ -55,8 +55,9 @@ export class PageListComponent implements OnInit {
     //   }
     // }
 
-    gotoReport() {
-        window.open( "http://localhost:63342/Busted/Results/index.html" );
+    gotoReport(assignmentId) {
+        // user/website/:wid/page/:pid/report
+        this.router.navigate(['user', 'website', 'this.wid', 'page', assignmentId, 'report']);
     }
 
     createAssignment() {
@@ -81,6 +82,7 @@ export class PageListComponent implements OnInit {
         // invoke a function that can pass the value of the parameters
         this.route.params.subscribe(( params: any ) => {
             this.wid = params['wid'];
+            
         } );
 
         // this.getUser();

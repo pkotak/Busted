@@ -26,7 +26,7 @@ public class PersonTests {
 	public void testFindPeople() {
 		PersonService ps = new PersonService();
 		ps.insertPerson("{'firstname':'hello','lastname':'ak','email':'aisj@gma.com','password':'hi','role':'student'}");
-		ps.login("{'username':'ak@gmail.com','password':'hi'}");
+		ps.login("{'username':'sm@gmail.com','password':'what'}");
 		ps.updatePerson("216", "{'firstName':'gg','lastName':'','email':'gg@gmail.com', 'phone':'', 'type':'STUDENT','password':'', 'username': ''}");
 		dao.deletePerson("aisj@gma.com");
 	}

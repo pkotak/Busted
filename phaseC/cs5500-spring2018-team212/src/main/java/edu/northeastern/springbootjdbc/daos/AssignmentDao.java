@@ -258,7 +258,9 @@ public class AssignmentDao {
 			conn = DriverManager.getConnection(Constants.CONNECTION_STRING, Constants.AWS_USERNAME, Constants.AWS_P);
 			String assignmentSql = "SELECT count(*) as total from Assignment where name = ?";
 			try {
+
 				try {
+
 				assignmentStatement = conn.prepareStatement(assignmentSql);
 				assignmentStatement.setString(1, hwName);
 				rs = assignmentStatement.executeQuery();
@@ -270,8 +272,6 @@ public class AssignmentDao {
 						assignmentStatement.close();
 					}
 				}
-				
-
 			} finally {
 				
 				if (rs != null) {

@@ -14,8 +14,4 @@ export class AssignmentService {
   newId() {
     return (Number( Math.floor((Math.random()) * 10000))).toString();
   }
-
-
-  
-  
 }

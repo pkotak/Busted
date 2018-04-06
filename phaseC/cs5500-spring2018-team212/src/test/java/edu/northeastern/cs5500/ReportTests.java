@@ -12,9 +12,8 @@ public class ReportTests {
 
 	@Test
 	public void test() {
-		
 		ReportDao rs = ReportDao.getInstance();
-		List<Report> reports = rs.findAllReports();
+		List<Report> reports = rs.findAllReports(599, "HW1");
 		Report report = reports.get(0);
 		rs.deleteReport(report.getId());
 		rs.createReport(report);
@@ -23,7 +22,6 @@ public class ReportTests {
 		report.setIsResolved(0);
 		report.toString();
 		ReportService reps = new ReportService();
-		reps.insertStudent();
+		reps.getReports(599, "HW1");
 	}
-
 }

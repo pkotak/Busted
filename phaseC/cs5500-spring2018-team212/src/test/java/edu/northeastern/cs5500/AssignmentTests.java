@@ -1,5 +1,4 @@
 package edu.northeastern.cs5500;
-
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.when;
@@ -16,8 +15,6 @@ import org.powermock.core.classloader.annotations.PowerMockIgnore;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 import org.zeroturnaround.zip.ZipUtil;
-
-import com.fasterxml.jackson.core.JsonProcessingException;
 
 import edu.northeastern.springbootjdbc.controllers.AssignmentService;
 import edu.northeastern.springbootjdbc.daos.AssignmentDao;
@@ -59,20 +56,23 @@ public class AssignmentTests {
 		AssignmentService svc = new AssignmentService();
 		when(S3.putObject(any(String.class), any(String.class), any(String.class), eq(false))).thenReturn("shaaaa");
 		when(S3.putObject(any(String.class), any(String.class), any(String.class), eq(true))).thenReturn("http://meh");
+		when(S3.uploadDir(any(String.class), any(String.class))).thenReturn("http://meh2");
 		JSONObject obj = new JSONObject();
+
 		try {
 			obj.put("name", "HW1");
 			obj.put("githublink", "https://github.com/team212test/test1");
 			obj.put("studentid", 1);
 			obj.put("courseid", 2);
 			obj.put("hwName", "HW1");
-			obj.put("parentAssignment", 510);
+			obj.put("parentAssignment", 1);
 			svc.uploadGit(obj.toString());
-			obj.put("githubLink", "https://github.com/team212test/test2");
+			obj.put("githublink", "https://github.com/team212test/test2");
 			svc.uploadGit(obj.toString());
 		} catch (JSONException e1) {
 			e1.printStackTrace();
 		}
+
 		System.out.println(svc.getAssignmentById(2));
 		System.out.println(svc.getSubmissions(4, 2, "HW1"));
 		HashMap<String, String> map = new HashMap<String, String>();

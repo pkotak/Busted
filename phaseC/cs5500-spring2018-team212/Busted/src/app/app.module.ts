@@ -25,11 +25,14 @@ import { WidgetEditComponent } from './components/widget/widget-edit/widget-edit
 import { WidgetHeaderComponent } from './components/widget/widget-edit/widget-header/widget-header.component';
 import { WidgetImageComponent } from './components/widget/widget-edit/widget-image/widget-image.component';
 import { WidgetYoutubeComponent } from './components/widget/widget-edit/widget-youtube/widget-youtube.component';
+import { ReportListComponent } from './components/report/report-list.component';
+import { ReportDetailComponent } from './components/report/report-detail/report-detail.component';
 import {WebsiteService} from './services/website.service.client';
 import { UserService } from './services/user.service.client';
 import { PageService } from './services/page.service.client';
 import { WidgetService } from './services/widget.service.client';
 import { AssignmentService } from './services/assignment.service.client';
+import { ReportService } from './services/report.service.client';
 import {HomeComponent} from './components/home/home.component';
 import {HttpModule} from '@angular/http';
 import { FlickrImageSearchComponent } from './components/widget/widget-edit/widget-image/flickr-image-search/flickr-image-search.component';
@@ -62,6 +65,8 @@ import { AdminComponent } from './components/user/admin/admin.component';
     WidgetHeaderComponent,
     WidgetImageComponent,
     WidgetYoutubeComponent,
+    ReportListComponent,
+    ReportDetailComponent,
     HomeComponent,
     FlickrImageSearchComponent,
     WidgetHtmlComponent,
@@ -84,6 +89,7 @@ import { AdminComponent } from './components/user/admin/admin.component';
     WidgetService,
     FlickrService,
     SharedService,
+    ReportService,
     AuthenticationService,
     CookieService,
   ],

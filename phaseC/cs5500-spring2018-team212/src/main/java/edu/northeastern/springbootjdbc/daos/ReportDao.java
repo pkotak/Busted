@@ -171,11 +171,66 @@ public class ReportDao {
 	}
 
 	/**
+	 * Delete a report from the database
+	 * 
+	 * @param reportId
+	 *            the specific Id for the report
+	 * @return Number of rows affected in the database
+	 */
+	public Report getReport(int reportId) {
+		Connection conn = null;
+		PreparedStatement reportStatement = null;
+		ResultSet rs = null;
+		Report report = null;
+		try {
+			Class.forName(Constants.JDBC_DRIVER);
+			conn = DriverManager.getConnection(Constants.CONNECTION_STRING, Constants.AWS_USERNAME, Constants.AWS_P);
+			String reportDelete = "select * from Report where id = ?";
+			try {
+				reportStatement = conn.prepareStatement(reportDelete);
+				reportStatement.setInt(1, reportId);
+				try {
+					rs = reportStatement.executeQuery();
+					if (rs.next()) {
+						int id = Integer.parseInt(rs.getString("id"));
+						int assign1Id = rs.getInt("assignment1");
+						int assign2Id = rs.getInt("assignment2");
+						int similarityScore = rs.getInt("similarityscore");
+						String downloadLink = rs.getString("downloadlink");
+						boolean isResolved = rs.getBoolean("isResolved");
+						report = new Report(assign1Id, assign2Id, similarityScore, downloadLink, isResolved);
+						report.setId(id);
+					}
+				} finally {
+					if (rs != null) {
+						rs.close();
+					}
+				}
+			} finally {
+				if (reportStatement != null)
+					reportStatement.close();
+			}
+		} catch (ClassNotFoundException e) {
+			LOGGER.info(e.toString());
+		} catch (SQLException e) {
+			LOGGER.info(e.toString());
+		} finally {
+			try {
+				if (conn != null)
+					conn.close();
+			} catch (SQLException e) {
+				LOGGER.info(e.toString());
+			}
+		}
+		return report;
+	}
+
+	/**
 	 * Find all the reports
 	 * 
 	 * @return the List of all the Reports and their details
 	 */
-	public List<Report> findAllReports() {
+	public List<Report> findAllReports(int courseid, String hwName) {
 		List<Report> reportList = new ArrayList<Report>();
 		Connection conn = null;
 		PreparedStatement statement = null;
@@ -183,10 +238,11 @@ public class ReportDao {
 		try {
 			Class.forName(Constants.JDBC_DRIVER);
 			conn = DriverManager.getConnection(Constants.CONNECTION_STRING, Constants.AWS_USERNAME, Constants.AWS_P);
-
-			String sql = "select * from Report";
+			String sql = "select * from Report where assignment1 in (select id from Assignment where courseid=? and name=?)";
 			try {
 				statement = conn.prepareStatement(sql);
+				statement.setInt(1, courseid);
+				statement.setString(2, hwName);
 				try {
 					results = statement.executeQuery();
 					while (results.next()) {

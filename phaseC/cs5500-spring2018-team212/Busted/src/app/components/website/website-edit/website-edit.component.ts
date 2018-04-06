@@ -87,7 +87,7 @@ export class WebsiteEditComponent implements OnInit {
                 // this.user = newuser;
                 console.log(this.user);
                 alert('Welcome to class "' + this.course.code + ' ' + this.course.name + '"');
-                window.location.reload(false); // reload page
+                this.router.navigate(['profile']); // reload page
               });
           }
         });
@@ -111,7 +111,7 @@ export class WebsiteEditComponent implements OnInit {
                 // this.user = newuser;
                 console.log(this.user);
                 alert('You have dropped "' + this.course.code + ' ' + this.course.name + '"');
-                window.location.reload(false); // reload page
+                this.router.navigate(['profile']); // reload page
               });
 
           }

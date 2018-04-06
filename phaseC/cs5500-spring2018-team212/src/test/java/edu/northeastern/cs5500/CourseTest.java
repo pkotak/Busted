@@ -39,7 +39,7 @@ public class CourseTest {
 	
 	@Test
 	public void test2() {
-		assertEquals(2, cdao.getCourseIDbyCode("CS5200").size());
+		assertEquals(3, cdao.getCourseIDbyCode("CS5200").size());
 	}
 	
 	@Test

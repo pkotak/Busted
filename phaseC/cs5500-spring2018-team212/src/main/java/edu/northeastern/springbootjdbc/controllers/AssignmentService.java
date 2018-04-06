@@ -21,7 +21,6 @@ import org.springframework.web.bind.annotation.RestController;
 import org.zeroturnaround.zip.ZipUtil;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 import edu.northeastern.cs5500.CallLibrary;
 import edu.northeastern.cs5500.GitUtil;
@@ -93,6 +92,7 @@ public class AssignmentService {
 
 			ZipUtil.pack(keyDir, new File(reportZipName));
 			String reportURL = S3.putObject(reportBucketName, reportZipName, reportZipName, true);
+			S3.uploadDir("plagiarismresults", keyName1);
 			Report r1 = new Report(pr.getAssignmentID1(), pr.getAssignmentID2(), pr.getSimilarityScore(), reportURL, false);
 			rdao.createReport(r1);
 		}
@@ -154,8 +154,7 @@ public class AssignmentService {
 		java.util.Date utilDate = new java.util.Date();
 		Long currentTime = utilDate.getTime();
 		String folderStructure = course.getCode() + PATH_DELIM + course.getSemester() + PATH_DELIM + hwName;
-		Assignment assignment = new Assignment(hwName, studentid, new Date(currentTime), a1.getDuedate(), false,
-				false, "", 0, githublink, courseID);
+		Assignment assignment = new Assignment(hwName, studentid, new Date(currentTime), a1.getDuedate(), false, false, "", 0, githublink, courseID);
 		int aid = adao.createAssignment(assignment);
 		if (aid == 0) {
 			return 0;
