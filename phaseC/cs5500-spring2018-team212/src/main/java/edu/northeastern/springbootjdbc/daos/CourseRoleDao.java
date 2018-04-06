@@ -26,6 +26,10 @@ public class CourseRoleDao {
 	private static PersonDao pdao = PersonDao.getInstance();
 	private static CourseDao cdao = CourseDao.getInstance();
 
+	public static void setInstance(CourseRoleDao dao) {
+		instance = dao;
+	}
+	
 	public static CourseRoleDao getInstance() {
 		if (instance == null)
 			return new CourseRoleDao();

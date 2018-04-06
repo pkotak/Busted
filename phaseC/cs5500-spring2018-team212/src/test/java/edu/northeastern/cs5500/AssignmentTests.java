@@ -29,7 +29,7 @@ public class AssignmentTests {
 
 	@Test
 	public void testAssignmentModel() {
-		Assignment a = new Assignment("HW1", 1, Date.valueOf("2018-03-22"), Date.valueOf("2018-04-21"), false, false, "", 0, "", 1);
+		Assignment a = new Assignment("HW1", 4, Date.valueOf("2018-03-22"), Date.valueOf("2018-04-21"), false, false, "", 0, "", 1);
 		a.setCourseID(a.getCourseID());
 		a.setDuedate(a.getDuedate());
 		a.setGithubLink(a.getGithubLink());
@@ -49,10 +49,11 @@ public class AssignmentTests {
 
 
 	@Test
-	@PrepareForTest({S3.class, ZipUtil.class})
+	@PrepareForTest({S3.class, ZipUtil.class, GitUtil.class})
 	public void testAssignmentService() {
         PowerMockito.mockStatic(S3.class);
         PowerMockito.mockStatic(ZipUtil.class);
+        PowerMockito.mockStatic(GitUtil.class);
 		AssignmentService svc = new AssignmentService();
 		when(S3.putObject(any(String.class), any(String.class), any(String.class), eq(false))).thenReturn("shaaaa");
 		when(S3.putObject(any(String.class), any(String.class), any(String.class), eq(true))).thenReturn("http://meh");
@@ -62,7 +63,7 @@ public class AssignmentTests {
 		try {
 			obj.put("name", "HW1");
 			obj.put("githublink", "https://github.com/team212test/test1");
-			obj.put("studentid", 1);
+			obj.put("studentid", 4);
 			obj.put("courseid", 2);
 			obj.put("hwName", "HW1");
 			obj.put("parentAssignment", 1);

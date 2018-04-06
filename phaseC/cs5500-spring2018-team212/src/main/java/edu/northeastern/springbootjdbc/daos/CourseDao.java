@@ -22,7 +22,11 @@ import edu.northeastern.springbootjdbc.models.Course;
 public class CourseDao {
 	private static CourseDao instance = null;
 	static final Logger LOGGER = Logger.getLogger(CourseDao.class.getName());
-
+	
+	public static void setInstance(CourseDao dao) {
+		instance = dao;
+	}
+	
 	public static CourseDao getInstance() {
 		if (instance == null)
 			return new CourseDao();

@@ -71,7 +71,6 @@ public class AssignmentDao {
 				if (assignmentStatement != null)
 					assignmentStatement.close();
 			}
-
 		} catch (ClassNotFoundException e) {
 			LOGGER.info(e.toString());
 		} catch (SQLException e) {

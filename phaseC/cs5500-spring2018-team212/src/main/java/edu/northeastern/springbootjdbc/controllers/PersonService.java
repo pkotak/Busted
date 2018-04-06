@@ -5,6 +5,7 @@ import java.util.logging.Logger;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -28,11 +29,12 @@ import edu.northeastern.springbootjdbc.models.RoleType;
  *
  */
 @RestController
+@Configuration
 public class PersonService {
 	private static final Logger LOGGER = Logger.getLogger(PersonService.class.getName());
 	/**
 	 * Creates a person in the database
-	 * 
+	 * /api/user/{userid}
 	 * @return
 	 * @return the number of rows affected
 	 */

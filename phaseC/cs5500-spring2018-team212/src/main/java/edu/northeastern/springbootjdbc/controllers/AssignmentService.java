@@ -156,6 +156,7 @@ public class AssignmentService {
 		String folderStructure = course.getCode() + PATH_DELIM + course.getSemester() + PATH_DELIM + hwName;
 		Assignment assignment = new Assignment(hwName, studentid, new Date(currentTime), a1.getDuedate(), false, false, "", 0, githublink, courseID);
 		int aid = adao.createAssignment(assignment);
+		
 		if (aid == 0) {
 			return 0;
 		}
