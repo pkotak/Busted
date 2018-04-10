@@ -6,7 +6,7 @@ public class HTMLParserTests {
 	
 	@Test
 	public void test() {
-		//HtmlParser parser = new HtmlParser();
-		//parser.getSimilarityScore("testteam212op");
+		HtmlParser parser = new HtmlParser();
+		parser.getSimilarityScore("test_op");
 	}
 }

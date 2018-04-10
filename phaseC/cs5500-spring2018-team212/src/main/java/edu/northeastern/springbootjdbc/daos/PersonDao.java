@@ -10,6 +10,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
+import org.springframework.stereotype.Service;
+
 import edu.northeastern.cs5500.Constants;
 import edu.northeastern.springbootjdbc.models.Person;
 
@@ -18,10 +20,14 @@ import edu.northeastern.springbootjdbc.models.Person;
  * @author Paarth
  * @author abhiruchi
  */
+
 public class PersonDao {
 	private static PersonDao instance = null;
 	private static final Logger LOGGER = Logger.getLogger(PersonDao.class.getName());
 
+	public static void setInstance(PersonDao dao) {
+		instance = dao;
+	}
 	public static PersonDao getInstance() {
 		if (instance == null)
 			return new PersonDao();
@@ -29,7 +35,7 @@ public class PersonDao {
 			return instance;
 	}
 
-	private PersonDao() {
+	public PersonDao() {
 	}
 
 	/**
@@ -371,7 +377,6 @@ public class PersonDao {
 	 * @return Person object containing his/her details
 	 */
 	public Person findPersonById(int personId) {
-
 		Person person = null;
 		Connection conn = null;
 		PreparedStatement statement = null;

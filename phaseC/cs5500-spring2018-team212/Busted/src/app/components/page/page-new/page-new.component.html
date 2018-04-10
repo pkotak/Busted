@@ -17,7 +17,7 @@
 
     <!--tick mark-->
     <div class="navbar-text pull-right">
-      <a (click)="create(pagename, description)"
+      <a (click)="createAssignment(coursename, duedate)"
         class="black">
         <span class="glyphicon glyphicon-ok "></span>
       </a>
@@ -31,13 +31,13 @@
 <div class="container-fluid padding" >
 
     <label>Assignment Name</label>
-    <input [(ngModel)]="pagename"
+    <input [(ngModel)]="coursename"
            class="form-control"
            type="text"
            placeholder="Assignment Name"/>
 
     <label>Due Date</label>
-    <input [(ngModel)]="description"
+    <input [(ngModel)]="duedate"
            class="form-control"
            type="date"
            placeholder="Due Date"/>

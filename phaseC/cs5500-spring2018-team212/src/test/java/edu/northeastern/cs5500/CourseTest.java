@@ -3,6 +3,9 @@ package edu.northeastern.cs5500;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.junit.Test;
 
 import edu.northeastern.springbootjdbc.controllers.CourseService;
@@ -34,12 +37,12 @@ public class CourseTest {
 	@Test
 	public void testselectCourseById() {
 		CourseService cs = new CourseService();
-		cs.selectCoursesByCourseId("5", "2");
+		System.out.println(cs.selectCoursesByCourseId("5", "2"));
 	}
 	
 	@Test
 	public void test2() {
-		assertEquals(2, cdao.getCourseIDbyCode("CS5200").size());
+		assertEquals(3, cdao.getCourseIDbyCode("CS5200").size());
 	}
 	
 	@Test
@@ -62,5 +65,15 @@ public class CourseTest {
 	public void test6() {
 		assertFalse(cs.selectAllCourses().isEmpty());
 	}
+	
+	@Test
+	public void test7() {
+		Map<String, String> hmap = new HashMap<String, String>();
+		hmap.put("semester", "Spring 2018");
+		cs.selectCoursesbySemester(hmap);
+		cs.selectCoursesbySemester(new HashMap<String, String>());
+	}
+	
+	
 	
 }

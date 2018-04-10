@@ -1,0 +1,173 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<HEAD>
+ <TITLE>2</TITLE>
+<META http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <script type="text/javascript">
+  <!--
+   function ZweiFrames(URL1,F1,URL2,F2)
+   {
+    parent.frames[F1].location.href=URL1;
+    parent.frames[F2].location.href=URL2;
+   }
+  //-->
+  </script>
+</HEAD>
+<BODY BGCOLOR="#ffffff">
+<HR>
+<H3><CENTER>clientchat.py</CENTER></H3><HR>
+<PRE>
+<A NAME="0"></A># coding=UTF-8
+<FONT color="#0000ff"><A HREF="javascript:ZweiFrames('match0-1.html#0',3,'match0-top.html#0',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>from Tkinter import *
+from socket import *
+from thread import *
+
+client_socket = socket(AF_INET, SOCK_STREAM)
+remote_ip_c = '127.0.0.1'
+remote_port_c = 10317
+client_socket.connect((remote_ip_c, remote_port_c))
+
+root = Tk()
+root.title('å??Aliceè??å¤©ä¸­')
+root.geometry(&quot;450x500&quot;)
+
+Label(root, text='è??å¤©è®°å½?:').grid(row=0, sticky=W, padx=5, pady=5)
+
+# record text
+r_frame = Frame(root)
+r_frame.grid(row=1, sticky=W)
+r_text = Text(r_frame, width=60, height=20)
+r_s_bar = Scrollbar(r_frame, command=r_text.yview, orient=VERTICAL)
+r_text.config(yscrollcommand=r_s_bar.set)
+r_text.bind(&quot;&lt;KeyPress&gt;&quot;, lambda e: 'break')
+r_text.pack(side=LEFT, fill=BOTH)
+r_s_bar.pack(side=RIGHT, fill=Y)
+
+Label(root, text='è¯·è¾?å?¥è??å¤©ä¿¡æ?¯:').grid(row=3, sticky=W, padx=5, pady=5)
+# type text
+t_frame = Frame(root)
+t_frame.grid(row=4, sticky=W)
+t_text = Text(t_frame, width=60, height=8)
+t_s_bar = Scrollbar(t_frame, command=t_text.yview, orient=VERTICAL)
+t_text.config(yscrollcommand=t_s_bar.set)
+t_text.pack(side=LEFT, fill=BOTH)
+t_s_bar.pack(side=RIGHT, fill=Y)
+
+
+def send_chat(event):
+    data = t_text.get(1.0, 'end').strip().encode('utf-8')
+    r_text.insert('end', 'Randy:' + data + '\n')
+    client_socket.send(data)
+    t_text.delete(1.0, 'end')
+    return 'break'
+
+
+t_text.bind('&lt;Return&gt;', send_chat)
+
+
+def receive_thread(so):
+    while True:
+        buf = so.recv(256)
+<A NAME="3"></A><A NAME="2"></A><A NAME="1"></A>        if not buf:
+            break
+        r_text.insert(</B></FONT>'end', 'Alice:' + buf + '\n')
+        so<FONT color="#f63526"><A HREF="javascript:ZweiFrames('match0-1.html#1',3,'match0-top.html#1',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>.close(</B></FONT></B></FONT><FONT color="#77bfc7"><A HREF="javascript:ZweiFrames('match0-1.html#2',3,'match0-top.html#2',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>)<FONT color="#6cc417"><A HREF="javascript:ZweiFrames('match0-1.html#3',3,'match0-top.html#3',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>
+
+
+start_new_thread(receive_thread, (client_socket,))
+root.mainloop(</B></FONT>)
+</PRE>
+<HR>
+<H3><CENTER>magic.py</CENTER></H3><HR>
+<PRE>
+<A NAME="4"></A># Import the modules
+<FONT color="#151b8d"><A HREF="javascript:ZweiFrames('match0-1.html#4',3,'match0-top.html#4',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>import sys
+import random
+<A NAME="5"></A>
+flag =</B></FONT> True
+
+options <FONT color="#c8c2a7"><A HREF="javascript:ZweiFrames('match0-1.html#5',3,'match0-top.html#5',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>= { 1</B></FONT>: &quot;It is certain&quot;,
+2: &quot;Outlook good&quot;,
+3: &quot;You may rely on it&quot;,
+4: &quot;Ask again later&quot;,
+5: &quot;Concentrate and ask again&quot;,
+6: &quot;Reply hazy, try again&quot;,
+<A NAME="6"></A>7: &quot;My reply is no&quot;,
+<A NAME="7"></A>8: &quot;My sources say no&quot;}
+
+<FONT color="#50ebec"><A HREF="javascript:ZweiFrames('match0-1.html#6',3,'match0-top.html#6',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>while flag:
+    q =</B></FONT> raw_input<FONT color="#c58917"><A HREF="javascript:ZweiFrames('match0-1.html#7',3,'match0-top.html#7',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>(&quot;Ask the magic 8 ball a question: (press enter to quit) &quot;)
+<A NAME="9"></A><A NAME="8"></A>    if q == &quot;&quot;:
+        sys.exit(</B></FONT>)
+    else:
+    	print options.get<FONT color="#bce954"><A HREF="javascript:ZweiFrames('match0-1.html#8',3,'match0-top.html#8',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>(</B></FONT>random.randint(<FONT color="#f88017"><A HREF="javascript:ZweiFrames('match0-1.html#9',3,'match0-top.html#9',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>1</B></FONT>, 8))
+</PRE>
+<HR>
+<H3><CENTER>serverchat.py</CENTER></H3><HR>
+<PRE>
+<A NAME="10"></A># coding=UTF-8
+<FONT color="#b041ff"><A HREF="javascript:ZweiFrames('match0-1.html#10',3,'match0-top.html#10',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>from Tkinter import *
+from socket import *
+from thread import *
+
+server_socket = socket(AF_INET, SOCK_STREAM)
+local_ip_s = '127.0.0.1'
+local_port_s = 10317
+server_socket.bind((local_ip_s, local_port_s))
+server_socket.listen(5)
+
+so, addr = server_socket.accept()
+
+root = Tk()
+root.title('å??Randyè??å¤©ä¸­')
+root.geometry(&quot;450x500&quot;)
+
+Label(root, text='è??å¤©è®°å½?:').grid(row=0, sticky=W, padx=5, pady=5)
+
+# record text
+r_frame = Frame(root)
+r_frame.grid(row=1, sticky=W)
+r_text = Text(r_frame, width=60, height=20)
+r_s_bar = Scrollbar(r_frame, command=r_text.yview, orient=VERTICAL)
+r_text.config(yscrollcommand=r_s_bar.set)
+r_text.bind(&quot;&lt;KeyPress&gt;&quot;, lambda e: 'break')
+r_text.pack(side=LEFT, fill=BOTH)
+r_s_bar.pack(side=RIGHT, fill=Y)
+
+Label(root, text='è¯·è¾?å?¥è??å¤©ä¿¡æ?¯:').grid(row=3, sticky=W, padx=5, pady=5)
+# type text
+t_frame = Frame(root)
+t_frame.grid(row=4, sticky=W)
+t_text = Text(t_frame, width=60, height=8)
+t_s_bar = Scrollbar(t_frame, command=t_text.yview, orient=VERTICAL)
+t_text.config(yscrollcommand=t_s_bar.set)
+t_text.pack(side=LEFT, fill=BOTH)
+t_s_bar.pack(side=RIGHT, fill=Y)
+
+
+def send_chat(event):
+    data = t_text.get(1.0, 'end').strip().encode('utf-8')
+    r_text.insert('end', 'Alice:' + data + '\n')
+    so.send(data)
+    t_text.delete(1.0, 'end')
+    return 'break'
+
+
+t_text.bind('&lt;Return&gt;', send_chat)
+
+
+def receive_thread(so):
+    while True:
+        buf = so.recv(256)
+        if not buf:
+            break
+        r_text.insert('end', 'Randy:' + buf + '\n')
+    so.close()
+
+
+start_new_thread(receive_thread, (so,))
+root.mainloop(</B></FONT>)
+</PRE>
+
+</BODY>
+</HTML>

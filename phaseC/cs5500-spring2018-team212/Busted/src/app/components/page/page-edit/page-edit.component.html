@@ -11,7 +11,7 @@
 
     <div class="navbar-brand pull-left">
       <div class="thick">
-        <b>Edit Assignment</b>
+        <b>{{this.course.semester}} &nbsp; {{this.course.code}} &nbsp; {{this.course.name}}: &nbsp; Edit Assignment</b>
       </div>
     </div>
 
@@ -32,22 +32,20 @@
 
   <b>Assignment Name</b>
 
-    <input [(ngModel)]="this.page.name"
+    <input [(ngModel)]="this.assignment.name"
            class="form-control"
            type="text"
            placeholder="Assignment name">
 
   <b>Due Date</b>
 
-    <input [(ngModel)]="this.page.description"
+    <input [(ngModel)]="this.assignment.duedate"
            class="form-control"
            type="date"
            placeholder="Due date">
 
     <a class="btn btn-danger btn-block"
-       (click)="deletePage(this.wid, this.pid)"
-       routerLink="/user/website/{{wid}}/page" >Delete</a>
-
+       (click)="deleteAssignment(this.wid, this.assignment.id)">Delete</a>
 
 </div>
 

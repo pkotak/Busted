@@ -27,11 +27,12 @@ export class PageNewComponent implements OnInit {
   websites: Website[];
   description: String;
   pid: String;
-  pagename: String;
+  coursename: String;
   title: String;
   pages: Page[];
   duedate: Date;
   course: any;
+  courses: [{}];
 
   // inject route info in constructor
   constructor(
@@ -65,6 +66,26 @@ export class PageNewComponent implements OnInit {
     }
   }
 
+  createAssignment(name, duedate) {
+    if (!name) {
+      alert('Please input assignment name');
+    } else {
+      const newAssignment = {
+        studentId: this.user.id,
+        name: name,
+        duedate: duedate,
+        courseId: this.course.id,
+        githublink: '',
+      };
+      console.log(newAssignment);
+
+      this.pageService.createAssignment(newAssignment).subscribe((courses) => {
+        this.courses = courses;
+        this.router.navigate(['user', 'website', this.wid, 'page']);
+      });
+    }
+  }
+
 
   // notify the changes of the route
   ngOnInit() {
@@ -84,6 +105,7 @@ export class PageNewComponent implements OnInit {
     this.websiteService.findWebsiteById(this.userId, this.wid)
       .subscribe((course) => {
         this.course = course;
+        console.log(course);
       });
 
     this.userService.findUserById(this.userId).subscribe((user: User) => {

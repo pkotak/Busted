@@ -71,8 +71,8 @@ export class WebsiteEditComponent implements OnInit {
 
     joinClass() {
       this.userService.findUserInCourse(this.user.id, this.course.id, this.user.type)
-        .subscribe((user) => {
-          if (user.id === this.user.id) {
+        .subscribe((result) => {
+          if (result === 1 ) {
             alert('You are enrolled in this course already!');
           } else {
             const newCourseRole = {
@@ -87,7 +87,7 @@ export class WebsiteEditComponent implements OnInit {
                 // this.user = newuser;
                 console.log(this.user);
                 alert('Welcome to class "' + this.course.code + ' ' + this.course.name + '"');
-                window.location.reload(false); // reload page
+                this.router.navigate(['profile']); // reload page
               });
           }
         });
@@ -96,7 +96,8 @@ export class WebsiteEditComponent implements OnInit {
     dropClass() {
       this.userService.findUserInCourse(this.user.id, this.course.id, this.user.type)
         .subscribe((user) => {
-          if (user.id !== this.user.id) {
+          console.log(user);
+          if (user === 0) {
             alert('You are not enrolled in this course!');
           } else {
             const courseRole = {
@@ -111,7 +112,7 @@ export class WebsiteEditComponent implements OnInit {
                 // this.user = newuser;
                 console.log(this.user);
                 alert('You have dropped "' + this.course.code + ' ' + this.course.name + '"');
-                window.location.reload(false); // reload page
+                this.router.navigate(['profile']); // reload page
               });
 
           }
@@ -120,15 +121,18 @@ export class WebsiteEditComponent implements OnInit {
 
 
     goToAssignment() {
-
-      this.userService.findUserInCourse(this.user.id, this.course.id, this.user.type)
-        .subscribe((user) => {
-          if (user.id !== this.user.id) {
-            alert('You are currently not enrolled in this course.');
-          } else {
-            this.router.navigate(['user', 'website', this.wid, 'page']);
-          }
-        });
+      if (this.user.type !== 'STUDENT') {
+        this.router.navigate(['user', 'website', this.wid, 'page']);
+      } else {
+        this.userService.findUserInCourse(this.user.id, this.course.id, this.user.type)
+          .subscribe((user) => {
+            if (user === 0) {
+              alert('You are currently not enrolled in this course.');
+            } else {
+              this.router.navigate(['user', 'website', this.wid, 'page']);
+            }
+          });
+      }
     }
 
     deleteWebsite() {
@@ -167,7 +171,6 @@ export class WebsiteEditComponent implements OnInit {
         this.courses = courses;
         console.log(courses);
       });
-
 
     this.websiteService.findWebsiteById(this.userId, this.wid)
       .subscribe((course) => {

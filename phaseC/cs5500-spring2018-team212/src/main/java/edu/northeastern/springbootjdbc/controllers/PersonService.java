@@ -5,6 +5,7 @@ import java.util.logging.Logger;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -28,11 +29,12 @@ import edu.northeastern.springbootjdbc.models.RoleType;
  *
  */
 @RestController
+@Configuration
 public class PersonService {
 	private static final Logger LOGGER = Logger.getLogger(PersonService.class.getName());
 	/**
 	 * Creates a person in the database
-	 * 
+	 * /api/user/{userid}
 	 * @return
 	 * @return the number of rows affected
 	 */
@@ -101,10 +103,13 @@ public class PersonService {
 		PersonDao dao = PersonDao.getInstance();
 		ObjectMapper mapperObj = new ObjectMapper();
 		Person p = dao.findPersonByUsername(email);
-		if (p == null) 
-			return "";
-		else
+		String returnJson = "";
+		if (p == null) {
+			returnJson = "{\"email\": \"null\"}";
+			return returnJson;
+		} else {
 			return mapperObj.writeValueAsString(p);
+		}
 	}
 
 	/**

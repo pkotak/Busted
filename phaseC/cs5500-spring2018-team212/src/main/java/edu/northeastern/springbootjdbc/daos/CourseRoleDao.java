@@ -11,6 +11,7 @@ import java.util.logging.Logger;
 
 import edu.northeastern.cs5500.Constants;
 import edu.northeastern.springbootjdbc.models.Course;
+import edu.northeastern.springbootjdbc.models.CourseRole;
 import edu.northeastern.springbootjdbc.models.Person;
 import edu.northeastern.springbootjdbc.models.RoleType;
 
@@ -26,6 +27,10 @@ public class CourseRoleDao {
 	private static PersonDao pdao = PersonDao.getInstance();
 	private static CourseDao cdao = CourseDao.getInstance();
 
+	public static void setInstance(CourseRoleDao dao) {
+		instance = dao;
+	}
+	
 	public static CourseRoleDao getInstance() {
 		if (instance == null)
 			return new CourseRoleDao();
@@ -87,6 +92,58 @@ public class CourseRoleDao {
 
 
 		return clist;
+	}
+	
+	
+	// return 1 if ound, return 0 if not
+	public int isEnrolled(int personid, int courseID) {
+		Connection conn = null;
+		ResultSet results = null;
+		int foundid = -1;
+		java.sql.PreparedStatement statement = null;
+		try {
+			Class.forName("com.mysql.jdbc.Driver");
+			conn = DriverManager.getConnection(Constants.CONNECTION_STRING, Constants.AWS_USERNAME,
+					Constants.AWS_P);
+
+			String sqlquery = "SELECT personid FROM CourseRole as cr where cr.courseid = ? and cr.personid = ?";
+			try {
+				statement = conn.prepareStatement(sqlquery);
+				statement.setInt(1, courseID);
+				statement.setInt(2, personid);
+				try {
+					results = statement.executeQuery();
+					while(results.next()) {
+						foundid = results.getInt("personid");
+					}
+					
+				} finally {
+					if (results != null)
+						results.close();
+				}
+
+			}finally {
+				if (statement != null)
+					statement.close();
+			}
+
+		} catch (ClassNotFoundException e) {
+			LOGGER.info(e.toString());
+		} catch (SQLException e) {
+			LOGGER.info(e.toString());
+		} finally {
+			try {
+				if (conn != null)
+					conn.close();
+			} catch (SQLException e) {
+				LOGGER.info(e.toString());
+			}
+		}
+		if (foundid > 0) {
+			return 1;
+		} else {
+			return 0;
+		}	
 	}
 	
 	/**
@@ -189,7 +246,7 @@ public class CourseRoleDao {
 		return rowsAffected;
 	}
 	
-	
+	// Join course as student
 	public int joinCourseAsStudent(int courseID, int personID) {
 		int rowsAffected = 0;
 		Connection conn = null;
@@ -230,6 +287,7 @@ public class CourseRoleDao {
 		return rowsAffected;
 	}
 
+	
 	public int mapProfessor(int courseID, int personID) {
 		int rowsAffected = 0;
 		Connection conn = null;
@@ -307,5 +365,7 @@ public class CourseRoleDao {
 		}
 		return rowsAffected;
 	}
+
+
 	
 }

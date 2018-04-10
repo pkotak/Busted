@@ -1,75 +1,139 @@
 
 <nav class="navbar navbar-tiffany navbar-fixed-top">
-  <div class="container-fluid">
+	<div class="container-fluid">
 
-    <!--heading on the nav bar-->
-    <div class="navbar-text pull-left">
-      <a routerLink="/profile" class="black">
-        <span class="white glyphicon glyphicon-chevron-left"></span>
-      </a>
-    </div>
+		<!--heading on the nav bar-->
+		<div class="navbar-text pull-left">
+			<a routerLink="/profile" class="black"> <span
+				class="white glyphicon glyphicon-chevron-left"></span>
+			</a>
+		</div>
 
-    <div class="navbar-brand pull-left">
+		<div class="navbar-brand pull-left">
 
-        <b class = white>Assignments Dashboard:&nbsp;&nbsp; {{this.course.semester}}  {{this.course.code}} {{this.course.name}}  </b>
+			<b class=white>Assignments Dashboard:&nbsp;&nbsp;
+				{{this.course.semester}} {{this.course.code}} {{this.course.name}} </b>
 
-    </div>
+		</div>
 
-    <!--tick mark-->
-    <div class="navbar-brand pull-right ">
-      <a *ngIf="(user.type !== 'STUDENT' )"(click)= createAssignment() class="white " >
-        <b>New</b>
-        <!--<span class="glyphicon glyphicon-plus "></span>-->
-        <!--<button class="btn btn-primary">Create a portfolio</button>-->
-      </a>
-    </div>
+		<!--tick mark-->
+		<div class="navbar-brand pull-right ">
+			<a *ngIf="(user.type !== 'STUDENT' )" (click)=createAssignment()
+				class="white "> <b>New</b> <!--<span class="glyphicon glyphicon-plus "></span>-->
+				<!--<button class="btn btn-primary">Create a portfolio</button>-->
+			</a>
+		</div>
 
-  </div>
+	</div>
 </nav>
 
-<div class="container-fluid padding"></div>
-<label class ='letter-tiffany paddingleft'> Hi, &nbsp;{{user.firstName}}!&nbsp; &nbsp; Role: {{user.type}}</label>
+<div class="container-fluid padding">
+	<label class='letter-tiffany paddingleft'> Hi,
+		&nbsp;{{user.firstName}}!&nbsp; &nbsp; Role: {{user.type}}</label>
 
-<div *ngFor = "let assignment of assignments" class="container-fluid ">
-  <ul  class="list-group">
-    <li class="list-group-item blue ">
+	<!--<br>-->
+	<!--<meter value = "80"></meter>-->
 
-      <a routerLink="/user/website/{{ wid }}/page/{{assignment}}/widget/" class="thick">
-       <b> {{ assignment }}: &nbsp;&nbsp; {{assignment.duedate}} </b>
-      </a>
+	<!--<br>-->
 
-      <!--<a class="pull-right" routerLink="/user/website/{{ wid }}/page/{{page._id}}">-->
-        <!--<span class="glyphicon glyphicon-cog"></span>-->
-      <!--</a>-->
-      <button *ngIf="(user.type !== 'STUDENT' )" class="pull-right btn-success "
-              (click)= "gotoReport()" >
+	<div class="container-fluid paddingleft padding-b"
+		*ngIf="(user.type !== 'STUDENT')">
+		<table id='customers'>
+			<thead>
+				<tr>
+					<th>&nbsp; Name</th>
+					<th>&nbsp; Due Date</th>
+					<th *ngIf="(user.type !== 'STUDENT' && (user.type !== 'TA' ) )">
+						Edit Assignment</th>
+          <th *ngIf="(user.type !== 'STUDENT')">Check all submissions</th>
+					<th *ngIf="(user.type !== 'STUDENT')">Check reports</th>
 
-              <!--routerLink="/user/website/{{ wid }}/page/{{page._id}}/widget/new">-->
-        Check Report
-      </button>
+				</tr>
+			</thead>
+			<tbody>
+				<tr *ngFor="let assignment of assignments">
+					<td>&nbsp; {{assignment.name}}</td>
+					<td>&nbsp; {{assignment.duedate}}</td>
+					<td *ngIf="(user.type !== 'STUDENT' ) && (user.type !== 'TA' )"
+              routerLink="/user/website/{{ wid }}/page/{{assignment.id}}">
+						<a class="glyphicon glyphicon-cog"> </a>
+					</td>
 
-      &nbsp;
+          <td *ngIf="(user.type !== 'STUDENT' )" routerLink="/user/website/{{ wid }}/page/{{assignment.id}}/assignments">
+            <a class="glyphicon glyphicon-folder-open"> </a>
+          </td>
 
-      <button *ngIf="(user.type !== 'STUDENT' )" class="pull-right btn-primary " routerLink="/user/website/{{ wid }}/page/{{course.id}}">
-        Edit assignment
-      </button>
+					<td *ngIf="(user.type !== 'STUDENT')" routerLink="/user/website/{{ wid }}/page/{{assignment.id}}/report">
+            <a class="glyphicon glyphicon-file"></a></td>
+				</tr>
+			</tbody>
+		</table>
 
-    </li>
-  </ul>
-</div>
+	</div>
+
+	<div class="container-fluid paddingleft padding-b" *ngIf="(user.type == 'STUDENT')">
+		<table id='customers'>
+			<thead>
+				<tr>
+					<th>&nbsp; Name</th>
+					<th>&nbsp; Due Date</th>
+
+				</tr>
+			</thead>
+			<tbody>
+				<tr *ngFor="let assignment of assignments"
+					routerLink="/user/website/{{ wid }}/page/{{assignment.id}}/widget/">
+					<td>&nbsp; {{assignment.name}}</td>
+					<td>&nbsp; {{assignment.duedate}}</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
 
 
-<nav class="navbar navbar-tiffany navbar-fixed-bottom">
-  <div class="container-fluid">
-    <b class="navbar-text pull-left white">
-      Busted
-    </b>
+	<!--<div *ngFor = "let assignment of assignments" class="container-fluid ">-->
+	<!--<ul  class="list-group">-->
+	<!--<li class="list-group-item blue ">-->
 
-    <p class="navbar-text pull-right">
-      <a routerLink="/profile" class="blue">
-        <span class="white glyphicon glyphicon-user"></span>
-      </a>
-    </p>
-  </div>
-</nav>
+	<!--<a routerLink="/user/website/{{ wid }}/page/{{assignment}}/widget/" class="thick">-->
+	<!--<b> Name {{ assignment.name }}: &nbsp;&nbsp; Due date: {{assignment.duedate}} </b>-->
+	<!--</a>-->
 
+	<!--&lt;!&ndash;<a class="pull-right" routerLink="/user/website/{{ wid }}/page/{{page._id}}">&ndash;&gt;-->
+	<!--&lt;!&ndash;<span class="glyphicon glyphicon-cog"></span>&ndash;&gt;-->
+	<!--&lt;!&ndash;</a>&ndash;&gt;-->
+	<!--<button *ngIf="(user.type !== 'STUDENT' )" class="pull-right btn-success "-->
+	<!--(click)= "gotoReport()" >-->
+
+	<!--&lt;!&ndash;routerLink="/user/website/{{ wid }}/page/{{page._id}}/widget/new">&ndash;&gt;-->
+	<!--Check Report-->
+	<!--</button>-->
+
+	<!--&nbsp;-->
+	<!--<button *ngIf="(user.type !== 'STUDENT' )" class="pull-right btn-primary " routerLink="/user/website/{{ wid }}/page/{{course.id}}">-->
+	<!--Edit assignment-->
+	<!--</button>-->
+
+	<!--&lt;!&ndash;<div class="progress">&ndash;&gt;-->
+	<!--&lt;!&ndash;<div class="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="70"&ndash;&gt;-->
+	<!--&lt;!&ndash;aria-valuemin="0" aria-valuemax="100" style="width: getAssignmentProgress(assignment.name, this.wid,)">&ndash;&gt;-->
+	<!--&lt;!&ndash;70% Complete (danger)&ndash;&gt;-->
+	<!--&lt;!&ndash;</div>&ndash;&gt;-->
+	<!--&lt;!&ndash;</div>&ndash;&gt;-->
+
+	<!--</li>-->
+	<!--</ul>-->
+	<!--</div>-->
+	<!--</div>-->
+
+	<nav class="navbar navbar-tiffany navbar-fixed-bottom">
+		<div class="container-fluid">
+			<b class="navbar-text pull-left white"> Busted </b>
+
+			<p class="navbar-text pull-right">
+				<a routerLink="/profile" class="blue"> <span
+					class="white glyphicon glyphicon-user"></span>
+				</a>
+			</p>
+		</div>
+	</nav>

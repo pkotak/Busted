@@ -12,6 +12,7 @@ import java.util.logging.Logger;
 import com.mysql.jdbc.Statement;
 
 import edu.northeastern.cs5500.Constants;
+import edu.northeastern.cs5500.Semester;
 import edu.northeastern.springbootjdbc.models.Course;
 
 /**
@@ -22,7 +23,11 @@ import edu.northeastern.springbootjdbc.models.Course;
 public class CourseDao {
 	private static CourseDao instance = null;
 	static final Logger LOGGER = Logger.getLogger(CourseDao.class.getName());
-
+	
+	public static void setInstance(CourseDao dao) {
+		instance = dao;
+	}
+	
 	public static CourseDao getInstance() {
 		if (instance == null)
 			return new CourseDao();
@@ -189,7 +194,7 @@ public class CourseDao {
 			conn = DriverManager.getConnection(Constants.CONNECTION_STRING, Constants.AWS_USERNAME,
 					Constants.AWS_P);
 
-			String sql = "select * from Course";
+			String sql = "select * from Course order by semester desc";
 			try {
 				statement = conn.prepareStatement(sql);
 				try {
@@ -247,14 +252,12 @@ public class CourseDao {
 			Class.forName(Constants.JDBC_DRIVER);
 			conn = DriverManager.getConnection(Constants.CONNECTION_STRING, Constants.AWS_USERNAME,
 					Constants.AWS_P);
-
 			String sql = "select * from Course WHERE id = ?";
 			try {
 				statement = conn.prepareStatement(sql);
 				statement.setInt(1, courseid);
 				try {
 					results = statement.executeQuery();
-
 					if (results.next()) {
 						int id = Integer.parseInt(results.getString("id"));
 						String name = results.getString("name");
@@ -265,7 +268,6 @@ public class CourseDao {
 						course.setName(name);
 						course.setSemester(semester);
 						course.setCode(code);
-			
 					}
 				} finally {
 					if (results != null) {
@@ -276,7 +278,6 @@ public class CourseDao {
 				if (statement != null)
 					statement.close();
 			}
-
 		} catch (ClassNotFoundException e) {
 			LOGGER.info(e.toString());
 		} catch (SQLException e) {
@@ -396,5 +397,75 @@ public class CourseDao {
 			}
 		}
 		return courseid;
+	}
+
+	/**
+	 * method to retrieve courses for the given semester. 
+	 * @param givensemester - the String representation of the given semester.
+	 * @return the list of Courses.
+	 */
+	public List<Course> findCoursesBySemester(String givensemester) {
+		List<Course> courseList = new ArrayList<Course>();
+		Connection conn = null;
+		PreparedStatement statement = null;
+		ResultSet results = null;
+		try {
+			Class.forName(Constants.JDBC_DRIVER);
+			conn = DriverManager.getConnection(Constants.CONNECTION_STRING, Constants.AWS_USERNAME,
+					Constants.AWS_P);
+
+			String sql = "select * from Course where semester = ?";
+			try {
+				statement = conn.prepareStatement(sql);
+				statement.setString(1, givensemester);
+				try {
+					results = statement.executeQuery();
+					while (results.next()) {
+						int id = Integer.parseInt(results.getString("id"));
+						String name = results.getString("name");
+						String semester = results.getString("semester");
+						String code = results.getString("code");
+						
+						Course course = new Course();
+						course.setId(id);
+						course.setName(name);
+						course.setSemester(semester);
+						course.setCode(code);
+						
+						courseList.add(course);	
+					}
+				} finally {
+					if (results != null)
+						results.close();
+				}
+			} finally {
+				if (statement != null)
+					statement.close();
+			}
+
+		
+
+		} catch (ClassNotFoundException e) {
+			LOGGER.info(e.toString());
+		} catch (SQLException e) {
+			LOGGER.info(e.toString());
+		} finally {
+			try {
+				if (conn != null)
+					conn.close();
+			} catch (SQLException e) {
+				LOGGER.info(e.toString());
+			}
+		}
+		return courseList;
+	}
+
+	/**
+	 * method to retrieve courses for the current semester. 
+	 * @return the list of Courses.
+	 */
+	public List<Course> defaultCourses() {
+		String currentSemester = Semester.getInstance().getSemester();
+		return new CourseDao().findCoursesBySemester(currentSemester);
 	}
 }

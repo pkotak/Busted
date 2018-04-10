@@ -17,7 +17,6 @@ export class HomeComponent implements OnInit {
   ) { }
 
   goLogin() {
-    alert('Please login to trade!');
     this.router.navigate(['login']);
   }
 

@@ -11,11 +11,14 @@ import {PageEditComponent} from './components/page/page-edit/page-edit.component
 import {WidgetListComponent} from './components/widget/widget-list/widget-list.component';
 import {WidgetChooserComponent} from './components/widget/widget-chooser/widget-chooser.component';
 import {WidgetEditComponent} from './components/widget/widget-edit/widget-edit.component';
+import {ReportListComponent} from './components/report/report-list.component';
+import {ReportDetailComponent} from './components/report/report-detail/report-detail.component';
 import {HomeComponent} from './components/home/home.component';
 import {ModuleWithProviders} from '@angular/core';
 import {FlickrImageSearchComponent} from './components/widget/widget-edit/widget-image/flickr-image-search/flickr-image-search.component';
 import {AuthenticationService} from './services/authentication.service.client';
 import {AdminComponent} from './components/user/admin/admin.component';
+import {AssignmentsComponent} from './components/assignments/assignments.component';
 
 // config route default constants
 const appRoutes: Routes = [
@@ -35,8 +38,11 @@ const appRoutes: Routes = [
   {path: 'user/website/:wid/page/:pid/widget', component: WidgetListComponent, canActivate: [AuthenticationService]},
   {path: 'user/website/:wid/page/:pid/widget/new', component: WidgetChooserComponent, canActivate: [AuthenticationService]},
   {path: 'user/website/:wid/page/:pid/widget/:wgid', component: WidgetEditComponent, canActivate: [AuthenticationService]},
-  {path: 'user/website/:wid/page/:pid/widget/:wgid/flickr', component: FlickrImageSearchComponent, canActivate: [AuthenticationService]},
+  {path: 'user/website/:wid/page/:pid/report', component: ReportListComponent, canActivate: [AuthenticationService]},
+  {path: 'user/website/:wid/page/:pid/report/:rid', component: ReportDetailComponent, canActivate: [AuthenticationService]},
   {path: 'user/admin', component: AdminComponent, canActivate: [AuthenticationService]},
+  {path: 'user/website/:wid/page/:pid/assignments', component: AssignmentsComponent, canActivate: [AuthenticationService]},
+
 ];
 
 // use appRoutes to config router module and export it as an constant variable that

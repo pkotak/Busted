@@ -44,7 +44,7 @@ public class HtmlParser implements IHTMLParser{
 				plagiarism.add(res);
 			} catch (IOException e) {
 				LOGGER.info(e.toString());
-			}
+			} 
 		}
 		return plagiarism;
 	}
@@ -57,15 +57,20 @@ public class HtmlParser implements IHTMLParser{
 	public List<File> getAllDir(String opdir) {
 		File folder = new File(opdir);
 		List<File> fileList = new ArrayList<File>();
-		
-		File[] listOfFiles = folder.listFiles();
-		for (int i = 0; i < listOfFiles.length; i++) {
-			if (listOfFiles[i].isDirectory()) 
-				fileList.add(listOfFiles[i]);
+
+		try {	
+			File[] listOfFiles = folder.listFiles();
+			for (int i = 0; i < listOfFiles.length; i++) {
+				if (listOfFiles[i].isDirectory()) 
+					fileList.add(listOfFiles[i]);
 			}
+		} catch (NullPointerException e) {
+			LOGGER.info(e.toString());
+		}
+
 		return fileList;
 	}
-	
+
 	/**
 	 * method to get all the files that are relevant to find the plagiarism score
 	 * in this directory.

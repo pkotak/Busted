@@ -16,6 +16,8 @@ import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.PutObjectRequest;
+import com.amazonaws.services.s3.transfer.TransferManager;
+import com.amazonaws.services.s3.transfer.TransferManagerBuilder;
 
 /**
  * class to interact with the S3 database.
@@ -29,10 +31,8 @@ public class S3 {
 	static final BasicAWSCredentials awsCreds = new BasicAWSCredentials(Constants.AWS_ACCESS_KEY, Constants.AWS_SECRET_KEY);
 	static final AmazonS3 s3Client = AmazonS3ClientBuilder.standard().withCredentials(new AWSStaticCredentialsProvider(awsCreds))
 			.withRegion(Constants.S3_REGION).build();
-	
-	private S3() {}
-	
 
+	private S3() {}
 	/**
 	 * Put an object in the database
 	 * 
@@ -85,6 +85,13 @@ public class S3 {
 		return md5;
 	}
 
+	public static String uploadDir(String bucketname, String keyName) {
+		@SuppressWarnings("deprecation")
+		TransferManager tm = TransferManagerBuilder.standard().withS3Client(s3Client).build();
+		tm.uploadDirectory("plagiarismresults", keyName, new File(keyName), true);
+		return "https://" + bucketname + ".s3-us-east-2.amazonaws.com/" + keyName;
+	}
+
 	/**
 	 * Get the S3 client
 	 * 
@@ -93,4 +100,5 @@ public class S3 {
 	public static AmazonS3 getS3client() {
 		return s3Client;
 	}
+	
 }

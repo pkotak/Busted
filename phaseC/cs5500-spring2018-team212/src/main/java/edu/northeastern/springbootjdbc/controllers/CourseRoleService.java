@@ -74,7 +74,7 @@ public class CourseRoleService {
 	 * @return the number of rows affected
 	 *        - indicating whether operation was successful.
 	 */
-	@CrossOrigin(origins = {"http://localhost:4200", "ec2-18-222-88-122.us-east-2.compute.amazonaws.com:4200"})
+	@CrossOrigin(origins = {"http://localhost:4200", "http://ec2-18-222-88-122.us-east-2.compute.amazonaws.com:4200"})
 	@RequestMapping(value="/api/user/course/drop", method=RequestMethod.POST)
 	public @ResponseBody int deleteStudentFromCourse(
 			@RequestBody String json) {
@@ -134,9 +134,9 @@ public class CourseRoleService {
 	 * @return the list of Courses for the Person
 	 */
 	@CrossOrigin(origins = {"http://localhost:4200", "http://ec2-18-222-88-122.us-east-2.compute.amazonaws.com:4200"})
-	@RequestMapping(value="/api/user/{id}/course/{courseId}", method=RequestMethod.POST)
+	@RequestMapping(value="/api/user/{userId}/course/{courseId}/uniqueid", method=RequestMethod.POST)
 	public @ResponseBody String checkIfPersonEnrolled(
-			@PathVariable("id") String id, @PathVariable("courseId") String cId,
+			@PathVariable("userId") String id, @PathVariable("courseId") String cId,
 			@RequestBody String json) {
 		JSONObject obj;
 		String type = "";
@@ -157,6 +157,20 @@ public class CourseRoleService {
 		
 		return returnJson;
 	}
+	
+	/**
+	 * Check if a person is in a course already
+	 * @return the 1 if yes else 0
+	 */
+	@CrossOrigin(origins = {"http://localhost:4200", "http://ec2-18-222-88-122.us-east-2.compute.amazonaws.com:4200"})
+	@RequestMapping(value="/api/user/{userId}/course/{courseId}/isInCourse", method=RequestMethod.GET)
+	public @ResponseBody int checkIfEnrolled(
+			@PathVariable("userId") int id, @PathVariable("courseId") int cId) {
+
+		return CourseRoleDao.getInstance().isEnrolled(id, cId);
+	}
+	
+	
 	
 	/**
 	 * method to get course Professor's email

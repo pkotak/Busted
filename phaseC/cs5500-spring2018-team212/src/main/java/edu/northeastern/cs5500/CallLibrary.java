@@ -19,19 +19,18 @@ public class CallLibrary implements ICallLibrary{
 	private static final Logger LOGGER = Logger.getLogger(CallLibrary.class.getName());
 	private static final String PATH_DELIM = "/";
 
-	
+
 	/* (non-Javadoc)
 	 * @see edu.northeastern.cs5500.ICallLibrary#compareFiles(java.lang.String, java.lang.String, int, int)
 	 */
 	@Override
-	public void compareFiles(String ipdir, String opdir, int strictness, int threshold) {
+	public void compareFiles(String ipdir, String opdir, int strictness) {
 		String jarCommand = "java -jar ";
 		String cmd = "";
 		cmd = jarCommand + Constants.LIBRARY_PATH +
 				" -l " + Constants.LANGUAGE + 
 				" -r " + opdir + 
 				" -t " + strictness +
-				" -m " + threshold + "%"+
 				" -s " + ipdir;
 		try {
 			Runtime.getRuntime().exec(cmd);
@@ -59,7 +58,7 @@ public class CallLibrary implements ICallLibrary{
 			FileUtils.copyDirectory(srcDir2, destDir2);
 		} catch (IOException e) {
 			LOGGER.info(e.toString());
-		}
+		} 
 		return destination;
 	}
 
@@ -76,7 +75,7 @@ public class CallLibrary implements ICallLibrary{
 		for (int i = 0; i < listOfFiles.length; i++) {
 			if (listOfFiles[i].isDirectory()) {
 				File x = listOfFiles[i];
-				String xname = x.getParentFile()+PATH_DELIM+x.getName();
+				String xname = x.getParentFile() + PATH_DELIM + x.getName();
 				if (!xname.equalsIgnoreCase(newdir))
 					fileList.add(x);
 			}
@@ -90,12 +89,12 @@ public class CallLibrary implements ICallLibrary{
 	 * @param newdir
 	 * @param rootdir
 	 * @param strictness
-	 * @param threshold
 	 * @return
 	 */
-	public static String compareDir(String newdir, String rootdir, int strictness, int threshold) {
+	public static String compareDir(String newdir, String rootdir, int strictness) {
 		CallLibrary cl = new CallLibrary();
 		List<File> listOfDir = getOtherDirs(newdir, rootdir);
+		Boolean b = true;
 		String rootopdir = rootdir + "op";
 		String rootmergedir = rootdir + "merge";
 		for (int i = 0; i < listOfDir.size(); i++) {
@@ -105,19 +104,19 @@ public class CallLibrary implements ICallLibrary{
 			String tempopdir = rootopdir+mdir+"op";
 			new File(tempopdir).mkdirs();
 
-			cl.compareFiles(ipdir, tempopdir, strictness, threshold);	
+			cl.compareFiles(ipdir, tempopdir, strictness);	
 		}
+
 		return rootopdir;
 	}
 
-	
 	/* (non-Javadoc)
 	 * @see edu.northeastern.cs5500.ICallLibrary#getReports(java.lang.String, java.lang.String, int, int)
 	 */
 	@Override
-	public List<PlagiarismResult> getReports(String newdir, String rootdir, int strictness, int threshold){
+	public List<PlagiarismResult> getReports(String newdir, String rootdir, int strictness){
 		try{
-			String resdir = compareDir(newdir, rootdir, strictness, threshold);
+			String resdir = compareDir(newdir, rootdir, strictness);
 			Thread.sleep(10000); 
 			HtmlParser parser = new HtmlParser();
 			return parser.getSimilarityScore(resdir);
@@ -127,37 +126,36 @@ public class CallLibrary implements ICallLibrary{
 		}
 		return new ArrayList<PlagiarismResult>();
 	}
-	
+
 	/**
 	 * method to compare the files in given two directories for plagiarism with JPlag
 	 * @param newdir
 	 * @param rootdir
 	 * @param strictness
-	 * @param threshold
 	 * @return
 	 */
-	public static String compareTwoFiles(String dir1, String dir2, int strictness, int threshold){
+	public static String compareTwoFiles(String dir1, String dir2, int strictness){
 		CallLibrary cl = new CallLibrary();
 		String ipdir = mergeDir(dir1, dir2, "test_merge");
 		String rootopdir = "test_op";
-		String opdir = rootopdir + PATH_DELIM + dir1+dir2;
+		String opdir = rootopdir + PATH_DELIM + dir1 + dir2;
 		new File(opdir).mkdirs();
-		cl.compareFiles(ipdir, opdir, strictness, threshold);
+		cl.compareFiles(ipdir, opdir, strictness);
 		return rootopdir;
-		
+
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see edu.northeastern.cs5500.ICallLibrary#getIndividualReport(java.lang.String, java.lang.String, int, int)
 	 */
 	@Override
-	public List<PlagiarismResult> getIndividualReport(String dir1, String dir2, int strictness, int threshold){	
+	public List<PlagiarismResult> getIndividualReport(String dir1, String dir2, int strictness){	
 		try{
-			String rootopdir = compareTwoFiles(dir1, dir2, strictness, threshold);
+			String rootopdir = compareTwoFiles(dir1, dir2, strictness);
 			Thread.sleep(10000); 
 			HtmlParser parser = new HtmlParser();
 			return parser.getSimilarityScore(rootopdir);
-			
+
 		}
 		catch(Exception e){  
 			LOGGER.info(e.toString());

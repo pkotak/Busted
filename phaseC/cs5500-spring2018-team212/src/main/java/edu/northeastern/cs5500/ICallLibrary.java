@@ -16,7 +16,7 @@ public interface ICallLibrary {
 	 * @param strictness
 	 * @param threshold
 	 */
-	public void compareFiles(String ipdir, String opdir, int strictness, int threshold);
+	public void compareFiles(String ipdir, String opdir, int strictness);
 
 	
 	/**
@@ -29,7 +29,7 @@ public interface ICallLibrary {
 	 * @param threshold - given threshold for plagiarsism score.
 	 * @return the list of the reports of the plagiarism check
 	 */
-	public List<PlagiarismResult> getReports(String newdir, String rootdir, int strictness, int threshold);
+	public List<PlagiarismResult> getReports(String newdir, String rootdir, int strictness);
 	
 	/**
 	 * method to get the reports for the plagiarism check run on the given two directories
@@ -40,6 +40,5 @@ public interface ICallLibrary {
 	 * @param threshold - given threshold for plagiarsism score.
 	 * @return the list of the reports of the plagiarism check
 	 */
-	public List<PlagiarismResult> getIndividualReport(String dir1, String dir2, int strictness, int threshold);
-
+	public List<PlagiarismResult> getIndividualReport(String dir1, String dir2, int strictness);
 }

@@ -43,7 +43,7 @@ export class RegisterComponent implements OnInit {
     } else {
       this.userService.findUserByUsername(this.username)
         .subscribe((user: User) => {
-          if (user.username === this.username) {
+          if (user.email === this.username) {
             console.log(user);
             alert('Username "' + this.username + '" already exists');
             this.router.navigate(['/register']);
@@ -72,6 +72,7 @@ export class RegisterComponent implements OnInit {
                   // passport will save user information so no need to include userId in router
                   this.router.navigate(['/profile']);
                   console.log(auser);
+                  alert('Wait for the Admin to approve your registration.');
                 },
                 (error: any) => {
                   this.error = error._body;

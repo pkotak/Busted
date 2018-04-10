@@ -28,6 +28,31 @@ export class PageService {
       });
   }
 
+  createAssignment(assignment) {
+    const url = this.baseUrl + '/api/assignment/new';
+    console.log(assignment);
+    return this.http.post(url, assignment)
+      .map((response: Response) => {
+        return response.json();
+      });
+  }
+
+  checkAgain(assignments) {
+    const url = this.baseUrl + '/api/course/assignment/checkAgain';
+    return this.http.post(url, assignments)
+      .map((response: Response) => {
+        return response.json();
+      });
+  }
+
+  getAssignmentProgress(courseId, assignmentName) {
+    const url = this.baseUrl + '/api/course/' + courseId + '/assignment/' + assignmentName;
+    return this.http.get(url)
+      .map((response: Response) => {
+        return response.json();
+      });
+  }
+
   // retrieves the assignments in a course
   findPagesByWebsiteId(courseId) {
     const url = this.baseUrl + '/api/course/' + courseId + '/assignment';
@@ -36,9 +61,37 @@ export class PageService {
     });
   }
 
-  findAssignmentsByCourseId(courseId) {
-    const url = this.baseUrl + '/api/course/' + courseId + '/assignment';
+  // Find an assignment's info by course Id
+  findAssignmentById(assignmentId) {
+    const url = this.baseUrl + '/api/course/assignment/' + assignmentId;
     return this.http.get(url).map((response: Response) => {
+      console.log(response);
+      return response.json();
+    });
+  }
+
+  findAssignmentsByCourseId(userId , courseId) {
+    const url = this.baseUrl + '/api/' + userId + '/course/' + courseId + '/assignment';
+    return this.http.get(url).map((response: Response) => {
+      console.log(response);
+      return response.json();
+      });
+  }
+
+  findSubmissions(hwName, courseId) {
+      const url = this.baseUrl + '/api/course/' + courseId + '/assignment/' + hwName;
+      console.log(hwName);
+      return this.http.get(url).map((response: Response) => {
+        console.log(response);
+        return response.json();
+        });
+  }
+
+  findSubmissionsForOneStudent(hwName, courseId, userId) {
+    const url = this.baseUrl + '/api/course/' + courseId + '/assignment/' + hwName + '/user/' + userId;
+    console.log(hwName);
+    return this.http.get(url).map((response: Response) => {
+      console.log(response);
       return response.json();
     });
   }
@@ -60,14 +113,43 @@ export class PageService {
     });
   }
 
+  // updates the assignment
+  updateAssignment(courseId, assignmentId, assignment) {
+    const url = this.baseUrl + '/api/course/' + courseId + '/assignment/' + assignmentId;
+    return this.http.put(url, assignment).map((response: Response) => {
+      return response.json();
+    });
+  }
+
   // removes the page from local pages array whose _id matches the pageId parameter
   deletePage(websiteId, pageId) {
     const url = this.baseUrl + '/api/website/' + websiteId + '/page/' + pageId;
     return this.http.delete(url).map((response: Response) => {
       return response.json();
     });
+  }
 
+  deleteAssignment(courseId, assignmentId) {
+    const url = this.baseUrl + '/api/course/assignment/' + assignmentId;
+    return this.http.delete(url).map((response: Response) => {
+      return response.json();
+    });
   }
 
 
+// uploads git repo
+  uploadGit(githublink, courseid, studentid, hwName, parentAssignmentId) {
+    console.log(githublink, courseid, studentid);
+    const data = {
+        'githublink': githublink,
+        'courseid': courseid,
+        'studentid': studentid,
+        'hwName': hwName,
+        'parentAssignment': parentAssignmentId
+    };
+    const url = this.baseUrl + '/api/assignment/uploadGit';
+    return this.http.post(url, data).map((response: Response) => {
+      return response.json();
+    });
+  }
 }
