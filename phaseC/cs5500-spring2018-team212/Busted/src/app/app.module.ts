@@ -46,6 +46,7 @@ import {AuthenticationService} from './services/authentication.service.client';
 import {SortableDirective} from './components/widget/widget-list/sortable.directive';
 import { OrderByPipe } from './components/widget/widget-list/order-by-pipe.pipe';
 import { AdminComponent } from './components/user/admin/admin.component';
+import { AssignmentsComponent } from './components/assignments/assignments.component';
 
 
 @NgModule({
@@ -75,6 +76,7 @@ import { AdminComponent } from './components/user/admin/admin.component';
     SortableDirective,
     OrderByPipe,
     AdminComponent,
+    AssignmentsComponent
     // Ng2SearchPipeModule
   ],
   imports: [

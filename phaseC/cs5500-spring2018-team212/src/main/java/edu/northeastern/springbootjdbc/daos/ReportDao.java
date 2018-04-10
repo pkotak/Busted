@@ -42,9 +42,10 @@ public class ReportDao {
 	 */
 	public int createReport(Report report) {
 
-		int rowsAffected = 0;
+		int reportID = 0;
 		Connection conn = null;
 		PreparedStatement reportStatement = null;
+		ResultSet rs = null;
 		try {
 			Class.forName(Constants.JDBC_DRIVER);
 			conn = DriverManager.getConnection(Constants.CONNECTION_STRING, Constants.AWS_USERNAME, Constants.AWS_P);
@@ -53,13 +54,21 @@ public class ReportDao {
 					+ "VALUES (?,?,?,?,?)";
 
 			try {
-				reportStatement = conn.prepareStatement(personInsert);
+				reportStatement = conn.prepareStatement(personInsert, PreparedStatement.RETURN_GENERATED_KEYS);
 				reportStatement.setInt(1, report.getAssignment1ID());
 				reportStatement.setInt(2, report.getAssignment2ID());
 				reportStatement.setInt(3, report.getSimilarityscore());
 				reportStatement.setString(4, report.getDownloadLink());
 				reportStatement.setBoolean(5, report.getIsResolved());
-				rowsAffected += reportStatement.executeUpdate();
+				reportStatement.executeUpdate();
+				try {
+					rs = reportStatement.getGeneratedKeys();
+					rs.next();
+					reportID = rs.getInt(1);
+				} finally {
+					if (rs != null)
+						rs.close();
+				}
 			} finally {
 				if (reportStatement != null)
 					reportStatement.close();
@@ -77,7 +86,7 @@ public class ReportDao {
 				LOGGER.info(e.toString());
 			}
 		}
-		return rowsAffected;
+		return reportID;
 
 	}
 

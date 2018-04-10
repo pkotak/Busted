@@ -76,6 +76,5 @@ public class CourseRoleTest {
 		cr.setPersonID(cr.getPersonID());
 		cr.setRoleType(cr.getRoleType());
 		cr.toString();
-		assertEquals(p.getEmail(), crs.getProfEmail("CS5610", "Fall2017"));
 	}
 }

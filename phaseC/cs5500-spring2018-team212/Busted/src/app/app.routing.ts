@@ -18,6 +18,7 @@ import {ModuleWithProviders} from '@angular/core';
 import {FlickrImageSearchComponent} from './components/widget/widget-edit/widget-image/flickr-image-search/flickr-image-search.component';
 import {AuthenticationService} from './services/authentication.service.client';
 import {AdminComponent} from './components/user/admin/admin.component';
+import {AssignmentsComponent} from './components/assignments/assignments.component';
 
 // config route default constants
 const appRoutes: Routes = [
@@ -40,6 +41,8 @@ const appRoutes: Routes = [
   {path: 'user/website/:wid/page/:pid/report', component: ReportListComponent, canActivate: [AuthenticationService]},
   {path: 'user/website/:wid/page/:pid/report/:rid', component: ReportDetailComponent, canActivate: [AuthenticationService]},
   {path: 'user/admin', component: AdminComponent, canActivate: [AuthenticationService]},
+  {path: 'user/website/:wid/page/:pid/assignments', component: AssignmentsComponent, canActivate: [AuthenticationService]},
+
 ];
 
 // use appRoutes to config router module and export it as an constant variable that

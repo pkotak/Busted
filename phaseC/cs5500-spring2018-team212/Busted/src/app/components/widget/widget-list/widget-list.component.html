@@ -37,7 +37,7 @@
         <br/>
         <label>GitHub Link: </label>
           <b class="blue">Github Link</b>
-          <textarea 
+          <textarea
                     class="form-control"
                     type="text"
                     placeholder='Your Github Link'
@@ -48,6 +48,35 @@
         <br/>
         <button class = 'btn-primary' (click)= uploadGit()>Submit</button>
   </div>
+
+  <br>
+
+  <div class="widget-list paddingleft">
+
+    <label>My submissions for &nbsp;{{this.hwName}}</label>
+
+    <table id='customers'>
+        <thead>
+        <tr>
+          <th>&nbsp; StudentId</th>
+          <th>&nbsp; Submission ID</th>
+          <th>&nbsp; Submission Date</th>
+          <th>&nbsp; Github Link</th>
+
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let submission of submissions">
+          <td>&nbsp; {{submission.studentID}}</td>
+          <td>&nbsp; {{submission.id}}</td>
+          <td>&nbsp; {{submission.duedate}}</td>
+          <td>&nbsp; {{submission.githubLink}}</td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+
+
 </div>
 
 <nav class="navbar navbar-light2 navbar-fixed-bottom">

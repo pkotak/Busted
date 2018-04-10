@@ -16,8 +16,6 @@ import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 import org.zeroturnaround.zip.ZipUtil;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-
 import edu.northeastern.springbootjdbc.controllers.AssignmentService;
 import edu.northeastern.springbootjdbc.daos.AssignmentDao;
 import edu.northeastern.springbootjdbc.models.Assignment;
@@ -64,19 +62,17 @@ public class AssignmentTests {
 		JSONObject obj2 = new JSONObject();
 
 		try {
-			obj1.put("name", "HW1");
 			obj1.put("githublink", "https://github.com/team212test/test1");
 			obj1.put("studentid", 1);
-			obj1.put("courseid", 2);
-			obj1.put("hwName", "HW1");
-			obj1.put("parentAssignment", 1);
+			obj1.put("courseid", 715);
+			obj1.put("hwName", "HW3");
+			obj1.put("parentAssignment", 1673);
 			svc.uploadGit(obj1.toString());
-			obj2.put("name", "HW1");
 			obj2.put("githublink", "https://github.com/team212test/test2");
-			obj2.put("studentid", 2);
-			obj2.put("courseid", 2);
-			obj2.put("hwName", "HW1");
-			obj2.put("parentAssignment", 1);
+			obj2.put("studentid", 4);
+			obj2.put("courseid", 715);
+			obj2.put("hwName", "HW3");
+			obj2.put("parentAssignment", 1673);
 			svc.uploadGit(obj2.toString());
 
 		} catch (JSONException e1) {
@@ -84,13 +80,14 @@ public class AssignmentTests {
 		}
 
 		System.out.println(svc.getAssignmentById(2));
-		System.out.println(svc.getSubmissions(4, 2, "HW1"));
+		System.out.println(svc.getSubmissions(4, "HW1"));
 		HashMap<String, String> map = new HashMap<String, String>();
 		map.put("studentId", "3");
 		map.put("courseId", "2");
 		map.put("duedate", "2018-08-08");
 		map.put("name", "HW10");
 		System.out.println(svc.createAssignmentForProfessor(map));
+		svc.updateAssignment("HW10", 2, "2018-08-08", 3);
 	}
 	
 	@Test
@@ -103,7 +100,7 @@ public class AssignmentTests {
 	@Test
 	public void testIndividual() {
 		AssignmentService svc = new AssignmentService();
-		svc.testIndividual(780, 785);
+		svc.testIndividual(1681, 1682);
 	}
 
 }

@@ -43,8 +43,8 @@ export class ReportDetailComponent implements OnInit {
   hwName: String;
   report: Report;
   reportid: String;
-  
-  
+
+
 
   // inject route info in constructor
   constructor(
@@ -57,7 +57,7 @@ export class ReportDetailComponent implements OnInit {
     private router: Router,
     public sanitizer: DomSanitizer) { }
 
-  //transform
+  // transform
   transform(url) {
       return this.sanitizer.bypassSecurityTrustResourceUrl(url);
     }

@@ -71,8 +71,8 @@ export class WebsiteEditComponent implements OnInit {
 
     joinClass() {
       this.userService.findUserInCourse(this.user.id, this.course.id, this.user.type)
-        .subscribe((user) => {
-          if (user.id === this.user.id) {
+        .subscribe((result) => {
+          if (result === 1 ) {
             alert('You are enrolled in this course already!');
           } else {
             const newCourseRole = {
@@ -97,7 +97,7 @@ export class WebsiteEditComponent implements OnInit {
       this.userService.findUserInCourse(this.user.id, this.course.id, this.user.type)
         .subscribe((user) => {
           console.log(user);
-          if (user.id !== this.user.id) {
+          if (user === 0) {
             alert('You are not enrolled in this course!');
           } else {
             const courseRole = {
@@ -126,7 +126,7 @@ export class WebsiteEditComponent implements OnInit {
       } else {
         this.userService.findUserInCourse(this.user.id, this.course.id, this.user.type)
           .subscribe((user) => {
-            if (user.id !== this.user.id) {
+            if (user === 0) {
               alert('You are currently not enrolled in this course.');
             } else {
               this.router.navigate(['user', 'website', this.wid, 'page']);

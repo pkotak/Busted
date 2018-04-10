@@ -70,15 +70,13 @@ public class CallLibrary implements ICallLibrary{
 	 */
 	public static List<File> getOtherDirs(String newdir, String rootdir) {
 		File folder = new File(rootdir);
-		String cdirname = newdir.replace(rootdir, "");
-		cdirname = cdirname.replace("/", "");
 		List<File> fileList = new ArrayList<File>();
 		File[] listOfFiles = folder.listFiles();
 		for (int i = 0; i < listOfFiles.length; i++) {
 			if (listOfFiles[i].isDirectory()) {
 				File x = listOfFiles[i];
-				String xname = x.getName();
-				if (!xname.equalsIgnoreCase(cdirname))
+				String xname = x.getParentFile() + PATH_DELIM + x.getName();
+				if (!xname.equalsIgnoreCase(newdir))
 					fileList.add(x);
 			}
 		}
@@ -108,22 +106,8 @@ public class CallLibrary implements ICallLibrary{
 
 			cl.compareFiles(ipdir, tempopdir, strictness);	
 		}
-		if(cl.deleteDir(rootmergedir))
-			b = new File(rootmergedir).delete();
-		return rootopdir;
-	}
 
-	public boolean deleteDir(String path) {
-		Boolean b = true;
-		File dir = new File(path);
-		File[] entries = dir.listFiles();
-		for(File f: entries){
-			if(f.isDirectory()) {
-				deleteDir(f.getPath());
-			}
-			b = b && f.delete();
-		}
-		return b;
+		return rootopdir;
 	}
 
 	/* (non-Javadoc)
@@ -154,7 +138,7 @@ public class CallLibrary implements ICallLibrary{
 		CallLibrary cl = new CallLibrary();
 		String ipdir = mergeDir(dir1, dir2, "test_merge");
 		String rootopdir = "test_op";
-		String opdir = rootopdir + PATH_DELIM + new File(dir1).getName() + new File(dir2).getName();
+		String opdir = rootopdir + PATH_DELIM + dir1 + dir2;
 		new File(opdir).mkdirs();
 		cl.compareFiles(ipdir, opdir, strictness);
 		return rootopdir;

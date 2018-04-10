@@ -178,12 +178,8 @@ export class UserService {
   }
 
   findUserInCourse(userId, courseId, role) {
-    const url =  this.baseUrl + '/api/user/' + userId + '/course/' + courseId + '/uniqueid';
-    const type = {
-      type: role
-    };
-    console.log(type);
-    return this.http.post(url, type)
+    const url =  this.baseUrl + '/api/user/' + userId + '/course/' + courseId + '/isInCourse';
+    return this.http.get(url)
       .map((response: Response) => {
         return response.json();
       });

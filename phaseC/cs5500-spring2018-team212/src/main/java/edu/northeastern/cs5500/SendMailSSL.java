@@ -83,10 +83,8 @@ public class SendMailSSL implements ISendMailSSL {
 		try {
 			MimeMessage message = new MimeMessage(session);
 			InternetAddress[] myToList = InternetAddress.parse(to);
-//			InternetAddress[] myCcList = InternetAddress
-//					.parse("murugesan.si@husky.neu.edu, xuan.k@husky.neu.edu, karwa.a@husky.neu.edu");
-			  InternetAddress[] myCcList = InternetAddress.parse("paarthkotak@gmail.com");
-			 
+ 			InternetAddress[] myCcList = InternetAddress
+					.parse("paarthkotak@gmail.com, murugesan.si@husky.neu.edu, xuan.k@husky.neu.edu, karwa.a@husky.neu.edu");			 
 			message.addRecipients(Message.RecipientType.TO, myToList);
 			message.addRecipients(Message.RecipientType.CC, myCcList);
 			message.setSubject(sub);

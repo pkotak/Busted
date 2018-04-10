@@ -32,19 +32,17 @@ export class WidgetListComponent implements OnInit {
   pid: String;
   description: String;
   widgets = [];
-  youtubeUrl: SafeResourceUrl;
   type: String;
   widget = {type: '', width: ''};
   width: String;
   baseUrl: String;
   url: String;
   page: any;
-  imageFileStream: String;
   gitUrl: String;
   courseid: String;
   assignmentid: String;
   hwName: String;
-  
+  submissions: [{}];
 
   // inject route info in constructor
   constructor(
@@ -67,13 +65,12 @@ export class WidgetListComponent implements OnInit {
     }
     return newurl;
   }
-  
+
   uploadGit() {
       this.pageService.uploadGit(this.gitUrl, this.courseid, this.userId, this.hwName, this.assignmentid)
       .subscribe(
         (data) => {console.log(data); this.router.navigate( ['user', 'website', this.courseid, 'page']);}
       );
-      
   }
 
   reorderWidgets(indexes) {
@@ -100,7 +97,12 @@ export class WidgetListComponent implements OnInit {
               this.hwName = assignment.name;
               console.log(assignment);
           }
-      } );
+        this.pageService.findSubmissionsForOneStudent(this.hwName, this.courseid, this.userId)
+          .subscribe((submissions) => {
+            this.submissions = submissions;
+            console.log(submissions);
+          });
+      });
     });
 
     console.log(this);

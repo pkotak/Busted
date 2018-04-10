@@ -42,7 +42,6 @@ export class ReportListComponent implements OnInit {
   assignmentid: String;
   hwName: String;
   reports = [];
-  
 
   // inject route info in constructor
   constructor(
@@ -69,7 +68,7 @@ export class ReportListComponent implements OnInit {
           if (assignment != null) {
               this.hwName = assignment.name;
               this.reportService.getReportsForAssignment(this.courseid, this.hwName)
-                  .subscribe((reports) => {this.reports = reports; console.log(this.reports)});
+                  .subscribe((reports) => {this.reports = reports; console.log(this.reports); });
           }
       } );
     });

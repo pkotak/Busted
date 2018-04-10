@@ -26,6 +26,7 @@ import edu.northeastern.cs5500.CallLibrary;
 import edu.northeastern.cs5500.GitUtil;
 import edu.northeastern.cs5500.PlagiarismResult;
 import edu.northeastern.cs5500.S3;
+import edu.northeastern.cs5500.SendMailSSL;
 import edu.northeastern.springbootjdbc.daos.AssignmentDao;
 import edu.northeastern.springbootjdbc.daos.CourseDao;
 import edu.northeastern.springbootjdbc.daos.ReportDao;
@@ -89,24 +90,35 @@ public class AssignmentService {
 				List<String> excludelist = adao.getPreviousSubmission(hwDir, studentID, courseID);
 				if (excludelist.contains(String.valueOf(pr.getAssignmentID1())) && excludelist.contains(String.valueOf(pr.getAssignmentID2())))
 					continue;
+
 				String keyName1 = folderStructure + "op" + PATH_DELIM + pr.getPath();
 				// Strip plagiarismResults in reportURL
 				String reportZipName = keyName1 + ".zip";
 				File keyDir = new File(keyName1);
 				if(keyDir.isDirectory() && keyDir.list().length == 0) {
-				    return;
+					return;
 				}
-	
+				
 				ZipUtil.pack(keyDir, new File(reportZipName));
 				String reportURL = S3.putObject(reportBucketName, reportZipName, reportZipName, true);
 				S3.uploadDir("plagiarismresults", keyName1);
 				Report r1 = new Report(pr.getAssignmentID1(), pr.getAssignmentID2(), pr.getSimilarityScore(), reportURL, false);
-				rdao.createReport(r1);
+				int reportID = rdao.createReport(r1);
+				// Duplicate Reports needn't be emailed another time.
+				if (reportID == 0)
+					continue;
 
+				SendMailSSL mail = new SendMailSSL();
+				mail.send("^EjHs0R4&wot", "team212updates@gmail.com",
+						  "Plagiarism Detected for " + studentID,
+						  "Report can be found at http://ec2-18-222-88-122.us-east-2.compute.amazonaws.com:4200/user/website/" + courseID + "/page/" + r1.getAssignment2ID() + "/report/" + reportID,
+						  System.getProperty("user.dir")+"/config.properties");
 			}
 		}
 		else
-			LOGGER.info("no reports");
+			System.out.println("no reports");
+//		else
+//			LOGGER.info("no reports");
 	}
 
 	/**
@@ -170,7 +182,7 @@ public class AssignmentService {
 		String folderStructure = course.getCode() + PATH_DELIM + course.getSemester() + PATH_DELIM + hwName;
 		Assignment assignment = new Assignment(hwName, studentid, new Date(currentTime), a1.getDuedate(), false, false, "", 0, githublink, courseID);
 		int aid = adao.createAssignment(assignment);
-		
+
 		if (aid == 0) {
 			return 0;
 		}
@@ -179,7 +191,22 @@ public class AssignmentService {
 		adao.checkAssignment(aid);
 		return aid;
 	}
-
+//
+//	public static void main(String[] args) {
+//		AssignmentService svc = new AssignmentService();
+//		JSONObject obj1 = new JSONObject();
+//		
+//		try {
+//			obj1.put("githublink", "https://github.com/team212test/test1");
+//			obj1.put("studentid", 5);
+//			obj1.put("courseid", 715);
+//			obj1.put("hwName", "HW3");
+//			obj1.put("parentAssignment", 1673);
+//		} catch (JSONException e) {
+//			e.printStackTrace();
+//		}
+//		svc.uploadGit(obj1.toString());
+//	}
 	/**
 	 * Get assignments for a particular course.
 	 * @param courseid
@@ -192,7 +219,7 @@ public class AssignmentService {
 		AssignmentDao adao = AssignmentDao.getInstance();
 		return adao.getAvailableAssignments(courseid, profid);
 	}
-	
+
 	/**
 	 * Get assignments for a particular course.
 	 * @param courseid
@@ -205,7 +232,7 @@ public class AssignmentService {
 		AssignmentDao adao = AssignmentDao.getInstance();
 		return adao.findAssignmentById(assignmentId);
 	}
-	
+
 	/**
 	 * Get submissions for a particular assignment.
 	 * 
@@ -214,13 +241,27 @@ public class AssignmentService {
 	 * @return
 	 */
 	@CrossOrigin(origins = {"http://localhost:4200", "http://ec2-18-222-88-122.us-east-2.compute.amazonaws.com:4200"})
-	@RequestMapping(value = "/api/course/{courseId}/assignment/{hwName}/user/{userId}", method = RequestMethod.GET)
-	public @ResponseBody List<Assignment> getSubmissions(@RequestParam("studentid") int studentid,
-			@RequestParam("courseid") int courseid, @RequestParam("hwName") String hwName) {
+	@RequestMapping(value = "/api/course/{courseid}/assignment/{hwName}", method = RequestMethod.GET)
+	public @ResponseBody List<Assignment> getSubmissions(@PathVariable("courseid") int courseid, @PathVariable("hwName") String hwName) {
 		AssignmentDao adao = AssignmentDao.getInstance();
-		return adao.getSubmissions(hwName, courseid, studentid);
+		return adao.getSubmissionsForAssignment(hwName, courseid);
 	}
 	
+	/**
+	 * Get submissions for a particular assignment of one student.
+	 * 
+	 * @param courseid
+	 * @param hwName
+	 * @return
+	 */
+	@CrossOrigin(origins = {"http://localhost:4200", "http://ec2-18-222-88-122.us-east-2.compute.amazonaws.com:4200"})
+	@RequestMapping(value = "/api/course/{courseid}/assignment/{hwName}/user/{useId}", method = RequestMethod.GET)
+	public @ResponseBody List<Assignment> getSubmissions(@PathVariable("courseid") int courseid, @PathVariable("hwName") String hwName,
+			@PathVariable("useId") int studentid) {
+		AssignmentDao adao = AssignmentDao.getInstance();
+		return adao.getSubmissionsForOneStudent(hwName, courseid, studentid);
+	}
+
 	/**
 	 * Create an assignment for Professor.
 	 * 
@@ -234,23 +275,24 @@ public class AssignmentService {
 		String hwName = payload.get("name");
 		int profid = Integer.parseInt(payload.get("studentId"));
 		int courseid = Integer.parseInt(payload.get("courseId"));
-		SimpleDateFormat format = new SimpleDateFormat("yyyy-mm-dd");
+		
+		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 		java.util.Date parsed = null;
-		Date duedate = null;
+		java.sql.Date duedate = null;
 		try {
 			parsed = format.parse(payload.get("duedate"));
-			duedate = new Date(parsed.getTime());
+			duedate = new java.sql.Date(parsed.getTime());
 		} catch (ParseException e) {
 			LOGGER.info(e.toString());
 		}
-		
+
 		AssignmentDao adao = AssignmentDao.getInstance();
 		java.util.Date utilDate = new java.util.Date();
 		Long currentTime = utilDate.getTime();
 		Assignment assignment = new Assignment(hwName, profid, new Date(currentTime), duedate, false, false, "prof", 0, "",  courseid);
 		return adao.createAssignment(assignment);
 	}
-	
+
 	/**
 	 * Deletes a assignment in the database
 	 * 
@@ -272,17 +314,16 @@ public class AssignmentService {
 	 */
 	@CrossOrigin(origins = {"http://localhost:4200", "http://ec2-18-222-88-122.us-east-2.compute.amazonaws.com:4200"})
 	@RequestMapping("/api/course/{courseId}/assignment/{assignmentId}")
-	public @ResponseBody int updateCourse(@RequestParam("name") String name, @RequestParam("studentId") int profid,
+	public @ResponseBody int updateAssignment(@RequestParam("name") String name, @RequestParam("studentId") int profid,
 			@RequestParam("duedate") String duedate, @RequestParam("courseID") int courseID) {
-		
 		AssignmentDao adao = AssignmentDao.getInstance();
-		
-		SimpleDateFormat format = new SimpleDateFormat("yyyy-mm-dd");
+
+		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 		java.util.Date parsed = null;
-		Date aduedate = null;
+		java.sql.Date aduedate = null;
 		try {
 			parsed = format.parse(duedate);
-			aduedate = new Date(parsed.getTime());
+			aduedate = new java.sql.Date(parsed.getTime());
 		} catch (ParseException e) {
 			LOGGER.info(e.toString());
 		}
@@ -290,12 +331,12 @@ public class AssignmentService {
 		Long currentTime = utilDate.getTime();
 
 		Assignment c = new Assignment(name, profid, new Date(currentTime), aduedate, false, false, "prof", 0 , "", courseID);
-//		Assignment assignment = new Assignment(hwName, profid, new Date(currentTime), duedate, false, false, "prof", 0, "",  courseid);
+		//		Assignment assignment = new Assignment(hwName, profid, new Date(currentTime), duedate, false, false, "prof", 0, "",  courseid);
 		return adao.updateAssignment(courseID, c);
 	}
-	
 
-	 /** method to compare assignments individually
+
+	/** method to compare assignments individually
 	 * @param assignmentid1
 	 * @param assignmentid2
 	 */
@@ -306,13 +347,13 @@ public class AssignmentService {
 		AssignmentDao adao = AssignmentDao.getInstance();
 		Map<Integer, String> aid1 = adao.getInfoforAssignment(assignmentid1);
 		Map<Integer, String> aid2 = adao.getInfoforAssignment(assignmentid2);
-		
+
 		String hwName1 = aid1.get(1);
 		String hwName2 = aid2.get(1);
 		CourseDao cdao = CourseDao.getInstance();
 		Course c1 = cdao.findCoursebyID(Integer.parseInt(aid1.get(2)));
 		Course c2 = cdao.findCoursebyID(Integer.parseInt(aid2.get(2)));
-		
+
 		if (hwName1.equalsIgnoreCase(hwName2) && c1.toString().equals(c2.toString())) {
 			String folderStructure ="assignments" + PATH_DELIM 
 					+ c1.getCode() + PATH_DELIM + c1.getSemester() + PATH_DELIM + hwName1;

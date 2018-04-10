@@ -294,7 +294,8 @@ public class AssignmentDao {
 		return total;
 	}
 
-	public List<Assignment> getSubmissions(String hwName, int courseid, int studentid) {
+	
+	public List<Assignment> getSubmissionsForAssignment(String hwName, int courseid) {
 		Connection conn = null;
 		PreparedStatement assignmentStatement = null;
 		ResultSet rs = null;
@@ -302,7 +303,66 @@ public class AssignmentDao {
 		try {
 			Class.forName(Constants.JDBC_DRIVER);
 			conn = DriverManager.getConnection(Constants.CONNECTION_STRING, Constants.AWS_USERNAME, Constants.AWS_P);
-			String assignmentSelect = "select * from Assignment where name = ? and courseid = ? and studentid = ?";
+			String assignmentSelect = "select * from Assignment where name = ? and courseid = ? and shaid != 'prof' order by studentid";
+
+			try {
+				assignmentStatement = conn.prepareStatement(assignmentSelect);
+				assignmentStatement.setString(1, hwName);
+				assignmentStatement.setInt(2, courseid);
+//				assignmentStatement.setInt(3, studentid);
+				try {
+					rs = assignmentStatement.executeQuery();
+					while (rs.next()) {
+						int aid = rs.getInt("id");
+						String name = rs.getString("name");
+						int studentid1 = rs.getInt("studentid");
+						Date uploaddate = rs.getDate("uploaddate");
+						Date duedate = rs.getDate("duedate");
+						Boolean metadatamismatch = rs.getBoolean("metadatamismatch");
+						Boolean isChecked = rs.getBoolean("isChecked");
+						String shaid = rs.getString("shaid");
+						int plagiarismcount = rs.getInt("plagiarismcount");
+						String githublink = rs.getString("githublink");
+						Assignment assignment = new Assignment(name, studentid1, uploaddate, duedate, metadatamismatch,
+								isChecked, shaid, plagiarismcount, githublink, courseid);
+						assignment.setId(aid);
+						assignments.add(assignment);
+					}
+				} finally {
+					if (rs != null) {
+						rs.close();
+					}
+				}
+
+			} finally {
+				if (assignmentStatement != null)
+					assignmentStatement.close();
+			}
+
+		} catch (ClassNotFoundException e) {
+			LOGGER.info(e.toString());
+		} catch (SQLException e) {
+			LOGGER.info(e.toString());
+		} finally {
+			try {
+				if (conn != null)
+					conn.close();
+			} catch (SQLException e) {
+				LOGGER.info(e.toString());
+			}
+		}
+		return assignments;
+	}
+	
+	public List<Assignment> getSubmissionsForOneStudent(String hwName, int courseid, int studentid) {
+		Connection conn = null;
+		PreparedStatement assignmentStatement = null;
+		ResultSet rs = null;
+		ArrayList<Assignment> assignments = new ArrayList<Assignment>();
+		try {
+			Class.forName(Constants.JDBC_DRIVER);
+			conn = DriverManager.getConnection(Constants.CONNECTION_STRING, Constants.AWS_USERNAME, Constants.AWS_P);
+			String assignmentSelect = "select * from Assignment where name = ? and courseid = ? and studentid = ? order by studentid";
 
 			try {
 				assignmentStatement = conn.prepareStatement(assignmentSelect);
