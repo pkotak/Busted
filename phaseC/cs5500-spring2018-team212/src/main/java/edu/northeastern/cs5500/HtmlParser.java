@@ -39,7 +39,7 @@ public class HtmlParser implements IHTMLParser{
 				int similarityScore = Math.round(Float.parseFloat(documentTextArray[5].replaceAll("%", "")));
 				int aid1 = Integer.parseInt(documentTextArray[2]);
 				int aid2 = Integer.parseInt(documentTextArray[4]);
-				String path = alldirList.get(i).getName();
+				String path = alldirList.get(i).getAbsolutePath();
 				PlagiarismResult res = new PlagiarismResult(similarityScore, aid1, aid2, path);
 				plagiarism.add(res);
 			} catch (IOException e) {

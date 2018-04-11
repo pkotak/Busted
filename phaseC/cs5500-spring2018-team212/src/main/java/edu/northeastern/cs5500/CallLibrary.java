@@ -7,8 +7,6 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.zeroturnaround.zip.commons.FileUtils;
-
 /**
  * class to run the JPlag library.
  * @author abhiruchi
@@ -39,49 +37,6 @@ public class CallLibrary implements ICallLibrary{
 		}
 	}
 
-	/** 
-	 * method to put two given directories into one in the given path.
-	 * @param dir1, dir2 - given directories to be merged.
-	 * @param rootdir - path of the root directory
-	 * @return
-	 */
-	public static String mergeDir(String dir1, String dir2, String rootdir) {
-		File srcDir1 = new File(dir1);
-		File srcDir2 = new File(dir2);
-
-		String destination = rootdir + PATH_DELIM + srcDir1.getName() + srcDir2.getName() ;
-		File destDir1 = new File(destination + PATH_DELIM + srcDir1.getName());
-		File destDir2 = new File(destination + PATH_DELIM + srcDir2.getName());
-
-		try {
-			FileUtils.copyDirectory(srcDir1, destDir1);
-			FileUtils.copyDirectory(srcDir2, destDir2);
-		} catch (IOException e) {
-			LOGGER.info(e.toString());
-		} 
-		return destination;
-	}
-
-	/**
-	 * method to get all the other directories present in the rootdirectory except the given directory.
-	 * @param newdir - given directory.
-	 * @param rootdir - the root directory.
-	 * @return the list of other directories present in the rootdirectory
-	 */
-	public static List<File> getOtherDirs(String newdir, String rootdir) {
-		File folder = new File(rootdir);
-		List<File> fileList = new ArrayList<File>();
-		File[] listOfFiles = folder.listFiles();
-		for (int i = 0; i < listOfFiles.length; i++) {
-			if (listOfFiles[i].isDirectory()) {
-				File x = listOfFiles[i];
-				String xname = x.getParentFile() + PATH_DELIM + x.getName();
-				if (!xname.equalsIgnoreCase(newdir))
-					fileList.add(x);
-			}
-		}
-		return fileList;
-	}
 
 	/**
 	 * method to compare the files in given input directory for plagiarism with JPlag
@@ -92,14 +47,14 @@ public class CallLibrary implements ICallLibrary{
 	 * @return
 	 */
 	public static String compareDir(String newdir, String rootdir, int strictness) {
-		CallLibrary cl = new CallLibrary();
-		List<File> listOfDir = getOtherDirs(newdir, rootdir);
 		Boolean b = true;
+		CallLibrary cl = new CallLibrary();
+		List<File> listOfDir = new Directory().getOtherDirs(newdir, rootdir);
 		String rootopdir = rootdir + "op";
 		String rootmergedir = rootdir + "merge";
 		for (int i = 0; i < listOfDir.size(); i++) {
 			String currdir = listOfDir.get(i).getName();
-			String ipdir = mergeDir(newdir, rootdir+PATH_DELIM+currdir, rootmergedir);
+			String ipdir = new Directory().mergeDir(newdir, rootdir+PATH_DELIM+currdir, rootmergedir);
 			String mdir = ipdir.replaceAll(rootmergedir, "");
 			String tempopdir = rootopdir+mdir+"op";
 			new File(tempopdir).mkdirs();
@@ -107,6 +62,8 @@ public class CallLibrary implements ICallLibrary{
 			cl.compareFiles(ipdir, tempopdir, strictness);	
 		}
 
+		if(new Directory().deleteDir(rootmergedir))	
+			b = b & new File(rootmergedir).delete();
 		return rootopdir;
 	}
 
@@ -136,9 +93,9 @@ public class CallLibrary implements ICallLibrary{
 	 */
 	public static String compareTwoFiles(String dir1, String dir2, int strictness){
 		CallLibrary cl = new CallLibrary();
-		String ipdir = mergeDir(dir1, dir2, "test_merge");
+		String ipdir = new Directory().mergeDir(dir1, dir2, "test_merge");
 		String rootopdir = "test_op";
-		String opdir = rootopdir + PATH_DELIM + dir1 + dir2;
+		String opdir = rootopdir + PATH_DELIM + new File(dir1).getName()+"_"+ new File(dir2).getName()+"op";
 		new File(opdir).mkdirs();
 		cl.compareFiles(ipdir, opdir, strictness);
 		return rootopdir;
