@@ -6,9 +6,21 @@ import { LoginComponent } from './components/user/login/login.component';
 import { RegisterComponent } from './components/user/register/register.component';
 import { FormsModule } from '@angular/forms';
 import { CookieService } from 'ngx-cookie-service';
-// import { GaugeModule } from 'angular-gauge';
-// import { NgxGaugeModule} from 'ngx-gauge';
-// import {Ng2SearchPipeModule} from 'ng2-search-filter';
+
+// Social module
+import { SocialLoginModule, AuthServiceConfig } from 'angular4-social-login';
+import { GoogleLoginProvider } from 'angular4-social-login';
+
+const config = new AuthServiceConfig([
+  {
+    id: GoogleLoginProvider.PROVIDER_ID,
+    provider: new GoogleLoginProvider('596677888081-jm3cm0csfhpht9jjm0iv4qiocojj7c3g.apps.googleusercontent.com')
+  },
+]);
+
+export function provideConfig() {
+  return config;
+}
 
 
 // import routing in appmodule.
@@ -77,13 +89,9 @@ import { AssignmentsComponent } from './components/assignments/assignments.compo
     OrderByPipe,
     AdminComponent,
     AssignmentsComponent
-    // Ng2SearchPipeModule
   ],
   imports: [
-    BrowserModule, routing, FormsModule, HttpModule, QuillEditorModule,
-    // Ng2SearchPipeModule
-    // GaugeModule.forRoot(),
-    // NgxGaugeModule
+    BrowserModule, routing, FormsModule, HttpModule, QuillEditorModule, SocialLoginModule
   ],
 
   // inject it into any constructors
@@ -97,7 +105,12 @@ import { AssignmentsComponent } from './components/assignments/assignments.compo
     ReportService,
     AuthenticationService,
     CookieService,
+    {
+      provide: AuthServiceConfig,
+      useFactory: provideConfig
+    },
   ],
   bootstrap: [AppComponent]
 })
+
 export class AppModule { }
