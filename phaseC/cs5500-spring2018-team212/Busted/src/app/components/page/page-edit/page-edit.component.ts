@@ -62,7 +62,7 @@ export class PageEditComponent implements OnInit {
       };
       console.log(newAssignment);
 
-      this.pageService.updateAssignment(this.wid, this.pid, newAssignment)
+      this.pageService.updateAssignment(this.pid, newAssignment)
         .subscribe((pages) => {
           // this.pages = pages;
           this.router.navigate(['user', 'website', this.wid, 'page']);

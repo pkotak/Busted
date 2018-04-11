@@ -62,7 +62,7 @@ public class PersonService {
 	}
 	
 	/**
-	 * Creates a person in the database
+	 * Login a person 
 	 * 
 	 * @return
 	 * @return the number of rows affected

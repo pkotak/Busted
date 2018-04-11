@@ -94,7 +94,7 @@ public class CourseService {
 	}
 	
 	/**
-	 * Find all courses
+	 * Find course by id
 	 * 
 	 * @return List of all the courses in the database
 	 */
@@ -105,6 +105,7 @@ public class CourseService {
 		CourseDao cdao = CourseDao.getInstance();
 		return cdao.findCoursebyID(Integer.parseInt(courseId));
 	}
+	
 
 	/**
 	 * Deletes a course in the database
@@ -132,11 +133,23 @@ public class CourseService {
 	}
 	
 	/**
+	 * Find all courses with same name
+	 * 
+	 * @return List of all the courses in the database
+	 */
+	@CrossOrigin(origins = {"http://localhost:4200", "http://ec2-18-222-88-122.us-east-2.compute.amazonaws.com:4200"})
+	@RequestMapping("/api/{coursecode}/sameCourse")
+	public @ResponseBody List<Course> selectAllCoursesWithSameCode(@PathVariable("coursecode") String coursecode) {
+		CourseDao cdao = CourseDao.getInstance();
+		return cdao.findCourseWithSameCode(coursecode);
+	}
+	
+	/**
 	 * Find all courses in the given semester
 	 * 
 	 * @return List of all the courses in the database
 	 */
-	@CrossOrigin(origins = "http://localhost:4200")
+	@CrossOrigin(origins = {"http://localhost:4200", "http://ec2-18-222-88-122.us-east-2.compute.amazonaws.com:4200"})
 	@RequestMapping(value = {"/api/allCourses/semester/{semester}"}, method = RequestMethod.GET)
 	public List<Course> selectCoursesbySemester(@PathVariable Map<String, String> pathVariablesMap) {
 		CourseDao cdao = CourseDao.getInstance();

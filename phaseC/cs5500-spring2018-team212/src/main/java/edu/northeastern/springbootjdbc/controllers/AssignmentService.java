@@ -341,9 +341,9 @@ public class AssignmentService {
 	 * @param assignmentid2
 	 */
 	@CrossOrigin(origins = {"http://localhost:4200", "http://ec2-18-222-88-122.us-east-2.compute.amazonaws.com:4200"})
-	@RequestMapping(value = "/api/assignment/individual", method = RequestMethod.GET)
-	public @ResponseBody void testIndividual(@RequestParam("assignmentid1") int assignmentid1,
-			@RequestParam("assignmentid2") int assignmentid2) {
+	@RequestMapping(value = "/api/assignment/individual/{{assignmentid1}}/{{assignmentid2}}", method = RequestMethod.GET)
+	public @ResponseBody void testIndividual(@PathVariable("assignmentid1") int assignmentid1,
+			@PathVariable("assignmentid2") int assignmentid2) {
 		AssignmentDao adao = AssignmentDao.getInstance();
 		Map<Integer, String> aid1 = adao.getInfoforAssignment(assignmentid1);
 		Map<Integer, String> aid2 = adao.getInfoforAssignment(assignmentid2);

@@ -12,7 +12,7 @@
 		<div class="navbar-brand pull-left">
 
 			<b class=white>Assignments Dashboard:&nbsp;&nbsp;
-				{{this.course.semester}} {{this.course.code}} {{this.course.name}} </b>
+				{{this.course.semester}} {{this.course.code}} {{this.course.name}}, Section{{this.course.section}} </b>
 
 		</div>
 
@@ -84,7 +84,7 @@
 				<tr *ngFor="let assignment of assignments"
 					routerLink="/user/website/{{ wid }}/page/{{assignment.id}}/widget/">
 					<td>&nbsp; {{assignment.name}}</td>
-					<td>&nbsp; {{assignment.duedate}}</td>
+					<td>&nbsp;{{assignment.duedate}}  </td>
 				</tr>
 			</tbody>
 		</table>

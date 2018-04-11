@@ -29,6 +29,7 @@ export class WebsiteEditComponent implements OnInit {
   semester: String;
   code: String;
   course: any;
+  section: any;
 
   // inject route info in constructor
   constructor(
@@ -103,7 +104,8 @@ export class WebsiteEditComponent implements OnInit {
             const courseRole = {
               userId: this.user.id,
               type: this.user.type,
-              courseId: this.course.id
+              courseId: this.course.id,
+              section: this.course.section
             };
             console.log(courseRole);
             this.userService.dropCourse(courseRole)

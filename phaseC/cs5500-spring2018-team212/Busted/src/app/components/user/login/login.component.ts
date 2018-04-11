@@ -84,6 +84,12 @@ export class LoginComponent implements OnInit {
       .login(username, password)
       .subscribe(
         (data: any) => {
+      // store current logged in user in SharedService
+      //    console.log(data);
+      //    if (data.isApproved !== true) {
+      //      alert('Your account needs to be approved by Admin');
+      //      this.router.navigate(['/login']);
+      //    } else {
           // store current logged in user in SharedService
           this.sharedService.user = data;
           this.cookieService.set('user', String(data.id));

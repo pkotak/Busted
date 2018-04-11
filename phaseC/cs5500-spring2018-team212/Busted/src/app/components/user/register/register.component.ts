@@ -70,7 +70,8 @@ export class RegisterComponent implements OnInit {
               .subscribe((auser) => {
                   this.sharedService.user = auser;
                   // passport will save user information so no need to include userId in router
-                  this.router.navigate(['/profile']);
+                  alert('Success! Please login again.');
+                  this.router.navigate(['/login']);
                   console.log(auser);
                   alert('Wait for the Admin to approve your registration.');
                 },

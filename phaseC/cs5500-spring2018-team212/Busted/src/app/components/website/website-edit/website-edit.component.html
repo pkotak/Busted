@@ -81,6 +81,8 @@
           <th>&nbsp; Semester</th>
           <th>&nbsp; Code</th>
           <th>&nbsp; Name</th>
+          <th>&nbsp; Section</th>
+
           <!--<th>  Go To Course</th>-->
         </tr>
         </thead>
@@ -90,6 +92,7 @@
           <td>&nbsp; {{course.semester}}</td>
           <td>&nbsp; {{course.code}}</td>
           <td>&nbsp; {{course.name}}</td>
+          <td>&nbsp; {{course.section}}</td>
           <!--<td>&nbsp;-->
           <!--<a class="glyphicon glyphicon-chevron-right " routerLink="/user/website/{{ course.id }}">-->
           <!--</a>-->
@@ -113,6 +116,12 @@
                 class="form-control"
                 type="text"
                 placeholder='Semester'>
+
+        <b class ='blue'>Section</b>
+        <input [(ngModel)]="this.course.section"
+               class="form-control"
+               type="text"
+               placeholder='1'>
 
         <b class ='blue'>Course Code</b>
         <textarea [(ngModel)]="this.course.code"

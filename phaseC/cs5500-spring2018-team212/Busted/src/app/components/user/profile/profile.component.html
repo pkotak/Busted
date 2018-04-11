@@ -165,6 +165,8 @@
               <th>&nbsp; Semester</th>
               <th>&nbsp; Code</th>
               <th>&nbsp; Name</th>
+              <th>&nbsp; Section</th>
+
               <th *ngIf="(user.type !== 'STUDENT' && (user.type !== 'TA' ) )">  Edit</th>
             </tr>
             </thead>
@@ -174,6 +176,8 @@
               <td>&nbsp; {{course.semester}}</td>
               <td>&nbsp; {{course.code}}</td>
               <td>&nbsp; {{course.name}}</td>
+              <td>&nbsp; {{course.section}}</td>
+
               <td *ngIf="(user.type !== 'STUDENT' ) && (user.type !== 'TA' )">
                 <a class="glyphicon glyphicon-cog" routerLink="/user/website/{{ course.id }}">
 

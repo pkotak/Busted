@@ -238,6 +238,69 @@ public class CourseDao {
 		}
 		return courseList;
 	}
+	
+	
+	
+	/**
+	 *  method to find all the courses in the database.
+	 * @return list of the courses.
+	 */
+	public List<Course> findCourseWithSameCode(String coursecode) {
+		List<Course> courseList = new ArrayList<Course>();
+		Connection conn = null;
+		PreparedStatement statement = null;
+		ResultSet results = null;
+		try {
+			Class.forName(Constants.JDBC_DRIVER);
+			conn = DriverManager.getConnection(Constants.CONNECTION_STRING, Constants.AWS_USERNAME,
+					Constants.AWS_P);
+
+			String sql = "select * from Course where code = ? order by semester desc";
+			try {
+				statement = conn.prepareStatement(sql);
+				statement.setString(1, coursecode);
+				try {
+					results = statement.executeQuery();
+					while (results.next()) {
+						int id = Integer.parseInt(results.getString("id"));
+						String name = results.getString("name");
+						String semester = results.getString("semester");
+						String code = results.getString("code");
+						
+						Course course = new Course();
+						course.setId(id);
+						course.setName(name);
+						course.setSemester(semester);
+						course.setCode(code);
+						
+						courseList.add(course);	
+					}
+				} finally {
+					if (results != null)
+						results.close();
+				}
+			} finally {
+				if (statement != null)
+					statement.close();
+			}
+
+		
+
+		} catch (ClassNotFoundException e) {
+			LOGGER.info(e.toString());
+		} catch (SQLException e) {
+			LOGGER.info(e.toString());
+		} finally {
+			try {
+				if (conn != null)
+					conn.close();
+			} catch (SQLException e) {
+				LOGGER.info(e.toString());
+			}
+		}
+		return courseList;
+	}
+
 
 	/**
 	 * @param courseid - id of the course to be found.

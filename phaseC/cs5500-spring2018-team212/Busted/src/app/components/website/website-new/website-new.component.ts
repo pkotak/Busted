@@ -28,6 +28,7 @@ export class WebsiteNewComponent implements OnInit {
   courses: [{}];
   description: String;
   newCourse: any;
+  section: any;
 
   // inject route info in constructor
   constructor(
@@ -49,6 +50,8 @@ export class WebsiteNewComponent implements OnInit {
     this.name = this.createForm.value.name;
     this.code = this.createForm.value.code;
     this.semester = this.createForm.value.semester;
+    this.section = this.createForm.value.section;
+
 
     if (this.semester === '') {
       alert('Please input semester');
@@ -61,7 +64,8 @@ export class WebsiteNewComponent implements OnInit {
         // _id: this.websiteService.newId(),
         name: this.name,
         code: this.code,
-        semester: this.semester
+        semester: this.semester,
+        section: this.section
       };
     }
     console.log(this.newCourse);
@@ -78,7 +82,7 @@ export class WebsiteNewComponent implements OnInit {
 
   // notify the changes of the route
   ngOnInit() {
-      
+
     // invoke a function that can pass the value of the parameters
     this.route.params.subscribe((params: any) => {
       this.wid = params['wid'];
