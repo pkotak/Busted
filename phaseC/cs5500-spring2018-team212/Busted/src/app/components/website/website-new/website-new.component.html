@@ -75,6 +75,8 @@
           <th>&nbsp; Semester</th>
           <th>&nbsp; Code</th>
           <th>&nbsp; Name</th>
+          <th>&nbsp; Section</th>
+
           <!--<th>  Go To Course</th>-->
         </tr>
         </thead>
@@ -84,6 +86,8 @@
           <td>&nbsp; {{course.semester}}</td>
           <td>&nbsp; {{course.code}}</td>
           <td>&nbsp; {{course.name}}</td>
+          <td>&nbsp; {{course.section}}</td>
+
           <!--<td>&nbsp;-->
           <!--<a class="glyphicon glyphicon-chevron-right " routerLink="/user/website/{{ course.id }}">-->
           <!--</a>-->
@@ -118,10 +122,19 @@
             <option value = 'SummerFull 2018'>SummerFull 2018</option>
             <option value = 'Summer2 2018'>Summer2 2018</option>
             <option value = 'Summer1 2018'>Summer1 2018</option>
-            <option value = 'Sring 2018'>Sring2018</option>
-            <option value = 'Fall 2017'>Fall2017</option>
+            <option value = 'Sring 2018'>Sring 2018</option>
+            <option value = 'Fall 2017'>Fall 2017</option>
           </select>
 
+          <br>
+
+          <b class="blue">Section</b>
+          <br>
+            <select name="semester" ngModel>
+              <option value = '1'>Section 1</option>
+              <option value = '2'>Section 2</option>
+              <option value = '3'>Section 3</option>
+            </select>
           <br>
 
           <!--<input ngModel-->

@@ -12,7 +12,6 @@ import com.amazonaws.AmazonServiceException;
 import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.services.s3.AmazonS3;
-import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.PutObjectRequest;
@@ -33,6 +32,7 @@ public class S3 {
 			.withRegion(Constants.S3_REGION).build();
 
 	private S3() {}
+	
 	/**
 	 * Put an object in the database
 	 * 
@@ -44,7 +44,6 @@ public class S3 {
 	 *            FileName of the uploaded object
 	 * @return
 	 */
-
 	public static String putObject(String bucketName, String keyName, String uploadFileName, Boolean getUrl) {
 		FileInputStream fis = null;
 		String md5 = "";
@@ -76,8 +75,7 @@ public class S3 {
 					.withCannedAcl(CannedAccessControlList.PublicRead);
 			getS3client().putObject(por);
 			if (getUrl) {
-				AmazonS3Client s3ClientNew = (AmazonS3Client) AmazonS3ClientBuilder.defaultClient();
-				return s3ClientNew.getResourceUrl(bucketName, keyName).replace("us-west-1", "us-east-2");
+				return "https://plagiarismresults.s3-us-east-2.amazonaws.com/" + keyName;
 			}
 		} catch (AmazonServiceException e) {
 			LOGGER.info(e.getErrorMessage());
@@ -86,7 +84,6 @@ public class S3 {
 	}
 
 	public static String uploadDir(String bucketname, String keyName) {
-		@SuppressWarnings("deprecation")
 		TransferManager tm = TransferManagerBuilder.standard().withS3Client(s3Client).build();
 		tm.uploadDirectory("plagiarismresults", keyName, new File(keyName), true);
 		return "https://" + bucketname + ".s3-us-east-2.amazonaws.com/" + keyName;

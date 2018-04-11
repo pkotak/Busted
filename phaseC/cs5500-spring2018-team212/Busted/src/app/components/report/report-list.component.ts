@@ -20,6 +20,7 @@ import {CookieService} from 'ngx-cookie-service';
   styleUrls: ['./report-list.component.css']
 })
 export class ReportListComponent implements OnInit {
+  @ViewChild('f') createForm: NgForm;
 
   wid: String;
   userId: String;
@@ -42,6 +43,8 @@ export class ReportListComponent implements OnInit {
   assignmentid: String;
   hwName: String;
   reports = [];
+  strategy: String;
+  language: String;
 
   // inject route info in constructor
   constructor(
@@ -53,6 +56,19 @@ export class ReportListComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     public sanitizer: DomSanitizer) { }
+
+    recompare() {
+      this.strategy = this.createForm.value.strategy;
+      this.language = this.createForm.value.language;
+      console.log(this.strategy);
+      console.log(this.language);
+
+      this.reportService.recompare(this.strategy, this.language, this.courseid, this.hwName)
+        .subscribe((reports) => {
+          this.reports = reports;
+          console.log(this.reports);
+        });
+    }
 
   // notify the changes of the route
   ngOnInit() {

@@ -23,6 +23,7 @@ import org.zeroturnaround.zip.ZipUtil;
 import com.fasterxml.jackson.core.JsonProcessingException;
 
 import edu.northeastern.cs5500.CallLibrary;
+import edu.northeastern.cs5500.Directory;
 import edu.northeastern.cs5500.GitUtil;
 import edu.northeastern.cs5500.PlagiarismResult;
 import edu.northeastern.cs5500.S3;
@@ -77,26 +78,21 @@ public class AssignmentService {
 	 */
 	public static void checkPlagiarism(String hwDir, String folderStructure, int strictness,
 			int courseID, int studentID) {
+		Boolean b = true;
 		CallLibrary jplagLib = new CallLibrary();
 		List<PlagiarismResult> results = jplagLib.getReports(hwDir, folderStructure, strictness); 
 		String reportBucketName = "plagiarismresults";
 		ReportDao rdao = ReportDao.getInstance();
-		AssignmentDao adao = AssignmentDao.getInstance();
 		File tempDir1 = new File(hwDir);
 		tempDir1.mkdirs();
 
 		if (results != null) {
 			for (PlagiarismResult pr : results) {
-				List<String> excludelist = adao.getPreviousSubmission(hwDir, studentID, courseID);
-				if (excludelist.contains(String.valueOf(pr.getAssignmentID1())) && excludelist.contains(String.valueOf(pr.getAssignmentID2())))
-					continue;
-
-				String keyName1 = folderStructure + "op" + PATH_DELIM + pr.getPath();
-				// Strip plagiarismResults in reportURL
+				String keyName1 = folderStructure + "op" + PATH_DELIM + new File(pr.getPath()).getName();
 				String reportZipName = keyName1 + ".zip";
-				File keyDir = new File(keyName1);
+				File keyDir = new File(pr.getPath());
 				if(keyDir.isDirectory() && keyDir.list().length == 0) {
-					return;
+					continue;
 				}
 				
 				ZipUtil.pack(keyDir, new File(reportZipName));
@@ -104,7 +100,6 @@ public class AssignmentService {
 				S3.uploadDir("plagiarismresults", keyName1);
 				Report r1 = new Report(pr.getAssignmentID1(), pr.getAssignmentID2(), pr.getSimilarityScore(), reportURL, false);
 				int reportID = rdao.createReport(r1);
-				// Duplicate Reports needn't be emailed another time.
 				if (reportID == 0)
 					continue;
 
@@ -113,12 +108,15 @@ public class AssignmentService {
 						  "Plagiarism Detected for " + studentID,
 						  "Report can be found at http://ec2-18-222-88-122.us-east-2.compute.amazonaws.com:4200/user/website/" + courseID + "/page/" + r1.getAssignment2ID() + "/report/" + reportID,
 						  System.getProperty("user.dir")+"/config.properties");
+				
 			}
 		}
 		else
-			System.out.println("no reports");
-//		else
-//			LOGGER.info("no reports");
+			LOGGER.info("no reports");
+		
+		String opdir = folderStructure + "op";
+		if(new Directory().deleteDir(opdir))	
+			b = b & new File(opdir).delete();
 	}
 
 	/**
@@ -188,6 +186,7 @@ public class AssignmentService {
 		}
 
 		cloneAndCheck(folderStructure, hwName, githublink, aid, strictness, courseID, studentid);
+		
 		adao.checkAssignment(aid);
 		return aid;
 	}
@@ -341,9 +340,9 @@ public class AssignmentService {
 	 * @param assignmentid2
 	 */
 	@CrossOrigin(origins = {"http://localhost:4200", "http://ec2-18-222-88-122.us-east-2.compute.amazonaws.com:4200"})
-	@RequestMapping(value = "/api/assignment/individual", method = RequestMethod.GET)
-	public @ResponseBody void testIndividual(@RequestParam("assignmentid1") int assignmentid1,
-			@RequestParam("assignmentid2") int assignmentid2) {
+	@RequestMapping(value = "/api/assignment/individual/{{assignmentid1}}/{{assignmentid2}}", method = RequestMethod.GET)
+	public @ResponseBody void testIndividual(@PathVariable("assignmentid1") int assignmentid1,
+			@PathVariable("assignmentid2") int assignmentid2) {
 		AssignmentDao adao = AssignmentDao.getInstance();
 		Map<Integer, String> aid1 = adao.getInfoforAssignment(assignmentid1);
 		Map<Integer, String> aid2 = adao.getInfoforAssignment(assignmentid2);

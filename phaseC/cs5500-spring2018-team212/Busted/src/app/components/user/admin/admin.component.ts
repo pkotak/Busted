@@ -50,6 +50,7 @@ export class AdminComponent implements OnInit {
   approve(userId) {
     this.userService.approveUser(userId).subscribe((status) => {
       console.log(status);
+      alert('User ' + userId + ' approved.');
       window.location.reload(false); // reload page
     });
   }

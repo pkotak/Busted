@@ -31,6 +31,13 @@ export class WebsiteService {
     });
   }
 
+  findSameCourses(coursecode) {
+    const url = this.baseUrl + '/api/' + coursecode + '/sameCourse';
+    return this.http.get(url).map((response: Response) => {
+      return response.json();
+    });
+  }
+
   createWebsite(userId: String, course) {
     const url = this.baseUrl + '/api/user/' + userId + '/courses';
     return this.http.post(url, course)

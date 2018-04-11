@@ -13,7 +13,8 @@ public class ReportTests {
 	@Test
 	public void test() {
 		ReportDao rs = ReportDao.getInstance();
-		List<Report> reports = rs.findAllReports(715, "HW3");
+
+		List<Report> reports = rs.findAllReports(716, "Asst1");
 		Report report = reports.get(0);
 		rs.deleteReport(report.getId());
 		rs.createReport(report);

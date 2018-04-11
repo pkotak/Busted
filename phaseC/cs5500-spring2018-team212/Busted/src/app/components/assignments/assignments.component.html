@@ -11,13 +11,10 @@
 
     <div class="navbar-brand pull-left">
       <div class="thick">
-        <b>{{this.assignment.name}}&nbsp; Submission List: </b>
+        <b>{{this.currentcourse.code}} , Section{{this.currentcourse.section}}, {{this.assignment.name}}&nbsp; Submission List: </b>
       </div>
     </div>
 
-    <div class="navbar-brand pull-right">
-      <button class="btn-info" (click)="checkAgain()">Check selected again</button>
-    </div>
 
   </div>
 </nav>
@@ -26,13 +23,76 @@
 
 <div class="container-fluid padding padding-b " >
 
+    Strategy &nbsp;&nbsp; &nbsp;&nbsp;  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Programing Language
+  <form (ngSubmit) = "checkSemester()" (ngSubmit) = "checkTwo()" #f="ngForm">
+    <div>
+      <select name="strategy" ngModel>
+        <option value = 'Jplag'>Jplag</option>
+        <option value = 'Metadata'>Metadata</option>
+      </select>
+      &nbsp;&nbsp;
+      &nbsp;&nbsp;
+      <select name="language" ngModel>
+        <option value = 'Python'>Python</option>
+        <option value = 'C++'>C++ </option>
+        <option value = 'Scheme'>Scheme</option>
+        <option value = 'C#'>C#</option>
+        <option value = 'Java'>Java 1</option>
+      </select>
+    </div>
+  </form>
+
+
+  <br>
+  <div>
+    &nbsp;&nbsp;Check against any other section/semester &nbsp;&nbsp;
+    <button class="btn-info " (click)="checkSemester()">Compare</button>
+    <br/>
+    <a>&nbsp;&nbsp;Choose one course and one submission</a>
+  </div>
+
+  <table id="customers">
+    <thead>
+    <tr>
+      <th>&nbsp; Semester</th>
+      <th>&nbsp; Code</th>
+      <th>&nbsp; Name</th>
+      <th>&nbsp; Section</th>
+      <th>&nbsp; Check against this semester/section</th>
+      <!--<th>  Go To Course</th>-->
+    </tr>
+    </thead>
+
+    <tbody>
+    <tr *ngFor="let course of courses">
+
+      <td >&nbsp; {{course.semester}}</td>
+      <td>&nbsp; {{course.code}}</td>
+      <td>&nbsp; {{course.name}}</td>
+      <td>&nbsp; {{course.section}}</td>
+      <td>   <input type="checkbox" name="needcheck" value= {{course.id}} (click)="addCourse(course.id)" /> </td>
+      <!--<td>&nbsp;-->
+      <!--<a class="glyphicon glyphicon-chevron-right " routerLink="/user/website/{{ course.id }}">-->
+      <!--</a>-->
+      <!--</td>-->
+    </tr>
+    </tbody>
+  </table>
+
+  <br>
+
+  <div>
+    <a>&nbsp;&nbsp;Select two submissions and compare again&nbsp;&nbsp;</a>
+    <button class="btn-info" (click)="checkTwo()">Compare</button>
+  </div>
+  <br>
   <table id='customers'>
     <thead>
     <tr>
       <th>&nbsp; StudentId</th>
       <th>&nbsp; Submission Date</th>
       <th>&nbsp; Github Link</th>
-      <th>&nbsp; Check again</th>
+      <th>&nbsp; Select</th>
 
     </tr>
     </thead>
@@ -40,7 +100,7 @@
       <tr *ngFor="let submission of submissions">
         <td>&nbsp; {{submission.studentID}}</td>
         <td>&nbsp; {{submission.duedate}}</td>
-        <td>&nbsp; {{submission.githubLink}}</td>
+        <td>&nbsp; <a href = "{{submission.githubLink}}">{{submission.githubLink}} </a></td>
         <td>   <input type="checkbox" name="needcheck" value= {{submission.id}} (click)="add(submission.id)" /> </td>
       </tr>
     </tbody>

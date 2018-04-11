@@ -37,14 +37,6 @@ export class PageService {
       });
   }
 
-  checkAgain(assignments) {
-    const url = this.baseUrl + '/api/course/assignment/checkAgain';
-    return this.http.post(url, assignments)
-      .map((response: Response) => {
-        return response.json();
-      });
-  }
-
   getAssignmentProgress(courseId, assignmentName) {
     const url = this.baseUrl + '/api/course/' + courseId + '/assignment/' + assignmentName;
     return this.http.get(url)
@@ -114,8 +106,8 @@ export class PageService {
   }
 
   // updates the assignment
-  updateAssignment(courseId, assignmentId, assignment) {
-    const url = this.baseUrl + '/api/course/' + courseId + '/assignment/' + assignmentId;
+  updateAssignment(assignmentId, assignment) {
+    const url = this.baseUrl + '/api/assignment/' + assignmentId;
     return this.http.put(url, assignment).map((response: Response) => {
       return response.json();
     });

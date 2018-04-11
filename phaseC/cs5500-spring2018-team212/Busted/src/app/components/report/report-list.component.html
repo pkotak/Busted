@@ -20,24 +20,28 @@
 
 <div class="container-fluid padding padding-b">
 
-  Strategy &nbsp;&nbsp; &nbsp;&nbsp;  Programing Language
-<div>
-  <select name="Stragety" ngModel>
-    <option value = 'Strategy1'>Jplag</option>
-    <option value = 'Strategy2'>Moss</option>
-  </select>
-  &nbsp;&nbsp;
+  Strategy &nbsp;&nbsp; &nbsp;&nbsp;  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Programing Language
+  <form (ngSubmit) = "recompare()" #f="ngForm">
 
-  <select name="Language" ngModel>
-    <option value = 'Python'>Python</option>
-    <option value = 'C++'>C++ </option>
-    <option value = 'Scheme'>Scheme</option>
-    <option value = 'C#'>C#</option>
-    <option value = 'Java'>Java 1</option>
-  </select>
-</div>
+    <div>
+      <select name="strategy" ngModel>
+        <option value = 'Jplag'>Jplag</option>
+        <option value = 'Metadata'>Metadata</option>
+      </select>
+      &nbsp;&nbsp;
+      &nbsp;&nbsp;
+      <select name="language" ngModel>
+        <option value = 'Python'>Python</option>
+        <option value = 'C++'>C++ </option>
+        <option value = 'Scheme'>Scheme</option>
+        <option value = 'C#'>C#</option>
+        <option value = 'Java'>Java 1</option>
+      </select>
+    </div>
+  </form>
   <br>
-  <a class="btn btn-primary"> Restart comparison</a>
+
+  <a class="btn btn-primary" (click)="recompare()"> Restart comparison</a>
   <br>
   <br>
 
@@ -57,7 +61,7 @@
 			<td>&nbsp; {{report.assignment1ID}}</td>
 			<td>&nbsp; {{report.assignment2ID}}</td>
 			<td>&nbsp; {{report.similarityscore}}</td>
-			<td>&nbsp; {{report.downloadLink}}</td>
+			<td>&nbsp;<a href = "{{report.downloadLink}}">{{report.downloadLink}}</a></td>
 		</tr>
 	</tbody>
 	</table>

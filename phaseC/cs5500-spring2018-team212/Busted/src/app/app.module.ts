@@ -6,9 +6,21 @@ import { LoginComponent } from './components/user/login/login.component';
 import { RegisterComponent } from './components/user/register/register.component';
 import { FormsModule } from '@angular/forms';
 import { CookieService } from 'ngx-cookie-service';
-// import { GaugeModule } from 'angular-gauge';
-// import { NgxGaugeModule} from 'ngx-gauge';
-// import {Ng2SearchPipeModule} from 'ng2-search-filter';
+
+// Social module
+import { SocialLoginModule, AuthServiceConfig } from 'angular4-social-login';
+import { GoogleLoginProvider } from 'angular4-social-login';
+
+const config = new AuthServiceConfig([
+  {
+    id: GoogleLoginProvider.PROVIDER_ID,
+    provider: new GoogleLoginProvider('596677888081-jm3cm0csfhpht9jjm0iv4qiocojj7c3g.apps.googleusercontent.com')
+  },
+]);
+
+export function provideConfig() {
+  return config;
+}
 
 
 // import routing in appmodule.
@@ -28,22 +40,22 @@ import { WidgetImageComponent } from './components/widget/widget-edit/widget-ima
 import { WidgetYoutubeComponent } from './components/widget/widget-edit/widget-youtube/widget-youtube.component';
 import { ReportListComponent } from './components/report/report-list.component';
 import { ReportDetailComponent } from './components/report/report-detail/report-detail.component';
-import {WebsiteService} from './services/website.service.client';
+import { WebsiteService} from './services/website.service.client';
 import { UserService } from './services/user.service.client';
 import { PageService } from './services/page.service.client';
 import { WidgetService } from './services/widget.service.client';
 import { AssignmentService } from './services/assignment.service.client';
 import { ReportService } from './services/report.service.client';
-import {HomeComponent} from './components/home/home.component';
-import {HttpModule} from '@angular/http';
+import { HomeComponent} from './components/home/home.component';
+import { HttpModule} from '@angular/http';
 import { FlickrImageSearchComponent } from './components/widget/widget-edit/widget-image/flickr-image-search/flickr-image-search.component';
-import {FlickrService} from './services/flickr.service.clients';
+import { FlickrService} from './services/flickr.service.clients';
 import { WidgetHtmlComponent } from './components/widget/widget-edit/widget-html/widget-html.component';
 import { WidgetTextComponent } from './components/widget/widget-edit/widget-text/widget-text.component';
 import { QuillEditorModule } from 'ngx-quill-editor';
-import {SharedService} from './services/shared.service.client';
-import {AuthenticationService} from './services/authentication.service.client';
-import {SortableDirective} from './components/widget/widget-list/sortable.directive';
+import { SharedService} from './services/shared.service.client';
+import { AuthenticationService} from './services/authentication.service.client';
+import { SortableDirective} from './components/widget/widget-list/sortable.directive';
 import { OrderByPipe } from './components/widget/widget-list/order-by-pipe.pipe';
 import { AdminComponent } from './components/user/admin/admin.component';
 import { AssignmentsComponent } from './components/assignments/assignments.component';
@@ -77,13 +89,9 @@ import { AssignmentsComponent } from './components/assignments/assignments.compo
     OrderByPipe,
     AdminComponent,
     AssignmentsComponent
-    // Ng2SearchPipeModule
   ],
   imports: [
-    BrowserModule, routing, FormsModule, HttpModule, QuillEditorModule,
-    // Ng2SearchPipeModule
-    // GaugeModule.forRoot(),
-    // NgxGaugeModule
+    BrowserModule, routing, FormsModule, HttpModule, QuillEditorModule, SocialLoginModule
   ],
 
   // inject it into any constructors
@@ -97,7 +105,12 @@ import { AssignmentsComponent } from './components/assignments/assignments.compo
     ReportService,
     AuthenticationService,
     CookieService,
+    {
+      provide: AuthServiceConfig,
+      useFactory: provideConfig
+    },
   ],
   bootstrap: [AppComponent]
 })
+
 export class AppModule { }

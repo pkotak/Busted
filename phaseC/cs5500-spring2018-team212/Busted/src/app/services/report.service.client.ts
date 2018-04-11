@@ -18,7 +18,31 @@ export class ReportService {
         return ( Number( Math.floor(( Math.random() ) * 10000 ) ) ).toString();
     }
 
-    getReportsForAssignment( courseid, hwName ) {
+  recompare(strategy,  language, courseid, hwName) {
+    return this.http.get( this.baseUrl + '/api/report/' + courseid + '/get/' + hwName + '/' + strategy + '/' + language )
+      .map(( res: Response ) => {
+        return res.json();
+      } );
+  }
+
+  checkAgain(assignmentid1, assignmentid2,  strategy, language) {
+    const url = this.baseUrl + '/api/assignment/individual/' + assignmentid1 + '/' + assignmentid2 + '/' + strategy + '/' + language;
+    return this.http.get(url)
+      .map((response: Response) => {
+        return response.json();
+      });
+  }
+
+
+  checkSemester(courseId, assignmentId, strategy, language) {
+    const url = this.baseUrl + '/api/assignment/semester/' + courseId + '/' + assignmentId + '/' + strategy + '/' + language;
+    return this.http.get(url)
+      .map((response: Response) => {
+        return response.json();
+      });
+  }
+
+  getReportsForAssignment( courseid, hwName ) {
         const data = {
                 'hwName': hwName,
                 'courseid': courseid

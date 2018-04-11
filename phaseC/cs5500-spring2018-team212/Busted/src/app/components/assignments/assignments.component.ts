@@ -8,6 +8,8 @@ import {CookieService} from 'ngx-cookie-service';
 import {WebsiteService} from '../../services/website.service.client';
 import {User} from '../../models/user.model.client';
 import {Website} from '../../models/website.model.client';
+import {NgForm} from '@angular/forms';
+import { ReportService } from '../../services/report.service.client';
 
 @Component({
   selector: 'app-assignments',
@@ -15,6 +17,7 @@ import {Website} from '../../models/website.model.client';
   styleUrls: ['./assignments.component.css']
 })
 export class AssignmentsComponent implements OnInit {
+  @ViewChild('f') createForm: NgForm;
   wid: String;
   userId: String;
   user: User;
@@ -35,6 +38,11 @@ export class AssignmentsComponent implements OnInit {
   submissions: [{}];
   assignment: any;
   assignments = [];
+  courses = [{}];
+  currentcourse: any;
+  courseIds = [];
+  strategy: String;
+  language: String;
 
   constructor(private userService: UserService,
               private websiteService: WebsiteService,
@@ -42,7 +50,8 @@ export class AssignmentsComponent implements OnInit {
               private pageService: PageService,
               private cookieService: CookieService,
               private route: ActivatedRoute,
-              private router: Router, ) { }
+              private router: Router,
+              private reportSerivce: ReportService) { }
 
   add(assignmentId) {
     if (this.assignments.indexOf(assignmentId) !== -1) {
@@ -57,15 +66,58 @@ export class AssignmentsComponent implements OnInit {
     }
   }
 
-  checkAgain() {
-    if (this.assignments.length !== 2) {
+  addCourse(courseId) {
+    if (this.courseIds.indexOf(courseId) !== -1) {
+      const i = this.courseIds.indexOf(courseId);
+      console.log(i);
+
+      this.courseIds.splice(i, 1);
+      console.log(this.courseIds);
+    } else {
+      this.courseIds.push(courseId);
+      console.log(this.courseIds);
+    }
+  }
+
+  checkSemester() {
+    this.strategy = this.createForm.value.strategy;
+    this.language = this.createForm.value.language;
+    console.log(this.strategy);
+    console.log(this.language);
+
+    if (this.courseIds.length !== 1 || this.assignments.length < 1) {
+      alert('Please select one semester and one submission you want to check.');
+    } else {
+      const courseId1 = this.courseIds[0];
+      // const courseId2 = this.courseIds[1];
+
+    this.reportSerivce.checkSemester(courseId1, this.assignments[0], this.strategy, this.language)
+      .subscribe((report) => {
+        console.log(report.id);
+        this.router.navigate(['user', 'website', this.wid, 'page', 'this.pid', 'report', report.id]);
+      });
+    }
+  }
+
+  checkTwo() {
+    this.strategy = this.createForm.value.strategy;
+    this.language = this.createForm.value.language;
+    console.log(this.strategy);
+    console.log(this.language);
+
+    if (this.strategy === null || this.language === null) {
+      alert('Please select strategy and language.');
+    } else if (this.assignments.length !== 2) {
       alert('Please select 2 submissions you want to recheck.');
     } else {
-      this.pageService.checkAgain(this.assignments)
-        .subscribe((report) => {
-          console.log(report.id);
-          this.router.navigate(['user', 'website', this.wid, 'page', 'this.pid', 'report', report.id]);
-        });
+      const assignmentid1 = this.assignments[0];
+      const assignmentid2 = this.assignments[1];
+
+    this.reportSerivce.checkAgain(assignmentid1, assignmentid2, this.strategy, this.language)
+      .subscribe((report) => {
+        console.log(report.id);
+        this.router.navigate(['user', 'website', this.wid, 'page', 'this.pid', 'report', report.id]);
+      });
     }
 
   }
@@ -82,6 +134,25 @@ export class AssignmentsComponent implements OnInit {
 
     });
 
+    // this.websiteService.findAllClasses()
+    //   .subscribe((classes) => {
+    //     this.courses = classes;
+    //     console.log(classes);
+    //   });
+
+    this.websiteService.findWebsiteById(this.userId, this.courseid)
+      .subscribe((course) => {
+        this.currentcourse = course;
+        console.log(this.currentcourse.code);
+        this.websiteService.findSameCourses(this.currentcourse.code)
+          .subscribe((classes) => {
+            this.courses = classes;
+            console.log(classes);
+          });
+      });
+
+
+
     this.pageService.findAssignmentById(this.assignmentid).subscribe(( assignment ) => {
       if (assignment != null) {
         this.assignment = assignment;
@@ -94,6 +165,8 @@ export class AssignmentsComponent implements OnInit {
           });
       }
     });
+
+
 
   }
 
