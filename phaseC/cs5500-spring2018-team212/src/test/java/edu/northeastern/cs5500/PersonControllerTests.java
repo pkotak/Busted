@@ -21,6 +21,7 @@ import org.powermock.api.mockito.PowerMockito;
 import org.powermock.modules.junit4.PowerMockRunner;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import edu.northeastern.springbootjdbc.controllers.PersonService;
@@ -99,16 +100,33 @@ public class PersonControllerTests {
 		PowerMockito.when(mockDao.createPerson(p)).thenReturn(1);
 		mockMvc.perform(post("/api/register").content(json)).andExpect(status().isOk());
 	}
-	
+
 	@Test
 	public void testUpdate() throws Exception {
 		mockDao = PowerMockito.mock(PersonDao.class);
 		mockDao.setInstance(mockDao);
 		Person p1 = new Person("Denny", "Tiger", "denny@gmai.com", "hi", "123", "STUDENT");
 		Person p2 = new Person("Denaerys", "Targ", "denny@gmail.com", "hiiiii", "5555", "PROFESSOR");
-		String json = "{ firstname = 'Denny', lastname = 'Tiger', email = 'denny@gmai.com', password = 'hi', phone = '123', role = 'STUDENT'}";
+		String json = "{ firstName = 'Denaerys', lastName = 'Targ', email = 'denny@gmail.com', password = 'hiiiii', phone = '5555', type = 'PROFESSOR'}";
 		PowerMockito.when(mockDao.updatePerson(1, p2)).thenReturn(1);
-		mockMvc.perform(post("/api/register").content(json)).andExpect(status().isOk());
+		PowerMockito.when(mockDao.findPersonById(1)).thenReturn(p2);
+		mockMvc.perform(post("/api/user/1").content(json))
+		.andExpect(status().isOk())
+		.andExpect(jsonPath("$.firstName", is(p2.getFirstName())))
+		.andExpect(jsonPath("$.email", is(p2.getEmail())));
+	}
+
+	@Test
+	public void testLoginWithValidLogin() throws Exception {
+		mockDao = PowerMockito.mock(PersonDao.class);
+		mockDao.setInstance(mockDao);
+		Person p1 = new Person("Denny", "Tiger", "denny@gmail.com", "hi", "123", "STUDENT");
+		String json = "{ username = 'denny@gmail.com', password = 'hi'}";
+		PowerMockito.when(mockDao.findPersonByUsername("denny@gmail.com")).thenReturn(p1);
+		mockMvc.perform(get("/api/login").content(json)).andExpect(status().isOk())
+				.andExpect(jsonPath("$.email", is(p1.getEmail())))
+				.andExpect(jsonPath("$.password", is(p1.getPassword())));
+
 	}
 
 }

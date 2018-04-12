@@ -190,22 +190,8 @@ public class AssignmentService {
 		adao.checkAssignment(aid);
 		return aid;
 	}
-//
-//	public static void main(String[] args) {
-//		AssignmentService svc = new AssignmentService();
-//		JSONObject obj1 = new JSONObject();
-//		
-//		try {
-//			obj1.put("githublink", "https://github.com/team212test/test1");
-//			obj1.put("studentid", 5);
-//			obj1.put("courseid", 715);
-//			obj1.put("hwName", "HW3");
-//			obj1.put("parentAssignment", 1673);
-//		} catch (JSONException e) {
-//			e.printStackTrace();
-//		}
-//		svc.uploadGit(obj1.toString());
-//	}
+
+
 	/**
 	 * Get assignments for a particular course.
 	 * @param courseid
@@ -270,16 +256,26 @@ public class AssignmentService {
 	 */
 	@CrossOrigin(origins = {"http://localhost:4200", "http://ec2-18-222-88-122.us-east-2.compute.amazonaws.com:4200"})
 	@RequestMapping(value = "/api/assignment/new", method = RequestMethod.POST)
-	public @ResponseBody int createAssignmentForProfessor(@RequestBody Map<String, String> payload) {
-		String hwName = payload.get("name");
-		int profid = Integer.parseInt(payload.get("studentId"));
-		int courseid = Integer.parseInt(payload.get("courseId"));
+	public @ResponseBody int createAssignmentForProfessor(@RequestBody String payload) {
+		JSONObject obj;
+		String hwName = "";
+		String jsonDuedate = "";
+		int profid = 0, courseid = 0;
+		try {
+			obj = new JSONObject(payload);
+			hwName = obj.getString("name");
+			profid = obj.getInt("studentId");
+			courseid = obj.getInt("courseId");
+			jsonDuedate = obj.getString("duedate");
+		} catch (JSONException e) {
+			LOGGER.info(e.toString());
+		}
 		
 		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 		java.util.Date parsed = null;
 		java.sql.Date duedate = null;
 		try {
-			parsed = format.parse(payload.get("duedate"));
+			parsed = format.parse(jsonDuedate);
 			duedate = new java.sql.Date(parsed.getTime());
 		} catch (ParseException e) {
 			LOGGER.info(e.toString());
@@ -310,18 +306,26 @@ public class AssignmentService {
 	 * 
 	 * @return the number of rows affected - indicating whether operation was
 	 *         successful.
+	 * @throws JSONException 
 	 */
 	@CrossOrigin(origins = {"http://localhost:4200", "http://ec2-18-222-88-122.us-east-2.compute.amazonaws.com:4200"})
-	@RequestMapping("/api/course/{courseId}/assignment/{assignmentId}")
-	public @ResponseBody int updateAssignment(@RequestParam("name") String name, @RequestParam("studentId") int profid,
-			@RequestParam("duedate") String duedate, @RequestParam("courseID") int courseID) {
+	@RequestMapping(value = "/api/assignment/{assignmentId}", method = RequestMethod.PUT)
+	public @ResponseBody int updateAssignment(@PathVariable("assignmentId") int assignId,@RequestBody String json) throws JSONException {
 		AssignmentDao adao = AssignmentDao.getInstance();
 
 		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 		java.util.Date parsed = null;
 		java.sql.Date aduedate = null;
+		JSONObject obj;
+		String name = "";
+		int profid = 0;
+		int courseID = 0; 
 		try {
-			parsed = format.parse(duedate);
+			obj = new JSONObject(json);
+			name = obj.getString("name");
+			profid = obj.getInt("studentId");
+			courseID = obj.getInt("courseId");
+			parsed = format.parse(obj.getString("duedate"));
 			aduedate = new java.sql.Date(parsed.getTime());
 		} catch (ParseException e) {
 			LOGGER.info(e.toString());
@@ -330,6 +334,7 @@ public class AssignmentService {
 		Long currentTime = utilDate.getTime();
 
 		Assignment c = new Assignment(name, profid, new Date(currentTime), aduedate, false, false, "prof", 0 , "", courseID);
+		c.setId(assignId);
 		//		Assignment assignment = new Assignment(hwName, profid, new Date(currentTime), duedate, false, false, "prof", 0, "",  courseid);
 		return adao.updateAssignment(courseID, c);
 	}
@@ -340,7 +345,7 @@ public class AssignmentService {
 	 * @param assignmentid2
 	 */
 	@CrossOrigin(origins = {"http://localhost:4200", "http://ec2-18-222-88-122.us-east-2.compute.amazonaws.com:4200"})
-	@RequestMapping(value = "/api/assignment/individual/{{assignmentid1}}/{{assignmentid2}}", method = RequestMethod.GET)
+	@RequestMapping(value = "/api/assignment/individual/{assignmentid1}/{assignmentid2}", method = RequestMethod.GET)
 	public @ResponseBody void testIndividual(@PathVariable("assignmentid1") int assignmentid1,
 			@PathVariable("assignmentid2") int assignmentid2) {
 		AssignmentDao adao = AssignmentDao.getInstance();
