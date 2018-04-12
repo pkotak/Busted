@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
 
+import edu.northeastern.springbootjdbc.daos.PersonDao;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -104,7 +105,8 @@ public class AssignmentService {
 					continue;
 
 				SendMailSSL mail = new SendMailSSL();
-				mail.send("^EjHs0R4&wot", "team212updates@gmail.com",
+				PersonDao personDao = PersonDao.getInstance();
+				mail.send("^EjHs0R4&wot", personDao.findPersonById(studentID).getEmail(),
 						  "Plagiarism Detected for " + studentID,
 						  "Report can be found at http://ec2-18-222-88-122.us-east-2.compute.amazonaws.com:4200/user/website/" + courseID + "/page/" + r1.getAssignment2ID() + "/report/" + reportID,
 						  System.getProperty("user.dir")+"/config.properties");
