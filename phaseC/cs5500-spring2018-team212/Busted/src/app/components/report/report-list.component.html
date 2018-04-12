@@ -21,6 +21,8 @@
 <div class="container-fluid padding padding-b">
 
   Strategy &nbsp;&nbsp; &nbsp;&nbsp;  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Programing Language
+  &nbsp;&nbsp;&nbsp;
+  <!--Plagiarism Standard-->
   <form (ngSubmit) = "recompare()" #f="ngForm">
 
     <div>
@@ -35,14 +37,28 @@
         <option value = 'C++'>C++ </option>
         <option value = 'Scheme'>Scheme</option>
         <option value = 'C#'>C#</option>
-        <option value = 'Java'>Java 1</option>
+        <option value = 'Java'>Java</option>
       </select>
+
     </div>
   </form>
   <br>
 
+
+
   <a class="btn btn-primary" (click)="recompare()"> Restart comparison</a>
   <br>
+  <br>
+
+  <div>Plagiarism Score Setup&nbsp;&nbsp; <input [(ngModel)] = "this.percentage"
+                          name="percentage"
+                          type="number"
+                          placeholder="95"
+                          required>
+
+    <button class="blue" (click)="apply()">Apply</button>
+  </div>
+
   <br>
 
 	<table id='customers'>

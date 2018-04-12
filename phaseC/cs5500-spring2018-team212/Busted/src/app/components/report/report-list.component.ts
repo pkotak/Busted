@@ -45,6 +45,7 @@ export class ReportListComponent implements OnInit {
   reports = [];
   strategy: String;
   language: String;
+  percentage: number;
 
   // inject route info in constructor
   constructor(
@@ -60,8 +61,11 @@ export class ReportListComponent implements OnInit {
     recompare() {
       this.strategy = this.createForm.value.strategy;
       this.language = this.createForm.value.language;
+      this.percentage = this.createForm.value.percentage;
       console.log(this.strategy);
       console.log(this.language);
+      console.log(this.percentage);
+
 
       this.reportService.recompare(this.strategy, this.language, this.courseid, this.hwName)
         .subscribe((reports) => {
