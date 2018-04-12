@@ -97,7 +97,7 @@ public class PersonService {
 	 * @return Person details
 	 * @throws JsonProcessingException 
 	 */
-	@CrossOrigin(origins = {"http://localhost:4200", "http://ec2-18-222-88-122.us-east-2.compute.amazonaws.com:4200"})
+	@CrossOrigin(origins = {"http://localhost:4200", "http://ec2-18-222-88-122.us-east-2.compute.amazonaws.com:4200",})
 	@RequestMapping(value = "/api/user", method = RequestMethod.GET)
 	public @ResponseBody String selectPersonByUsername(@RequestParam("username") String email) throws JsonProcessingException {
 		PersonDao dao = PersonDao.getInstance();

@@ -66,13 +66,13 @@ public class AssignmentTests {
 			obj1.put("studentid", 1);
 			obj1.put("courseid", 716);
 			obj1.put("hwName", "HW3");
-			obj1.put("parentAssignment", 1802);
+			obj1.put("parentAssignment", 2016);
 			svc.uploadGit(obj1.toString());
 			obj2.put("githublink", "https://github.com/team212test/test2");
 			obj2.put("studentid", 4);
 			obj2.put("courseid", 716);
 			obj2.put("hwName", "HW3");
-			obj2.put("parentAssignment", 1802);
+			obj2.put("parentAssignment", 2016);
 			svc.uploadGit(obj2.toString());
 		} catch (JSONException e1) {
 			e1.printStackTrace();
@@ -99,7 +99,7 @@ public class AssignmentTests {
 	@Test
 	public void testIndividual() {
 		AssignmentService svc = new AssignmentService();
-		svc.testIndividual(1805, 1806);
+		svc.testIndividual(2016, 2016);
 	}
 
 }
