@@ -23,7 +23,8 @@
 
 <div class="container-fluid padding padding-b " >
 
-    Strategy &nbsp;&nbsp; &nbsp;&nbsp;  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Programing Language
+    Strategy &nbsp;&nbsp; &nbsp;&nbsp;  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  &nbsp;&nbsp;&nbsp;&nbsp;Programing Language
   <form (ngSubmit) = "checkSemester()" (ngSubmit) = "checkTwo()" #f="ngForm">
     <div>
       <select name="strategy" ngModel>
@@ -37,7 +38,7 @@
         <option value = 'C++'>C++ </option>
         <option value = 'Scheme'>Scheme</option>
         <option value = 'C#'>C#</option>
-        <option value = 'Java'>Java 1</option>
+        <option value = 'Java'>Java</option>
       </select>
     </div>
   </form>
@@ -57,7 +58,7 @@
       <th>&nbsp; Semester</th>
       <th>&nbsp; Code</th>
       <th>&nbsp; Name</th>
-      <th>&nbsp; Section</th>
+      <!--<th>&nbsp; Section</th>-->
       <th>&nbsp; Check against this semester/section</th>
       <!--<th>  Go To Course</th>-->
     </tr>
@@ -66,10 +67,10 @@
     <tbody>
     <tr *ngFor="let course of courses">
 
-      <td >&nbsp; {{course.semester}}</td>
+      <td>&nbsp; {{course.semester}}</td>
       <td>&nbsp; {{course.code}}</td>
       <td>&nbsp; {{course.name}}</td>
-      <td>&nbsp; {{course.section}}</td>
+      <!--<td>&nbsp; {{course.section}}</td>-->
       <td>   <input type="checkbox" name="needcheck" value= {{course.id}} (click)="addCourse(course.id)" /> </td>
       <!--<td>&nbsp;-->
       <!--<a class="glyphicon glyphicon-chevron-right " routerLink="/user/website/{{ course.id }}">-->

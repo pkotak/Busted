@@ -25,28 +25,25 @@
   submission will be subjected to 50% grade deduction!</label>
 
   <div class="widget-list paddingleft">
-        <!-- <input type="file" nv-file-select uploader="uploader"/> -->
-
-        <br/>
-
-
-            <!--Name: <span ng-bind="item.file.name"></span><br/>-->
-        <!-- <button ng-click="item.upload()">upload</button> -->
-
         <br/>
         <br/>
         <!--<label>GitHub Link: </label>-->
           <b class="blue">&nbsp;Github Link:</b>
-          <textarea
+          <input
                     class="form-control"
                     type="text"
                     placeholder='Your Github Link'
                     name="github"
-                    [(ngModel)]='gitUrl'></textarea>
+                    [(ngModel)]='gitUrl'>
+        <br/>
 
-        <br/>
-        <br/>
-        <button class = 'btn-primary' (click)= uploadGit()>Submit</button>
+
+         <input type="file" nv-file-select uploader="uploader"/>
+          <span ng-bind="item.file.name"></span>
+         <a class="btn btn-info" ng-click="item.upload()">upload</a>
+          <br>
+          <br>
+         <a class = 'btn btn-tw' (click)= uploadGit()>Submit</a>
   </div>
 
   <br>

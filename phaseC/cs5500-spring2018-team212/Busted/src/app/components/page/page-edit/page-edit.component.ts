@@ -58,7 +58,6 @@ export class PageEditComponent implements OnInit {
         name: this.assignment.name,
         duedate: this.assignment.duedate,
         courseId: this.course.id,
-        githublink: '',
       };
       console.log(newAssignment);
 
