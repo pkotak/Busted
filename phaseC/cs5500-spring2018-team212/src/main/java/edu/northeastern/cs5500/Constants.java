@@ -15,7 +15,7 @@ public class Constants {
 	public static final int STRICTNESS_EASY = 15;
 	public static final String CONNECTION_STRING = "jdbc:mysql://team212.chh6n0jvv6vr.us-east-2.rds.amazonaws.com/plagiarismDetector";
 	public static final String AWS_USERNAME = "admin";
-	public static final String AWS_P = "password";
+	public static final String AWS_P = "newpassword";
 	public static final String JDBC_DRIVER = "com.mysql.jdbc.Driver";
 	public static final String FIRSTNAME = "firstname";
 	public static final String LASTNAME = "lastname";
