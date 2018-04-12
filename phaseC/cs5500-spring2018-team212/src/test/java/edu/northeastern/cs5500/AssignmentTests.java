@@ -66,27 +66,20 @@ public class AssignmentTests {
 			obj1.put("studentid", 1);
 			obj1.put("courseid", 716);
 			obj1.put("hwName", "HW3");
-			obj1.put("parentAssignment", 2016);
+			obj1.put("parentAssignment", 2020);
 			svc.uploadGit(obj1.toString());
 			obj2.put("githublink", "https://github.com/team212test/test2");
 			obj2.put("studentid", 4);
 			obj2.put("courseid", 716);
 			obj2.put("hwName", "HW3");
-			obj2.put("parentAssignment", 2016);
+			obj2.put("parentAssignment", 2020);
 			svc.uploadGit(obj2.toString());
 		} catch (JSONException e1) {
 			e1.printStackTrace();
 		}
 
-		System.out.println(svc.getAssignmentById(2));
-		System.out.println(svc.getSubmissions(4, "HW1"));
-		HashMap<String, String> map = new HashMap<String, String>();
-		map.put("studentId", "3");
-		map.put("courseId", "2");
-		map.put("duedate", "2018-08-08");
-		map.put("name", "HW10");
-		System.out.println(svc.createAssignmentForProfessor(map));
-		svc.updateAssignment("HW10", 2, "2018-08-08", 3);
+		System.out.println(svc.getAssignmentById(2020));
+		System.out.println(svc.getSubmissions(716, "HW3"));
 	}
 	
 	@Test

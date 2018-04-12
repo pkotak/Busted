@@ -32,6 +32,10 @@ public class AssignmentDao {
 		else
 			return instance;
 	}
+	
+	public static void setInstance(AssignmentDao dao) {
+		instance = dao;
+	}
 
 	private AssignmentDao() {
 	}
