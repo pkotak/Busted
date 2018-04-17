@@ -86,11 +86,16 @@ export class ReportDetailComponent implements OnInit {
               this.url = this.sanitizer.bypassSecurityTrustResourceUrl(s3url);
               console.log(this.url);
           }
-      })
+      });
     });
 
     console.log(this);
     this.userId = this.cookieService.get('user');
+
+    if (this.userId === '') {
+      alert('Please login first');
+      this.router.navigate(['']);
+    }
   }
 
 }

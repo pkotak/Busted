@@ -24,7 +24,7 @@ export class ReportListComponent implements OnInit {
 
   wid: String;
   userId: String;
-  user: User;
+  user: any;
   developerId: String;
   websites: Website[];
   pid: String;
@@ -95,6 +95,15 @@ export class ReportListComponent implements OnInit {
 
     console.log(this);
     this.userId = this.cookieService.get('user');
+    this.userService.findUserById(this.userId).subscribe((user: User) => {
+      this.user = user;
+      console.log(this.user);
+    });
+
+    if (this.userId === '') {
+      alert('Please login first');
+      this.router.navigate(['']);
+    }
   }
 
 }
