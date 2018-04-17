@@ -49,7 +49,7 @@ public class AssignmentTests {
 	}
 
 
-	@Test 
+	@Test
 	@PrepareForTest({S3.class, ZipUtil.class, GitUtil.class})
 	public void testAssignmentService() {
         PowerMockito.mockStatic(S3.class);
