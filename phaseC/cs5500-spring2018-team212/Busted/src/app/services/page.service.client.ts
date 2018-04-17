@@ -130,14 +130,15 @@ export class PageService {
 
 
 // uploads git repo
-  uploadGit(githublink, courseid, studentid, hwName, parentAssignmentId) {
+  uploadGit(githublink, courseid, studentid, hwName, parentAssignmentId, language) {
     console.log(githublink, courseid, studentid);
     const data = {
         'githublink': githublink,
         'courseid': courseid,
         'studentid': studentid,
         'hwName': hwName,
-        'parentAssignment': parentAssignmentId
+        'parentAssignment': parentAssignmentId,
+        'language': language
     };
     const url = this.baseUrl + '/api/assignment/uploadGit';
     return this.http.post(url, data).map((response: Response) => {

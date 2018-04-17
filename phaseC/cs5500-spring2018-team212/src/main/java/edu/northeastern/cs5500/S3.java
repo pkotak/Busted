@@ -30,8 +30,6 @@ public class S3 {
 	static final BasicAWSCredentials awsCreds = new BasicAWSCredentials(Constants.AWS_ACCESS_KEY, Constants.AWS_SECRET_KEY);
 	static final AmazonS3 s3Client = AmazonS3ClientBuilder.standard().withCredentials(new AWSStaticCredentialsProvider(awsCreds))
 			.withRegion(Constants.S3_REGION).build();
-
-	private S3() {}
 	
 	/**
 	 * Put an object in the database

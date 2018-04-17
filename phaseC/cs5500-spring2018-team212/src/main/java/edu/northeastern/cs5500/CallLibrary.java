@@ -19,18 +19,24 @@ public class CallLibrary implements ICallLibrary{
 
 
 	/* (non-Javadoc)
-	 * @see edu.northeastern.cs5500.ICallLibrary#compareFiles(java.lang.String, java.lang.String, int, int)
+	 * @see edu.northeastern.cs5500.ICallLibrary#compareFiles(java.lang.String, java.lang.String, int)
 	 */
 	@Override
-	public void compareFiles(String ipdir, String opdir, int strictness) {
+	public void compareFiles(String ipdir, String opdir, int strictness, String language) {
 		String jarCommand = "java -jar ";
 		String cmd = "";
 		cmd = jarCommand + Constants.LIBRARY_PATH +
-				" -l " + Constants.LANGUAGE + 
-				" -r " + opdir + 
+				" -l " + Language.setLanguage(language) + 
+				" -r " + "\"" + opdir + "\""+  
 				" -t " + strictness +
-				" -s " + ipdir;
+				" -s " + "\"" +ipdir + "\"";
 		try {
+			try {
+				Thread.sleep(5000);
+			} catch (InterruptedException e) {
+				 LOGGER.log(Level.WARNING, "Interrupted!", e);
+				 Thread.currentThread().interrupt();
+			}
 			Runtime.getRuntime().exec(cmd);
 		} catch (IOException e) {
 			LOGGER.log(Level.INFO, e.toString());
@@ -45,8 +51,9 @@ public class CallLibrary implements ICallLibrary{
 	 * @param rootdir
 	 * @param strictness
 	 * @return
+	 * @throws InterruptedException 
 	 */
-	public static String compareDir(String newdir, String rootdir, int strictness) {
+	public static String compareDir(String newdir, String rootdir, int strictness, String language) throws InterruptedException {
 		Boolean b = true;
 		CallLibrary cl = new CallLibrary();
 		List<File> listOfDir = new Directory().getOtherDirs(newdir, rootdir);
@@ -58,8 +65,8 @@ public class CallLibrary implements ICallLibrary{
 			String mdir = ipdir.replaceAll(rootmergedir, "");
 			String tempopdir = rootopdir+mdir+"op";
 			new File(tempopdir).mkdirs();
-
-			cl.compareFiles(ipdir, tempopdir, strictness);	
+			Thread.sleep(5000);
+			cl.compareFiles(ipdir, tempopdir, strictness, language);	
 		}
 
 		if(new Directory().deleteDir(rootmergedir))	
@@ -71,9 +78,9 @@ public class CallLibrary implements ICallLibrary{
 	 * @see edu.northeastern.cs5500.ICallLibrary#getReports(java.lang.String, java.lang.String, int, int)
 	 */
 	@Override
-	public List<PlagiarismResult> getReports(String newdir, String rootdir, int strictness){
+	public List<PlagiarismResult> getReports(String newdir, String rootdir, int strictness, String language){
 		try{
-			String resdir = compareDir(newdir, rootdir, strictness);
+			String resdir = compareDir(newdir, rootdir, strictness, language);
 			Thread.sleep(10000); 
 			HtmlParser parser = new HtmlParser();
 			return parser.getSimilarityScore(resdir);
@@ -91,13 +98,18 @@ public class CallLibrary implements ICallLibrary{
 	 * @param strictness
 	 * @return
 	 */
-	public static String compareTwoFiles(String dir1, String dir2, int strictness){
+	public static String compareTwoFiles(String dir1, String dir2, int strictness, String language){
 		CallLibrary cl = new CallLibrary();
+		Boolean b = true;
 		String ipdir = new Directory().mergeDir(dir1, dir2, "test_merge");
 		String rootopdir = "test_op";
 		String opdir = rootopdir + PATH_DELIM + new File(dir1).getName()+"_"+ new File(dir2).getName()+"op";
 		new File(opdir).mkdirs();
-		cl.compareFiles(ipdir, opdir, strictness);
+		cl.compareFiles(ipdir, opdir, strictness, language);
+
+		if(new Directory().deleteDir("test_merge"))	
+			b = b & new File("test_merge").delete();
+
 		return rootopdir;
 
 	}
@@ -106,9 +118,9 @@ public class CallLibrary implements ICallLibrary{
 	 * @see edu.northeastern.cs5500.ICallLibrary#getIndividualReport(java.lang.String, java.lang.String, int, int)
 	 */
 	@Override
-	public List<PlagiarismResult> getIndividualReport(String dir1, String dir2, int strictness){	
+	public List<PlagiarismResult> getIndividualReport(String dir1, String dir2, int strictness, String language){	
 		try{
-			String rootopdir = compareTwoFiles(dir1, dir2, strictness);
+			String rootopdir = compareTwoFiles(dir1, dir2, strictness, language);
 			Thread.sleep(10000); 
 			HtmlParser parser = new HtmlParser();
 			return parser.getSimilarityScore(rootopdir);
@@ -119,6 +131,5 @@ public class CallLibrary implements ICallLibrary{
 		}
 		return new ArrayList<PlagiarismResult>();
 	}
-
 
 }

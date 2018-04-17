@@ -24,9 +24,30 @@
   <label class ='letter-tiffany paddingleft'>Please make sure submit your assignments before due day. Any late
   submission will be subjected to 50% grade deduction!</label>
 
+
+
   <div class="widget-list paddingleft">
         <br/>
         <br/>
+
+    <div>
+
+
+        &nbsp;&nbsp;
+      Programming Language
+      <form (ngSubmit) = "uploadGit()" #f="ngForm">
+        <select name="language" ngModel>
+          <option value = 'Python'>Python</option>
+          <option value = 'C++'>C++ </option>
+          <option value = 'Scheme'>Scheme</option>
+          <option value = 'C#'>C#</option>
+          <option value = 'Java'>Java</option>
+        </select>
+      </form>
+
+      <br>
+
+    </div>
         <!--<label>GitHub Link: </label>-->
           <b class="blue">&nbsp;Github Link:</b>
           <input

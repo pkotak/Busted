@@ -23,7 +23,8 @@ public class ReportTests {
 		report.toString();
 		ReportService reps = new ReportService();
 		reps.getReports(599, "HW1");
-	}
+		reps.getReportById(100);
+		}
 	
 	@Test
 	public void test2() {
@@ -35,5 +36,5 @@ public class ReportTests {
 	public void test3() {
 		ReportDao rs = ReportDao.getInstance();
 		rs.getReport(100);
-	}
+		}
 }

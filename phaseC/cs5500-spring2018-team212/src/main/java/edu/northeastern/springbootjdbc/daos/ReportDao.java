@@ -23,6 +23,10 @@ public class ReportDao {
 	private static ReportDao instance = null;
 	private static final Logger LOGGER = Logger.getLogger(PersonDao.class.getName());
 
+	public static void setInstance(ReportDao dao) {
+		instance = dao;
+	}
+	
 	public static ReportDao getInstance() {
 		if (instance == null)
 			return new ReportDao();

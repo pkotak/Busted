@@ -51,16 +51,4 @@ public class AdminService {
 		public @ResponseBody int deleteUser(@PathVariable("userId") String userid) {
 			return dao.deletePerson(Integer.parseInt(userid));
 		}
-		
-		/**
-		 * Creates a person in the database
-		 * @return 
-		 * @return the number of rows affected
-		 */
-		@CrossOrigin(origins = "http://localhost:4200")
-		@RequestMapping("/api/admin/register")
-		public @ResponseBody Person insertPerson(@RequestBody String json) {
-			PersonService ps = new PersonService();
-			return ps.insertPerson(json);
-		}
 }
