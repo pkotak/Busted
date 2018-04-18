@@ -1,6 +1,7 @@
 package edu.northeastern.springbootjdbc.controllers;
 
 import java.io.File;
+import java.io.IOException;
 import java.sql.Date;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -9,6 +10,8 @@ import java.util.Map;
 import java.util.logging.Logger;
 
 import edu.northeastern.springbootjdbc.daos.PersonDao;
+
+import org.eclipse.jgit.util.FileUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -84,12 +87,16 @@ public class AssignmentService {
 		String reportBucketName = "plagiarismresults";
 		File tempDir1 = new File(hwDir);
 		tempDir1.mkdirs();
-
 		addReports(results, reportBucketName, folderStructure, studentID, courseID);
-		
 		String opdir = folderStructure + "op";
-		if(new Directory().deleteDir(opdir))	
-			b = b & new File(opdir).delete();
+		File f = new File(opdir);
+		if(f.exists() && f.isDirectory()) {
+			try {
+				FileUtils.delete(f, FileUtils.RECURSIVE);
+			} catch (IOException e) {
+				LOGGER.info(e.toString());
+			}
+		}
 	}
 
 	public static void addReports(List<PlagiarismResult> results, String reportBucketName,
@@ -119,7 +126,6 @@ public class AssignmentService {
 						  "Plagiarism Detected for " + studentID,
 						  "Report can be found at http://ec2-18-222-88-122.us-east-2.compute.amazonaws.com:4200/user/website/" + courseID + "/page/" + r1.getAssignment2ID() + "/report/" + reportID,
 						  System.getProperty("user.dir")+"/config.properties");
-				
 			}
 		}
 		else
@@ -195,7 +201,6 @@ public class AssignmentService {
 		adao.checkAssignment(aid);
 		return aid;
 	}
-
 
 	/**
 	 * Get assignments for a particular course.

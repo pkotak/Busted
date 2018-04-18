@@ -1,7 +1,9 @@
 package edu.northeastern.cs5500;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -21,28 +23,28 @@ public class CallLibrary implements ICallLibrary{
 	/* (non-Javadoc)
 	 * @see edu.northeastern.cs5500.ICallLibrary#compareFiles(java.lang.String, java.lang.String, int)
 	 */
-	@Override
-	public void compareFiles(String ipdir, String opdir, int strictness, String language) {
+
+	public static void compareFiles(String ipdir, String opdir, int strictness, String language) {
 		String jarCommand = "java -jar ";
 		String cmd = "";
 		cmd = jarCommand + Constants.LIBRARY_PATH +
 				" -l " + Language.setLanguage(language) + 
-				" -r " + "\"" + opdir + "\""+  
+				" -r " + opdir +  
 				" -t " + strictness +
-				" -s " + "\"" +ipdir + "\"";
+				" -s " + ipdir;
 		try {
-			try {
-				Thread.sleep(5000);
-			} catch (InterruptedException e) {
-				 LOGGER.log(Level.WARNING, "Interrupted!", e);
-				 Thread.currentThread().interrupt();
-			}
-			Runtime.getRuntime().exec(cmd);
+			String line;
+			Process p = Runtime.getRuntime().exec(cmd);
+			BufferedReader in = new BufferedReader(
+		               new InputStreamReader(p.getInputStream()) );
+		       while ((line = in.readLine()) != null) {
+		         LOGGER.info(line);
+		       }
+		    in.close();
 		} catch (IOException e) {
-			LOGGER.log(Level.INFO, e.toString());
+			LOGGER.info(e.toString());
 		}
 	}
-
 
 	/**
 	 * method to compare the files in given input directory for plagiarism with JPlag
@@ -53,9 +55,8 @@ public class CallLibrary implements ICallLibrary{
 	 * @return
 	 * @throws InterruptedException 
 	 */
-	public static String compareDir(String newdir, String rootdir, int strictness, String language) throws InterruptedException {
+	public static String compareDir(String newdir, String rootdir, int strictness, String language) {
 		Boolean b = true;
-		CallLibrary cl = new CallLibrary();
 		List<File> listOfDir = new Directory().getOtherDirs(newdir, rootdir);
 		String rootopdir = rootdir + "op";
 		String rootmergedir = rootdir + "merge";
@@ -65,8 +66,7 @@ public class CallLibrary implements ICallLibrary{
 			String mdir = ipdir.replaceAll(rootmergedir, "");
 			String tempopdir = rootopdir+mdir+"op";
 			new File(tempopdir).mkdirs();
-			Thread.sleep(5000);
-			cl.compareFiles(ipdir, tempopdir, strictness, language);	
+			compareFiles(ipdir, tempopdir, strictness, language);	
 		}
 
 		if(new Directory().deleteDir(rootmergedir))	
@@ -81,7 +81,6 @@ public class CallLibrary implements ICallLibrary{
 	public List<PlagiarismResult> getReports(String newdir, String rootdir, int strictness, String language){
 		try{
 			String resdir = compareDir(newdir, rootdir, strictness, language);
-			Thread.sleep(10000); 
 			HtmlParser parser = new HtmlParser();
 			return parser.getSimilarityScore(resdir);
 		}
@@ -99,19 +98,17 @@ public class CallLibrary implements ICallLibrary{
 	 * @return
 	 */
 	public static String compareTwoFiles(String dir1, String dir2, int strictness, String language){
-		CallLibrary cl = new CallLibrary();
 		Boolean b = true;
 		String ipdir = new Directory().mergeDir(dir1, dir2, "test_merge");
 		String rootopdir = "test_op";
 		String opdir = rootopdir + PATH_DELIM + new File(dir1).getName()+"_"+ new File(dir2).getName()+"op";
 		new File(opdir).mkdirs();
-		cl.compareFiles(ipdir, opdir, strictness, language);
+		compareFiles(ipdir, opdir, strictness, language);
 
 		if(new Directory().deleteDir("test_merge"))	
 			b = b & new File("test_merge").delete();
 
 		return rootopdir;
-
 	}
 
 	/* (non-Javadoc)
@@ -124,12 +121,10 @@ public class CallLibrary implements ICallLibrary{
 			Thread.sleep(10000); 
 			HtmlParser parser = new HtmlParser();
 			return parser.getSimilarityScore(rootopdir);
-
 		}
 		catch(Exception e){  
 			LOGGER.info(e.toString());
 		}
 		return new ArrayList<PlagiarismResult>();
 	}
-
 }

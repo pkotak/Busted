@@ -8,16 +8,6 @@ import java.util.List;
  *
  */
 public interface ICallLibrary {
-
-	/**
-	 * method to compare the files in given input directory for plagiarism with JPlag. 
-	 * @param ipdir
-	 * @param opdir
-	 * @param strictness
-	 * @param threshold
-	 */
-	public void compareFiles(String ipdir, String opdir, int strictness, String language);
-
 	
 	/**
 	 * method to get the reports for the plagiarism check run on the given directory
