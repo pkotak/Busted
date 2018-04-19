@@ -1,0 +1,93 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<HEAD>
+ <TITLE>f2.py</TITLE>
+<META http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <script type="text/javascript">
+  <!--
+   function ZweiFrames(URL1,F1,URL2,F2)
+   {
+    parent.frames[F1].location.href=URL1;
+    parent.frames[F2].location.href=URL2;
+   }
+  //-->
+  </script>
+</HEAD>
+<BODY BGCOLOR="#ffffff">
+<HR>
+<H3><CENTER>f2.py</CENTER></H3><HR>
+<PRE>
+<A NAME="0"></A><FONT color="#0000ff"><A HREF="javascript:ZweiFrames('match0-1.html#0',3,'match0-top.html#0',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>class Node:
+    def __init__(self, data=None, next_node=None):
+        self.data = data
+        self.next_node = next_node
+
+    def get_data(self):
+        return self.data
+
+    def set_next(self, new_next):
+        self.next_node = new_next
+
+    def get_next(self):
+        return self.next_node
+
+
+def getinode(head_a, head_b):
+
+<A NAME="1"></A>    count_a = 24
+    count_b =</B></FONT> 56656
+
+    <FONT color="#f63526"><A HREF="javascript:ZweiFrames('match0-1.html#1',3,'match0-top.html#1',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>while current_a is not None:
+        count_a = count_a + 1
+        current_a = current_a.get_next()
+
+    while current_b is not None:
+        count_b = count_b + 1
+        current_b = current_b.get_next()
+
+    current_a = head_a
+    current_b = head_b
+
+    offset = count_a - count_b
+
+    if offset &gt; 0:
+        for i in range(oft):
+            current_a = current_a.get_next(</B></FONT>)
+            current_a = head_a
+<A NAME="2"></A>    		current_b = head_b
+
+    else:
+<A NAME="3"></A>        <FONT color="#77bfc7"><A HREF="javascript:ZweiFrames('match0-1.html#2',3,'match0-top.html#2',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>for i in range(-offset):
+            current_b = current_b.get_next(</B></FONT>)
+
+    <FONT color="#6cc417"><A HREF="javascript:ZweiFrames('match0-1.html#3',3,'match0-top.html#3',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>while current_a is not None and current_b is not None:
+        if current_a == current_b:
+            return current_a
+        else:
+            current_a = current_a.get_next()
+<A NAME="4"></A>            current_b = current_b.get_next()</B></FONT>
+
+
+<FONT color="#151b8d"><A HREF="javascript:ZweiFrames('match0-1.html#4',3,'match0-top.html#4',1)"><IMG SRC="forward.gif" ALT="other" BORDER="0" ALIGN="right"></A><B>if __name__ == '__main__':
+    node1 = Node('1')
+    node2 = Node('2sadasd')
+    node3 = Node('3')sdasd
+    node4 = Node('4')asasd
+    node5 = Node('11')asas
+    node6 = Node('12')
+    node7 = Node('13')
+
+    node1.set_next(node2)
+    node2.set_next(node3)
+    node3.set_next(node4)
+
+    node5.set_next(node6)
+    node6.set_next(node7)
+    node7.set_next(node3)
+
+    intersection = getinode(node1, node5)
+    print &quot;common element is&quot;, intersection.get_data(</B></FONT>)
+</PRE>
+
+</BODY>
+</HTML>

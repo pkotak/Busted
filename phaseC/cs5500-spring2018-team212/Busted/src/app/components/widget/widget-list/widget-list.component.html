@@ -21,8 +21,8 @@
 
 
 <div class="container-fluid padding padding-b " >
-  <label class ='letter-tiffany paddingleft'>Please make sure submit your assignments before due day. Any late
-  submission will be subjected to 50% grade deduction!</label>
+  <b class ='letter-tiffany paddingleft'>Please make sure submit your assignments before due day. Any late
+  submission will be subjected to 50% grade deduction!</b>
 
 
 
@@ -34,7 +34,7 @@
 
 
         &nbsp;&nbsp;
-      Programming Language
+      <b class="blue" >Programming Language</b>
       <form (ngSubmit) = "uploadGit()" #f="ngForm">
         <select name="language" ngModel>
           <option value = 'Python'>Python</option>
@@ -56,15 +56,19 @@
                     placeholder='Your Github Link'
                     name="github"
                     [(ngModel)]='gitUrl'>
-        <br/>
 
+
+    <a class = 'btn btn-tw' (click)= uploadGit() routerLink="/user/website/{{this.courseid}}/page">Submit Git</a>
+    <br>
+    <br>
+    <br>
 
          <input type="file" nv-file-select uploader="uploader"/>
           <span ng-bind="item.file.name"></span>
-         <a class="btn btn-info" ng-click="item.upload()">upload</a>
           <br>
+         <a class="btn btn-info" ng-click="item.upload()" routerLink="/user/website/{{this.courseid}}/page">Submit zip</a>
           <br>
-         <a class = 'btn btn-tw' (click)= uploadGit()>Submit</a>
+
   </div>
 
   <br>
@@ -87,13 +91,13 @@
         <tr *ngFor="let submission of submissions">
           <td>&nbsp; {{submission.studentID}}</td>
           <td>&nbsp; {{submission.id}}</td>
-          <td>&nbsp; {{submission.duedate}}</td>
+          <td>&nbsp; {{submission.uploadDate}}</td>
           <td>&nbsp; {{submission.githubLink}}</td>
         </tr>
         </tbody>
       </table>
     </div>
-
+<br>
 
 </div>
 

@@ -1,0 +1,62 @@
+
+<nav class="navbar navbar-light2 navbar-fixed-top">
+  <div class="container-fluid">
+
+    <!--heading on the nav bar-->
+    <div class="navbar-text pull-left">
+      <a routerLink="/user/website/{{wid}}/page" class="black">
+        <span class="glyphicon glyphicon-chevron-left "></span>
+      </a>
+    </div>
+
+    <div class="navbar-brand pull-left">
+      <div class="black">
+        <b>{{this.course.semester}}  {{this.course.code}} {{this.course.name}}, Section{{this.course.section}} &nbsp;  New Assignment: </b>
+      </div>
+    </div>
+
+    <!--tick mark-->
+    <div class="navbar-text pull-right">
+      <a (click)="createAssignment(coursename, duedate)"
+        class="black">
+        <span class="glyphicon glyphicon-ok "></span>
+      </a>
+    </div>
+
+  </div>
+</nav>
+
+
+
+<div class="container-fluid padding" >
+
+    <label>Assignment Name</label>
+    <input [(ngModel)]="coursename"
+           class="form-control"
+           type="text"
+           placeholder="Assignment Name"/>
+
+    <label>Due Date</label>
+    <input [(ngModel)]="duedate"
+           class="form-control"
+           type="date"
+           placeholder="Due Date"/>
+
+
+</div>
+
+
+
+<nav class="navbar navbar-light2 navbar-fixed-bottom">
+  <div class="container-fluid">
+    <b class="navbar-text pull-left ">
+      Busted
+    </b>
+    <p class="navbar-text pull-right">
+      <a routerLink="/profile" class="blue">
+        <span class="glyphicon glyphicon-user "></span>
+      </a>
+    </p>
+  </div>
+</nav>
+

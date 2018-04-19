@@ -1,0 +1,218 @@
+
+
+<!--<input value = "{{user.username}}"/>-->
+<!--<br/>-->
+
+<!--<input value = "{{user.firstName}}"/>-->
+
+    <nav class="navbar navbar-tiffany navbar-fixed-top">
+      <div class="container-fluid">
+
+
+
+        <div class="col-sm-4 ">
+          <!--heading on the nav bar-->
+          <div class="navbar-brand pull-left">
+            <!--<a class="thick white nounderline " href="../page/page-list.html">-->
+            <b class="white">Profile</b>
+            <!--</a>-->
+          </div>
+
+          <div class="navbar-text pull-right">
+            <a (click)= "update ()" class="white ">
+              <span class="glyphicon glyphicon-ok "></span>
+            </a>
+          </div>
+        </div>
+
+        <div class="navbar-brand pull-right">
+          <a *ngIf="(user.type !== 'STUDENT' ) && (user.type !== 'TA' )  " (click) = addclass() class="white ">
+            <b>Add Course</b>
+            <!--<span class="glyphicon glyphicon-plus "></span>-->
+          </a>
+        </div>
+
+
+
+        <!--tick mark-->
+
+      </div>
+    </nav>
+
+
+<!--<form id="updateForm" (ngSubmit) = "update()" #f="ngForm">-->
+
+  <div class="container padding40">
+
+    <div class="row">
+
+
+
+      <div class="col-sm-4  padding40 padding-b">
+
+        <!--<img src="../../../../assets/images/placeholder-user-1-400x400.png" height="400" width="400"/>-->
+        <div class="w3-card w3-margin w3-margin-top center">
+
+
+          <div class="w3-container w3-white">
+
+
+            <label class ='letter-tiffany '>Hi, {{user.firstName}}! &nbsp; &nbsp; Role: {{user.type}}</label>
+
+            <!--<label class = 'blue'>Welcome to StockSim, {{user.firstName}} !</label>-->
+
+        <!--<b class ='letter-tiffany '>Name: &nbsp;{{user.firstName}}!&nbsp; Role: {{user.role}}</b>-->
+        <br/>
+
+
+
+          <form #f="ngForm">
+
+            <!--<div class="form-group">-->
+              <!--<label class = 'blue'>Type</label>-->
+              <!--<input [(ngModel)] = "user.type"-->
+                     <!--name="type"-->
+                     <!--type="type" class="form-control"-->
+                     <!--placeholder="a@unicorn.com"-->
+                     <!--required>-->
+            <!--</div>-->
+
+            <br>
+
+            <div class="form-group">
+              <label class = 'blue'>Username</label>
+              <input [(ngModel)] = "user.email"
+                     name="email"
+                     type="email" class="form-control"
+                     placeholder="a@unicorn.com"
+                     required>
+            </div>
+
+
+            <div class="form-group">
+              <label class = 'blue'>First Name </label>
+              <input [(ngModel)] = "user.firstName"
+                     name="firstName"
+                     type="text"
+                     class="form-control"
+                     placeholder = "firstName"
+                     required>
+            </div>
+
+
+
+            <div class="form-group">
+              <label class = 'blue'>Last Name</label>
+              <input [(ngModel)] = "user.lastName"
+                     name="lastName"
+                     type="text"
+                     class="form-control"
+                     placeholder = "lastName"
+                     required>
+            </div>
+
+
+            <div class="form-group">
+              <label class = 'blue'>Phone</label>
+              <input [(ngModel)] = "user.phone"
+                     name="phone"
+                     type="phone" class="form-control"
+                     placeholder="1112223333"
+                     required>
+            </div>
+
+            <div class="form-group">
+              <label class = 'blue'>Password</label>
+              <input [(ngModel)] = "user.password"
+                     name="password"
+                     type="password" class="form-control"
+                     placeholder="a@unicorn.com"
+                     required>
+            </div>
+
+
+          </form>
+
+
+          <a class="btn btn-danger btn-block " routerLink="">Logout</a>
+             <!--(click)="logout()" -->
+
+
+          <a (click)="deleteUser()"
+            class="btn btn-danger btn-block " routerLink="" >Delete User</a>
+
+          <a class="btn btn-primary btn-block"
+             routerLink="/website">All Courses</a>
+
+          <a *ngIf="(user.type === 'ADMIN' )" class="btn btn-info btn-block " (click)=gotoAdmin() >All Users(Admin only)</a>
+          <br/>
+      </div>
+    </div>
+
+  </div>
+
+
+      <div class="col-sm-8 hidden-xs padding40 padding-b ">
+
+
+          <h3 class="blue paddingleft15">My Courses</h3>
+
+
+
+        <div class = "container-fluid  paddingleft padding-b">
+          <table id = 'customers'>
+
+            <thead>
+            <tr>
+              <th>&nbsp; Semester</th>
+              <th>&nbsp; Code</th>
+              <th>&nbsp; Name</th>
+              <!--<th>&nbsp; Section</th>-->
+
+              <th *ngIf="(user.type !== 'STUDENT' && (user.type !== 'TA' ) )">  Edit</th>
+            </tr>
+            </thead>
+
+            <tbody>
+            <tr *ngFor="let course of courses" routerLink="/user/website/{{ course.id }}/page">
+              <td>&nbsp; {{course.semester}}</td>
+              <td>&nbsp; {{course.code}}</td>
+              <td>&nbsp; {{course.name}}</td>
+              <!--<td>&nbsp; {{course.section}}</td>-->
+
+              <td *ngIf="(user.type !== 'STUDENT' ) && (user.type !== 'TA' )">
+                <a class="glyphicon glyphicon-cog" routerLink="/user/website/{{ course.id }}">
+
+                </a>
+              </td>
+
+
+            </tr>
+            </tbody>
+          </table>
+        </div>
+
+
+        <br/>
+        <br/>
+        <br/>
+
+      </div>
+<!--</form>-->
+
+<!-- Footer -->
+
+
+<nav class="navbar navbar-tiffany navbar-fixed-bottom">
+  <div class="container-fluid">
+    <b class="navbar-text pull-left white">
+      Busted
+    </b>
+    <p class="navbar-text pull-right">
+      <a routerLink="/profile" class="white">
+        <span class="glyphicon glyphicon-user"></span>
+      </a>
+    </p>
+
+  </div>
+</nav>

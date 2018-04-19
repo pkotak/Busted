@@ -43,6 +43,7 @@ export class AssignmentsComponent implements OnInit {
   courseIds = [];
   strategy: String;
   language: String;
+  set: 0;
 
   constructor(private userService: UserService,
               private websiteService: WebsiteService,
@@ -52,6 +53,11 @@ export class AssignmentsComponent implements OnInit {
               private route: ActivatedRoute,
               private router: Router,
               private reportSerivce: ReportService) { }
+
+  apply() {
+    this.set = this.createForm.value.percentage;
+    console.log(this.set);
+  }
 
   add(assignmentId) {
     if (this.assignments.indexOf(assignmentId) !== -1) {
@@ -64,6 +70,13 @@ export class AssignmentsComponent implements OnInit {
       this.assignments.push(assignmentId);
       console.log(this.assignments);
     }
+  }
+
+  findStudentName(studentId) {
+    this.userService.findUserById(studentId)
+      .subscribe((user) => {
+        return user.firstName + user.lastName;
+      });
   }
 
   addCourse(courseId) {

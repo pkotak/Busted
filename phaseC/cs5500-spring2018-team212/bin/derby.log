@@ -1,0 +1,13 @@
+----------------------------------------------------------------
+Wed Apr 18 21:50:45 EDT 2018:
+Booting Derby version The Apache Software Foundation - Apache Derby - 10.13.1.1 - (1765088): instance a816c00e-0162-db98-c5f6-00000740c350 
+on database directory memory:/Users/Conan/Desktop/5500/team212/phaseC/cs5500-spring2018-team212/testdb with class loader sun.misc.Launcher$AppClassLoader@18b4aac2 
+Loaded from file:/Users/Conan/.m2/repository/org/apache/derby/derby/10.13.1.1/derby-10.13.1.1.jar
+java.vendor=Oracle Corporation
+java.runtime.version=1.8.0_131-b11
+user.dir=/Users/Conan/Desktop/5500/team212/phaseC/cs5500-spring2018-team212
+os.name=Mac OS X
+os.arch=x86_64
+os.version=10.13.4
+derby.system.home=null
+Database Class Loader started - derby.database.classpath=''

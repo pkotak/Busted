@@ -65,8 +65,8 @@
 	<thead>
 		<tr>
 			<td>ReportID</td>
-			<td>Submission1</td>
-			<td>Submission2</td>
+			<td>Submission1 Id</td>
+			<td>Submission2 Id</td>
 			<td>SimilarityScore</td>
 			<td>ReportLink</td>
 		</tr>
@@ -74,9 +74,9 @@
 	<tbody>
 		<tr *ngFor="let report of reports" routerLink="/user/website/{{ courseid }}/page/{{ assignmentid }}/report/{{report.id}}">
 			<td>&nbsp; {{report.id}}</td>
-			<td>&nbsp; {{report.assignment1ID}}</td>
-			<td>&nbsp; {{report.assignment2ID}}</td>
-			<td>&nbsp; {{report.similarityscore}}</td>
+			<td>&nbsp;&nbsp;<a routerLink="/user/website/{{this.courseid}}/page/{{this.assignmentid}}/assignments"> {{report.assignment1ID}}</a></td>
+      <td>&nbsp;&nbsp;<a routerLink="/user/website/{{this.courseid}}/page/{{this.assignmentid}}/assignments"> {{report.assignment2ID}}</a></td>
+			<td>&nbsp;{{report.similarityscore}}&nbsp; <b *ngIf="(report.similarityscore > 90)" class="red">Busted!</b> </td>
 			<td>&nbsp;<a href = "{{report.downloadLink}}">{{report.downloadLink}}</a></td>
 		</tr>
 	</tbody>

@@ -62,6 +62,10 @@ h1, h2, h3, h4, h5, h6{
   color: #337ab7;
 }
 
+.red {
+  color: #B22222;
+}
+
 .black{
   color:#000000;
 }
@@ -201,5 +205,7 @@ mwl-gauge > .gauge > .value-text {
   font-weight: bold;
   font-size: 1em;
 }
+
+
 
 

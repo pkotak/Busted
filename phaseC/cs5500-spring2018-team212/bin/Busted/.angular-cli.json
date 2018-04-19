@@ -1,0 +1,69 @@
+{
+  "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
+  "project": {
+    "name": "angular-four-mean-seed"
+  },
+  "apps": [
+    {
+      "root": "src",
+      "outDir": "dist",
+      "assets": [
+        "assets",
+        "favicon.ico"
+      ],
+      "index": "index.html",
+      "main": "main.ts",
+      "polyfills": "polyfills.ts",
+      "test": "test.ts",
+      "tsconfig": "tsconfig.app.json",
+      "testTsconfig": "tsconfig.spec.json",
+      "prefix": "app",
+      "styles": [
+        "styles.css"
+      ],
+      "scripts": [
+        "assets/BustedHome/js/modernizr.custom.js",
+        "assets/BustedHome/js/jquery.1.11.1.js",
+        "assets/BustedHome/js/bootstrap.js",
+        "assets/BustedHome/js/SmoothScroll.js",
+        "assets/BustedHome/js/jquery.counterup.js",
+        "assets/BustedHome/js/waypoints.js",
+        "assets/BustedHome/js/jquery.prettyPhoto.js",
+        "assets/BustedHome/js/jquery.isotope.js",
+        "assets/BustedHome/js/jqBootstrapValidation.js",
+        "assets/BustedHome/js/contact_me.js",
+        "assets/BustedHome/js/main.js"
+      ],
+      "environmentSource": "environments/environment.ts",
+      "environments": {
+        "dev": "environments/environment.ts",
+        "prod": "environments/environment.prod.ts"
+      }
+    }
+  ],
+  "e2e": {
+    "protractor": {
+      "config": "./protractor.conf.js"
+    }
+  },
+  "lint": [
+    {
+      "project": "src/tsconfig.app.json"
+    },
+    {
+      "project": "src/tsconfig.spec.json"
+    },
+    {
+      "project": "e2e/tsconfig.e2e.json"
+    }
+  ],
+  "test": {
+    "karma": {
+      "config": "./karma.conf.js"
+    }
+  },
+  "defaults": {
+    "styleExt": "css",
+    "component": {}
+  }
+}

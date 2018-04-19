@@ -73,10 +73,12 @@ export class WidgetListComponent implements OnInit {
     if (this.gitUrl === null) {
       alert ('Please input your github link or upload file.');
     } else {
+      alert('You have submitted you homework!');
       this.pageService.uploadGit(this.gitUrl, this.courseid, this.userId, this.hwName, this.assignmentid, this.language)
         .subscribe(
           (data) => {
             console.log(data);
+            alert('You have submitted you homework!');
             this.router.navigate(['user', 'website', this.courseid, 'page']);
           }
         );

@@ -1,0 +1,112 @@
+
+<nav class="navbar navbar-light2 navbar-fixed-top">
+  <div class="container-fluid">
+
+    <!--heading on the nav bar-->
+    <div class="navbar-text pull-left">
+      <a routerLink="/user/website/{{this.courseid}}/page" class="black">
+        <span class="glyphicon glyphicon-chevron-left "></span>
+      </a>
+    </div>
+
+    <div class="navbar-brand pull-left">
+      <div class="thick">
+        <b>Assignment: {{this.hwName}}</b>
+      </div>
+    </div>
+
+  </div>
+</nav>
+
+
+
+<div class="container-fluid padding padding-b " >
+  <label class ='letter-tiffany paddingleft'>Please make sure submit your assignments before due day. Any late
+  submission will be subjected to 50% grade deduction!</label>
+
+
+
+  <div class="widget-list paddingleft">
+        <br/>
+        <br/>
+
+    <div>
+
+
+        &nbsp;&nbsp;
+      Programming Language
+      <form (ngSubmit) = "uploadGit()" #f="ngForm">
+        <select name="language" ngModel>
+          <option value = 'Python'>Python</option>
+          <option value = 'C++'>C++ </option>
+          <option value = 'Scheme'>Scheme</option>
+          <option value = 'C#'>C#</option>
+          <option value = 'Java'>Java</option>
+        </select>
+      </form>
+
+      <br>
+
+    </div>
+        <!--<label>GitHub Link: </label>-->
+          <b class="blue">&nbsp;Github Link:</b>
+          <input
+                    class="form-control"
+                    type="text"
+                    placeholder='Your Github Link'
+                    name="github"
+                    [(ngModel)]='gitUrl'>
+        <br/>
+
+
+         <input type="file" nv-file-select uploader="uploader"/>
+          <span ng-bind="item.file.name"></span>
+         <a class="btn btn-info" ng-click="item.upload()">upload</a>
+          <br>
+          <br>
+         <a class = 'btn btn-tw' (click)= uploadGit()>Submit</a>
+  </div>
+
+  <br>
+
+  <div class="widget-list paddingleft">
+
+    <label>My submissions for &nbsp;{{this.hwName}}</label>
+
+    <table id='customers'>
+        <thead>
+        <tr>
+          <th>&nbsp; StudentId</th>
+          <th>&nbsp; Submission ID</th>
+          <th>&nbsp; Submission Date</th>
+          <th>&nbsp; Github Link</th>
+
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let submission of submissions">
+          <td>&nbsp; {{submission.studentID}}</td>
+          <td>&nbsp; {{submission.id}}</td>
+          <td>&nbsp; {{submission.duedate}}</td>
+          <td>&nbsp; {{submission.githubLink}}</td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+
+
+</div>
+
+<nav class="navbar navbar-light2 navbar-fixed-bottom">
+  <div class="container-fluid">
+    <b class="navbar-text pull-left">
+      Busted
+    </b>
+
+    <div class="navbar-text pull-right">
+      <a routerLink="/profile" class="blue">
+        <span class="glyphicon glyphicon-user "></span>
+      </a>
+    </div>
+  </div>
+</nav>

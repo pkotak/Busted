@@ -1,0 +1,179 @@
+
+<!--Top navbar -->
+<div class="container-fluid">
+  <nav class="navbar navbar-tiffany navbar-fixed-top">
+
+    <!--<div class="navbar-text pull-left">-->
+    <!--<span class="glyphicon glyphicon-chevron-left white pull-left"></span>-->
+    <!--</div>-->
+
+    <div class="row">
+      <div class="col-sm-1">
+        <div class="navbar-text pull-left">
+          <a routerLink="/profile" class="white">
+            <span class="glyphicon glyphicon-chevron-left"></span>
+          </a>
+        </div>
+      </div>
+
+      <div class="col-sm-3 hidden-xs">
+
+        <div class="navbar-brand pull-left">
+          <!--<a href="website-new.html" class="white">-->
+          <b class="white">My Course list</b>
+          <!--</a>-->
+        </div>
+
+        <!--<div class="navbar-text pull-right">-->
+          <!--<span class="glyphicon glyphicon-plus white "></span>-->
+        <!--</div>-->
+        <!--</p>-->
+
+      </div>
+
+      <div class="col-sm-8">
+
+        <!--heading on the nav bar-->
+        <div class="navbar-brand pull-left">
+          <div class="thick white">
+            <b>Course Information</b>
+          </div>
+        </div>
+        <!--tick mark-->
+        <div class="navbar-text pull-right">
+          <a (click)="update()" class="white">
+            <span class="glyphicon glyphicon-ok "></span>
+          </a>
+        </div>
+
+      </div>
+
+    </div>
+  </nav>
+</div>
+
+<div class="container-fluid">
+  <div class="row">
+
+    <div class="col-sm-4 hidden-xs">
+
+
+      <div class="padding padding"></div>
+      <label class ='letter-tiffany paddingleft'>Welcome, {{user.firstName}}! &nbsp; &nbsp; Role: {{user.type}}</label>
+
+      <!--<ul *ngFor = "let course of courses"  class="list-group">-->
+        <!--<li class="list-group-item blue borderless">-->
+
+          <!--&lt;!&ndash;<a routerLink="/profile/{{ userId }}/website/{{ wid }}/page">&ndash;&gt;-->
+          <!--<b>  {{ course.semester }}:    {{course.code}}   {{course.name}}  </b>-->
+          <!--&lt;!&ndash;</a>&ndash;&gt;-->
+
+          <!--&lt;!&ndash;<a class="pull-right" >&ndash;&gt;-->
+          <!--&lt;!&ndash;<span class="glyphicon glyphicon-cog"></span>&ndash;&gt;-->
+          <!--&lt;!&ndash;</a>&ndash;&gt;-->
+        <!--</li>-->
+      <!--</ul>-->
+
+      <table id="customers">
+
+        <thead>
+        <tr>
+          <th>&nbsp; Semester</th>
+          <th>&nbsp; Code</th>
+          <th>&nbsp; Name</th>
+          <!--<th>&nbsp; Section</th>-->
+
+          <!--<th>  Go To Course</th>-->
+        </tr>
+        </thead>
+
+        <tbody>
+        <tr *ngFor="let course of courses" routerLink="/user/website/{{ course.id }}">
+          <td>&nbsp; {{course.semester}}</td>
+          <td>&nbsp; {{course.code}}</td>
+          <td>&nbsp; {{course.name}}</td>
+          <!--<td>&nbsp; {{course.section}}</td>-->
+          <!--<td>&nbsp;-->
+          <!--<a class="glyphicon glyphicon-chevron-right " routerLink="/user/website/{{ course.id }}">-->
+          <!--</a>-->
+          <!--</td>-->
+        </tr>
+        </tbody>
+      </table>
+
+    </div>
+
+    <div class="col-sm-8 padding">
+      <div class="container-fluid">
+
+        <br/>
+        <!--<b class ='blue'>My competition:&nbsp; {{this.user.competitionName}}</b>-->
+        <!--<br/>-->
+
+
+        <b class ='blue'>Semester</b>
+        <input [(ngModel)]="this.course.semester"
+                class="form-control"
+                type="text"
+                placeholder='Semester'>
+
+        <b class ='blue'>Section</b>
+        <input [(ngModel)]="this.course.section"
+               class="form-control"
+               type="text"
+               placeholder='1'>
+
+        <b class ='blue'>Course Code</b>
+        <textarea [(ngModel)]="this.course.code"
+                  class="form-control"
+                   type="text"
+                   placeholder='Course Name'></textarea>
+
+
+        <b class ='blue'>Course Name</b>
+        <textarea [(ngModel)]="this.course.name"
+                  class="form-control"
+                  type="text"
+                  placeholder='Course Name'></textarea>
+
+
+        <a (click)=goToAssignment()
+           class="btn btn-primary btn-block" >
+          Go to course assignments
+        </a>
+
+        <a *ngIf="(user.type !== 'PROFESSOR' )" (click)="joinClass()"
+           class="btn btn-success btn-block" >
+          Join Course
+        </a>
+
+        <a *ngIf="(user.type !== 'PROFESSOR' )" (click)="dropClass()"
+           class="btn btn-warning btn-block" >
+          Drop Course
+        </a>
+
+
+        <a *ngIf="(user.type === 'PROFESSOR' ) || (user.type === 'ADMIN' )" (click)="deleteWebsite()"
+          class="btn btn-danger btn-block" >
+          Delete (Admin & Professors only)
+        </a>
+
+
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<nav class="navbar navbar-tiffany navbar-fixed-bottom">
+  <div class="container-fluid">
+    <b class="navbar-text pull-left white">
+      Busted
+    </b>
+    <div class="navbar-text pull-right">
+      <a routerLink="/profile" class="white">
+        <span class="glyphicon glyphicon-user "></span>
+      </a>
+    </div>
+  </div>
+</nav>

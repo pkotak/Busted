@@ -41,9 +41,14 @@ export class ReportDetailComponent implements OnInit {
   courseid: String;
   assignmentid: String;
   hwName: String;
-  report: Report;
+  report: any;
   reportid: String;
-
+  // assignment1Id: String;
+  // assignment2Id: String;
+  // userId1: String;
+  // userId2: String;
+  // user1: any;
+  // user2: any;
 
 
   // inject route info in constructor
@@ -85,6 +90,37 @@ export class ReportDetailComponent implements OnInit {
               var s3url = this.report.downloadLink.replace(".zip", "/match0.html");
               this.url = this.sanitizer.bypassSecurityTrustResourceUrl(s3url);
               console.log(this.url);
+            // this.assignment1Id = this.report.assignment1;
+            // console.log(this.assignment1Id);
+            // this.assignment2Id = this.report.assignment2;
+            // console.log(this.assignment2Id);
+            //
+            // this.pageService.findAssignmentById(this.assignment1Id).subscribe((assignment) => {
+            //   if (assignment != null) {
+            //     this.userId1 = assignment.studentid;
+            //   }
+            // } );
+            //
+            // this.pageService.findAssignmentById(this.assignment2Id).subscribe((assignment) => {
+            //   if (assignment != null) {
+            //     this.userId2 = assignment.studentid;
+            //   }
+            // } );
+            //
+            // this.userService.findUserById(this.userId1)
+            //   .subscribe((user) => {
+            //     this.user1 = user;
+            //     console.log(user);
+            //   });
+            //
+            // this.userService.findUserById(this.userId2)
+            //   .subscribe((user) => {
+            //     this.user2 = user;
+            //     console.log(user);
+            //   });
+
+
+
           }
       });
     });
