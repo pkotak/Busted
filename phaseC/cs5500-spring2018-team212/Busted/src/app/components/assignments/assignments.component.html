@@ -93,6 +93,7 @@
       <th>&nbsp; StudentId</th>
       <th>&nbsp; Submission Date</th>
       <th>&nbsp; Github Link</th>
+      <th>&nbsp; Compared </th>
       <th>&nbsp; Select</th>
 
     </tr>
@@ -100,8 +101,9 @@
     <tbody>
       <tr *ngFor="let submission of submissions">
         <td>&nbsp; {{submission.studentID}}</td>
-        <td>&nbsp; {{submission.duedate}}</td>
+        <td>&nbsp; {{submission.uploadDate}}</td>
         <td>&nbsp; <a href = "{{submission.githubLink}}">{{submission.githubLink}} </a></td>
+        <td>&nbsp; <a *ngIf="(submission.isChecked === true)">Yes</a> <a *ngIf="(submission.isChecked === false)">No</a></td>
         <td>   <input type="checkbox" name="needcheck" value= {{submission.id}} (click)="add(submission.id)" /> </td>
       </tr>
     </tbody>

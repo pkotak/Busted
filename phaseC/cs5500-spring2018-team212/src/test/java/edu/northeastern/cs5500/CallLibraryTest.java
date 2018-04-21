@@ -8,8 +8,8 @@ public class CallLibraryTest extends TestCase {
 	
 	public void testcompareFiles() {
 		CallLibrary cl = new CallLibrary();
-		cl.getIndividualReport("", "", 1);
-		cl.getReports("", "", 1);
+		cl.getIndividualReport("", "", 1, "python");
+		cl.getReports("", "", 1, "python");
 	}
 	
 }

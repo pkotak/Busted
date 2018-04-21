@@ -23,7 +23,6 @@ public class HtmlParser implements IHTMLParser{
 	@Override
 	public List<PlagiarismResult> getSimilarityScore(String outputDir) {
 		List<PlagiarismResult> plagiarism = new ArrayList<PlagiarismResult>();
-
 		List<File> alldirList = new ArrayList<File>(getAllDir(outputDir));
 		List<File> opdirList = new ArrayList<File>();
 
@@ -44,7 +43,7 @@ public class HtmlParser implements IHTMLParser{
 				plagiarism.add(res);
 			} catch (IOException e) {
 				LOGGER.info(e.toString());
-			} 
+			}
 		}
 		return plagiarism;
 	}

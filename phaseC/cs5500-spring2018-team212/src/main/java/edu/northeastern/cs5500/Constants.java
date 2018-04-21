@@ -2,10 +2,6 @@ package edu.northeastern.cs5500;
 
 public class Constants {
 	
-	private Constants() {
-		//empty
-	}
-	
 	public static final String LIBRARY_PATH = "jplag-2.11.9-SNAPSHOT-jar-with-dependencies.jar";
 	public static final String LANGUAGE = "python3";
 	public static final String OUTPUT_DIRECTORY = "Results";

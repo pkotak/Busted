@@ -1,0 +1,37 @@
+
+<nav class="navbar navbar-light2 navbar-fixed-top">
+	<div class="container-fluid">
+
+		<!--heading on the nav bar-->
+		<div class="navbar-text pull-left">
+			<a routerLink="/user/website/{{this.courseid}}/page/{{this.assignmentid}}/report" class="black">
+				<span class="glyphicon glyphicon-chevron-left "></span>
+			</a>
+		</div>
+
+		<div class="navbar-brand pull-left">
+			<div class="thick">
+				<b>Report Detail: {{this.hwName}} </b>
+			</div>
+		</div>
+
+	</div>
+</nav>
+
+<div class="container-fluid padding padding-b">
+	<iframe width="100%" height=800 [src]="url">
+		<!--content-->
+	</iframe>
+</div>
+
+<nav class="navbar navbar-light2 navbar-fixed-bottom">
+	<div class="container-fluid">
+		<b class="navbar-text pull-left"> Busted </b>
+
+		<div class="navbar-text pull-right">
+			<a routerLink="/profile" class="blue"> <span
+				class="glyphicon glyphicon-user "></span>
+			</a>
+		</div>
+	</div>
+</nav>

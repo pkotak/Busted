@@ -4,7 +4,8 @@ import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.when;
 
 import java.sql.Date;
-import java.util.HashMap;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -55,25 +56,19 @@ public class AssignmentTests {
         PowerMockito.mockStatic(ZipUtil.class);
         PowerMockito.mockStatic(GitUtil.class);
 		AssignmentService svc = new AssignmentService();
-		when(S3.putObject(any(String.class), any(String.class), any(String.class), eq(false))).thenReturn("shaaaa");
+		when(S3.putObject(any(String.class), any(String.class), any(String.class), eq(false))).thenReturn("shashashasha");
 		when(S3.putObject(any(String.class), any(String.class), any(String.class), eq(true))).thenReturn("http://meh");
 		when(S3.uploadDir(any(String.class), any(String.class))).thenReturn("http://meh2");
 		JSONObject obj1 = new JSONObject();
-		JSONObject obj2 = new JSONObject();
-
+		
 		try {
 			obj1.put("githublink", "https://github.com/team212test/test1");
 			obj1.put("studentid", 1);
 			obj1.put("courseid", 716);
 			obj1.put("hwName", "HW3");
 			obj1.put("parentAssignment", 2020);
+			obj1.put("language", "python");
 			svc.uploadGit(obj1.toString());
-			obj2.put("githublink", "https://github.com/team212test/test2");
-			obj2.put("studentid", 4);
-			obj2.put("courseid", 716);
-			obj2.put("hwName", "HW3");
-			obj2.put("parentAssignment", 2020);
-			svc.uploadGit(obj2.toString());
 		} catch (JSONException e1) {
 			e1.printStackTrace();
 		}
@@ -88,11 +83,15 @@ public class AssignmentTests {
 		dao.getAvailableAssignments(2, 1);
 		System.out.println(dao.getAvailableAssignments(2, 1));
 	}
-	
-	@Test
-	public void testIndividual() {
-		AssignmentService svc = new AssignmentService();
-		svc.testIndividual(2016, 2016);
+
+	@Test (expected = Exception.class)
+	public void testaddReports() {
+		List<PlagiarismResult> results = new ArrayList<PlagiarismResult>();
+		PlagiarismResult p1 = new PlagiarismResult(95, 12, 13, "");
+		PlagiarismResult p2 = new PlagiarismResult(65, 1122, 913, "");
+		results.add(p1);
+		results.add(p2);
+		AssignmentService.addReports(results, "plagiarismresults", "", 1, 716);
 	}
 
 }

@@ -1,6 +1,7 @@
 package edu.northeastern.springbootjdbc.controllers;
 
 import java.io.File;
+import java.io.IOException;
 import java.sql.Date;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -8,6 +9,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
 
+import edu.northeastern.springbootjdbc.daos.PersonDao;
+
+import org.eclipse.jgit.util.FileUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -15,7 +19,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.zeroturnaround.zip.ZipUtil;
@@ -77,15 +80,29 @@ public class AssignmentService {
 	 * @param folderStructure
 	 */
 	public static void checkPlagiarism(String hwDir, String folderStructure, int strictness,
-			int courseID, int studentID) {
+			int courseID, int studentID, String language) {
 		Boolean b = true;
 		CallLibrary jplagLib = new CallLibrary();
-		List<PlagiarismResult> results = jplagLib.getReports(hwDir, folderStructure, strictness); 
+		List<PlagiarismResult> results = jplagLib.getReports(hwDir, folderStructure, strictness, language); 
 		String reportBucketName = "plagiarismresults";
-		ReportDao rdao = ReportDao.getInstance();
 		File tempDir1 = new File(hwDir);
 		tempDir1.mkdirs();
+		addReports(results, reportBucketName, folderStructure, studentID, courseID);
+		String opdir = folderStructure + "op";
+		File f = new File(opdir);
+		if(f.exists() && f.isDirectory()) {
+			try {
+				FileUtils.delete(f, FileUtils.RECURSIVE);
+			} catch (IOException e) {
+				LOGGER.info(e.toString());
+			}
+		}
+	}
 
+	public static void addReports(List<PlagiarismResult> results, String reportBucketName,
+			String folderStructure, int studentID, int courseID) {
+		ReportDao rdao = ReportDao.getInstance();
+		
 		if (results != null) {
 			for (PlagiarismResult pr : results) {
 				String keyName1 = folderStructure + "op" + PATH_DELIM + new File(pr.getPath()).getName();
@@ -94,7 +111,7 @@ public class AssignmentService {
 				if(keyDir.isDirectory() && keyDir.list().length == 0) {
 					continue;
 				}
-				
+
 				ZipUtil.pack(keyDir, new File(reportZipName));
 				String reportURL = S3.putObject(reportBucketName, reportZipName, reportZipName, true);
 				S3.uploadDir("plagiarismresults", keyName1);
@@ -104,21 +121,17 @@ public class AssignmentService {
 					continue;
 
 				SendMailSSL mail = new SendMailSSL();
-				mail.send("^EjHs0R4&wot", "team212updates@gmail.com",
+				PersonDao personDao = PersonDao.getInstance();
+				mail.send("^EjHs0R4&wot", personDao.findPersonById(studentID).getEmail(),
 						  "Plagiarism Detected for " + studentID,
 						  "Report can be found at http://ec2-18-222-88-122.us-east-2.compute.amazonaws.com:4200/user/website/" + courseID + "/page/" + r1.getAssignment2ID() + "/report/" + reportID,
 						  System.getProperty("user.dir")+"/config.properties");
-				
 			}
 		}
 		else
 			LOGGER.info("no reports");
-		
-		String opdir = folderStructure + "op";
-		if(new Directory().deleteDir(opdir))	
-			b = b & new File(opdir).delete();
 	}
-
+	
 	/**
 	 * Wrapper function for Git Clone and Plagiarism Check.
 	 * 
@@ -128,11 +141,11 @@ public class AssignmentService {
 	 * @param aid
 	 */
 	public static void cloneAndCheck(String folderStructure, String hwName, String githublink, int aid,
-			int strictness,	int courseID, int studentID) {
+			int strictness,	int courseID, int studentID, String language) {
 		String hwDir = "assignments" + PATH_DELIM + folderStructure;
 		String currDir = hwDir + PATH_DELIM + aid;
 		uploadGitRepo(hwDir, hwName, githublink, aid);
-		checkPlagiarism(currDir, hwDir, strictness, courseID, studentID);
+		checkPlagiarism(currDir, hwDir, strictness, courseID, studentID, language);
 	}
 
 	/**
@@ -159,6 +172,7 @@ public class AssignmentService {
 		JSONObject obj;
 		String hwName = ""; 
 		String githublink = "";
+		String language = "";
 		int courseID = 0;
 		int studentid = 0;
 		int parentAid = 0;
@@ -169,6 +183,7 @@ public class AssignmentService {
 			courseID = obj.getInt("courseid");
 			studentid = obj.getInt("studentid");
 			parentAid = obj.getInt("parentAssignment");
+			language = obj.getString("language");
 		} catch (JSONException e) {
 			LOGGER.info(e.toString());
 		}
@@ -181,16 +196,11 @@ public class AssignmentService {
 		Assignment assignment = new Assignment(hwName, studentid, new Date(currentTime), a1.getDuedate(), false, false, "", 0, githublink, courseID);
 		int aid = adao.createAssignment(assignment);
 
-		if (aid == 0) {
-			return 0;
-		}
+		cloneAndCheck(folderStructure, hwName, githublink, aid, strictness, courseID, studentid, language);
 
-		cloneAndCheck(folderStructure, hwName, githublink, aid, strictness, courseID, studentid);
-		
 		adao.checkAssignment(aid);
 		return aid;
 	}
-
 
 	/**
 	 * Get assignments for a particular course.
@@ -231,7 +241,7 @@ public class AssignmentService {
 		AssignmentDao adao = AssignmentDao.getInstance();
 		return adao.getSubmissionsForAssignment(hwName, courseid);
 	}
-	
+
 	/**
 	 * Get submissions for a particular assignment of one student.
 	 * 
@@ -256,6 +266,7 @@ public class AssignmentService {
 	 */
 	@CrossOrigin(origins = {"http://localhost:4200", "http://ec2-18-222-88-122.us-east-2.compute.amazonaws.com:4200"})
 	@RequestMapping(value = "/api/assignment/new", method = RequestMethod.POST)
+
 	public @ResponseBody int createAssignmentForProfessor(@RequestBody String payload) {
 		JSONObject obj;
 		String hwName = "";
@@ -270,7 +281,7 @@ public class AssignmentService {
 		} catch (JSONException e) {
 			LOGGER.info(e.toString());
 		}
-		
+
 		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 		java.util.Date parsed = null;
 		java.sql.Date duedate = null;
@@ -300,7 +311,7 @@ public class AssignmentService {
 		AssignmentDao adao = AssignmentDao.getInstance();
 		return adao.deleteAssignment(assignmentId);
 	}
-	
+
 	/**
 	 * Updates a assignment in the database
 	 * 
@@ -345,13 +356,19 @@ public class AssignmentService {
 	 * @param assignmentid2
 	 */
 	@CrossOrigin(origins = {"http://localhost:4200", "http://ec2-18-222-88-122.us-east-2.compute.amazonaws.com:4200"})
-	@RequestMapping(value = "/api/assignment/individual/{assignmentid1}/{assignmentid2}", method = RequestMethod.GET)
+	@RequestMapping(value = "/api/assignment/individual/{assignmentid1}/{assignmentid2}/{language}",
+	method = RequestMethod.GET)
 	public @ResponseBody void testIndividual(@PathVariable("assignmentid1") int assignmentid1,
-			@PathVariable("assignmentid2") int assignmentid2) {
+			@PathVariable("assignmentid2") int assignmentid2, @PathVariable("language") String language) {
 		AssignmentDao adao = AssignmentDao.getInstance();
 		Map<Integer, String> aid1 = adao.getInfoforAssignment(assignmentid1);
 		Map<Integer, String> aid2 = adao.getInfoforAssignment(assignmentid2);
 
+		ReportDao rdao = ReportDao.getInstance();
+		
+		String reportBucketName = "plagiarismresults";
+		
+		Boolean b = false;
 		String hwName1 = aid1.get(1);
 		String hwName2 = aid2.get(1);
 		CourseDao cdao = CourseDao.getInstance();
@@ -364,7 +381,34 @@ public class AssignmentService {
 			String dir1 = folderStructure + PATH_DELIM + assignmentid1;
 			String dir2 = folderStructure + PATH_DELIM + assignmentid2;
 			CallLibrary lib = new CallLibrary();
-			lib.getIndividualReport(dir1, dir2, 1);
+			List<PlagiarismResult> results= lib.getIndividualReport(dir1, dir2, 1, language);
+			for (PlagiarismResult pr : results) {
+				String keyName1 = "test_op" + PATH_DELIM + new File(pr.getPath()).getName();
+				String reportZipName = keyName1 + ".zip";
+				File keyDir = new File(pr.getPath());
+				if(keyDir.isDirectory() && keyDir.list().length == 0) {
+					continue;
+				}
+
+				ZipUtil.pack(keyDir, new File(reportZipName));
+				String reportURL = S3.putObject(reportBucketName, reportZipName, reportZipName, true);
+				S3.uploadDir("plagiarismresults", keyName1);
+				Report r1 = new Report(pr.getAssignmentID1(), pr.getAssignmentID2(), pr.getSimilarityScore(), reportURL, false);
+				int reportID = rdao.createReport(r1);
+				if (reportID == 0)
+					continue;
+
+				SendMailSSL mail = new SendMailSSL();
+				mail.send("^EjHs0R4&wot", "team212updates@gmail.com",
+						"Plagiarism Detected for " + 1,
+						"Report can be found at http://ec2-18-222-88-122.us-east-2.compute.amazonaws.com:4200/user/website/" + c1.getId() + "/page/" + r1.getAssignment2ID() + "/report/" + reportID,
+						System.getProperty("user.dir")+"/config.properties");
+			}
 		}
+		if(new Directory().deleteDir("test_op"))	
+			b = b & new File("test_op").delete();
+		
 	}
+
+	
 }

@@ -12,10 +12,6 @@ import org.eclipse.jgit.api.errors.JGitInternalException;
  *
  */
 public class GitUtil {
-	
-	private GitUtil() {
-		// empty
-	}
 
 	static final Logger LOGGER = Logger.getLogger(GitUtil.class.getName());
 	/**

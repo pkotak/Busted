@@ -8,16 +8,6 @@ import java.util.List;
  *
  */
 public interface ICallLibrary {
-
-	/**
-	 * method to compare the files in given input directory for plagiarism with JPlag. 
-	 * @param ipdir
-	 * @param opdir
-	 * @param strictness
-	 * @param threshold
-	 */
-	public void compareFiles(String ipdir, String opdir, int strictness);
-
 	
 	/**
 	 * method to get the reports for the plagiarism check run on the given directory
@@ -26,10 +16,10 @@ public interface ICallLibrary {
 	 * @param newdir - given directory
 	 * @param rootdir - root directory
 	 * @param strictness - given strictness score
-	 * @param threshold - given threshold for plagiarsism score.
+	 * @param language - language of the files.
 	 * @return the list of the reports of the plagiarism check
 	 */
-	public List<PlagiarismResult> getReports(String newdir, String rootdir, int strictness);
+	public List<PlagiarismResult> getReports(String newdir, String rootdir, int strictness, String language);
 	
 	/**
 	 * method to get the reports for the plagiarism check run on the given two directories
@@ -37,8 +27,8 @@ public interface ICallLibrary {
 	 * @param dir1 - directory 1
 	 * @param dir2 - directory 2
 	 * @param strictness - given strictness score
-	 * @param threshold - given threshold for plagiarsism score.
+	 * @param language - language of the files.
 	 * @return the list of the reports of the plagiarism check
 	 */
-	public List<PlagiarismResult> getIndividualReport(String dir1, String dir2, int strictness);
+	public List<PlagiarismResult> getIndividualReport(String dir1, String dir2, int strictness, String language);
 }

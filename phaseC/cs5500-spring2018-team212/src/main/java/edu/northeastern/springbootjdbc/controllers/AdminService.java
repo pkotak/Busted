@@ -19,6 +19,7 @@ import edu.northeastern.springbootjdbc.models.Person;
  *
  */
 @RestController
+@CrossOrigin(origins = {"http://localhost:4200", "http://ec2-18-222-88-122.us-east-2.compute.amazonaws.com:4200"})
 public class AdminService {
 		PersonDao dao = PersonDao.getInstance();
 		
@@ -26,7 +27,6 @@ public class AdminService {
 		 * Find all unapproved users.
 		 * @return a list of all the unapproved persons
 		 */
-		@CrossOrigin(origins = "http://localhost:4200")
 		@RequestMapping("/api/admin/find/unapprovedusers")
 		public @ResponseBody List<Person> getUnapprovedUsers() {
 			return dao.findAllPeople(true);
@@ -36,7 +36,6 @@ public class AdminService {
 		 * Approve a user with given personID
 		 * @return int indicating whether the person was approved
 		 */
-		@CrossOrigin(origins = "http://localhost:4200")
 		@RequestMapping("/api/admin/approve/user/{id}")
 		public @ResponseBody int approveUser(@PathVariable("id") String id) {
 			return dao.approvePerson(Integer.parseInt(id));
@@ -46,21 +45,8 @@ public class AdminService {
 		 * Delete a user with given personID
 		 * @return int indicating whether the person was removed from the database
 		 */
-		@CrossOrigin(origins = "http://localhost:4200")
 		@RequestMapping(value="/api/user/{userId}", method=RequestMethod.DELETE)
 		public @ResponseBody int deleteUser(@PathVariable("userId") String userid) {
 			return dao.deletePerson(Integer.parseInt(userid));
-		}
-		
-		/**
-		 * Creates a person in the database
-		 * @return 
-		 * @return the number of rows affected
-		 */
-		@CrossOrigin(origins = "http://localhost:4200")
-		@RequestMapping("/api/admin/register")
-		public @ResponseBody Person insertPerson(@RequestBody String json) {
-			PersonService ps = new PersonService();
-			return ps.insertPerson(json);
 		}
 }

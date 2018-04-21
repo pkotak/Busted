@@ -40,6 +40,11 @@ public class AssignmentDao {
 	private AssignmentDao() {
 	}
 
+	/**
+	 * method for creating a record for Assignment in the database
+	 * @param assignment
+	 * @return
+	 */
 	public int createAssignment(Assignment assignment) {
 		Connection conn = null;
 		PreparedStatement assignmentStatement = null;
@@ -92,6 +97,11 @@ public class AssignmentDao {
 		return assignmentID;
 	}
 
+	/**
+	 * method to find the assignment with the given ID
+	 * @param id - the given Assignment ID
+	 * @return
+	 */
 	public Assignment findAssignmentById(int id) {
 		Connection conn = null;
 		PreparedStatement assignmentStatement = null;
@@ -139,6 +149,11 @@ public class AssignmentDao {
 		return a;
 	}
 
+	/**
+	 * method to mark Assignment as checked.
+	 * @param aid
+	 * @return
+	 */
 	public int checkAssignment(int aid) {
 		int rowsAffected = 0;
 		Connection conn = null;
@@ -170,6 +185,12 @@ public class AssignmentDao {
 		return rowsAffected;
 	}
 
+	/**
+	 * method to get all assignments for a give courseID, for the given student.
+	 * @param courseId
+	 * @param studentId
+	 * @return
+	 */
 	public Assignment getAssignmentForCourse(String courseId, int studentId) {
 		Connection conn = null;
 		PreparedStatement assignmentStatement = null;
@@ -221,6 +242,12 @@ public class AssignmentDao {
 		return a;
 	}
 
+	/**
+	 * method to update the sha of a given assignment
+	 * @param md5Hex
+	 * @param aid
+	 * @return
+	 */
 	public int updateSha(String md5Hex, int aid) {
 		int rowsAffected = 0;
 		Connection conn = null;
@@ -253,6 +280,11 @@ public class AssignmentDao {
 		return rowsAffected;
 	}
 
+	/**
+	 * method for getting the number of assignments for the homework with the given name.
+	 * @param hwName
+	 * @return
+	 */
 	public int getAssignmentCount(String hwName) {
 		Connection conn = null;
 		PreparedStatement assignmentStatement = null;
@@ -299,6 +331,13 @@ public class AssignmentDao {
 	}
 
 	
+	/**
+	 * method to get all the submissions for a assignment 
+	 * with the given name for the given course.
+	 * @param hwName
+	 * @param courseid
+	 * @return
+	 */
 	public List<Assignment> getSubmissionsForAssignment(String hwName, int courseid) {
 		Connection conn = null;
 		PreparedStatement assignmentStatement = null;
@@ -313,7 +352,6 @@ public class AssignmentDao {
 				assignmentStatement = conn.prepareStatement(assignmentSelect);
 				assignmentStatement.setString(1, hwName);
 				assignmentStatement.setInt(2, courseid);
-//				assignmentStatement.setInt(3, studentid);
 				try {
 					rs = assignmentStatement.executeQuery();
 					while (rs.next()) {
@@ -358,6 +396,14 @@ public class AssignmentDao {
 		return assignments;
 	}
 	
+	/**
+	 * method to get all assignments submitted for a given student
+	 * for the given course's homework with this name.
+	 * @param hwName
+	 * @param courseid
+	 * @param studentid
+	 * @return
+	 */
 	public List<Assignment> getSubmissionsForOneStudent(String hwName, int courseid, int studentid) {
 		Connection conn = null;
 		PreparedStatement assignmentStatement = null;
@@ -417,6 +463,12 @@ public class AssignmentDao {
 		return assignments;
 	}
 
+	/**
+	 * method to get all the available assignments for this course created by this professor.
+	 * @param courseid
+	 * @param profid
+	 * @return
+	 */
 	public List<Assignment> getAvailableAssignments(int courseid, int profid) {
 		Connection conn = null;
 		PreparedStatement assignmentStatement = null;
@@ -465,9 +517,9 @@ public class AssignmentDao {
 
 
 	/**
-	 * method for deleting existing course
-	 * @param courseId - id of course to be deleted
-	 * @return value indicating whether the course was deleted.
+	 * method for deleting existing assignment
+	 * @param courseId - id of assignment to be deleted
+	 * @return value indicating whether the assignment was deleted.
 	 */
 	public int deleteAssignment (int assignmentId) {
 		int rowsaffected = 0;
@@ -503,6 +555,14 @@ public class AssignmentDao {
 	}
 
 
+	/**
+	 * method for getting all the previous submissions by this student
+	 * for the given course with the given name
+	 * @param hwname
+	 * @param studentID
+	 * @param courseID
+	 * @return
+	 */
 	public List<String> getPreviousSubmission(String hwname, int studentID, int courseID) {
 		List<String> listOfID = new ArrayList<String>();
 		Connection conn = null;
@@ -554,6 +614,12 @@ public class AssignmentDao {
 
 
 
+	/**
+	 * method to update the information of an assignment's record in the database
+	 * @param courseID
+	 * @param assignment
+	 * @return
+	 */
 	public int updateAssignment(int courseID, Assignment assignment) {
 		int rowsAffected = 0;
 		Connection conn = null;
@@ -595,6 +661,11 @@ public class AssignmentDao {
 	}
 
 
+	/**
+	 * method to retrieve the name of an assignment and the courseID associated with the assignment
+	 * @param assignmentID
+	 * @return
+	 */
 	public Map<Integer, String> getInfoforAssignment(int assignmentID) {
 		Connection conn = null;
 		PreparedStatement assignmentStatement = null;
@@ -612,8 +683,10 @@ public class AssignmentDao {
 					if (rs.next()) {
 						String name = rs.getString("name");
 						int cid = rs.getInt("courseid");
+					
 						hmap.put(1, name);
 						hmap.put(2, String.valueOf(cid));
+						
 					}
 				} finally {
 					if (assignmentStatement != null) {

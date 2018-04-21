@@ -41,7 +41,7 @@
         </div>
         <!--tick mark-->
         <div class="navbar-text pull-right">
-          <a (click)="update()" class="white">
+          <a *ngIf="(user.type !== 'STUDENT' )" (click)="update()" class="white">
             <span class="glyphicon glyphicon-ok "></span>
           </a>
         </div>
@@ -142,12 +142,12 @@
           Go to course assignments
         </a>
 
-        <a *ngIf="(user.type !== 'PROFESSOR' )" (click)="joinClass()"
+        <a *ngIf="((user.type !== 'PROFESSOR')&&(user.type !== 'ADMIN') )" (click)="joinClass()"
            class="btn btn-success btn-block" >
           Join Course
         </a>
 
-        <a *ngIf="(user.type !== 'PROFESSOR' )" (click)="dropClass()"
+        <a *ngIf="((user.type !== 'PROFESSOR')&&(user.type !== 'ADMIN') )" (click)="dropClass()"
            class="btn btn-warning btn-block" >
           Drop Course
         </a>
